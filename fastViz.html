@@ -10,6 +10,8 @@
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/baseApp.js?v=0.1"></script>
+    <script type="text/javascript" src="js/dataLoader.js"></script>
+    <script type="text/javascript" src="js/stats.js?v=0.1"></script>
     <script type="text/javascript" src="js/fastViz.js?v=0.1"></script>
 
     <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
@@ -18,8 +20,19 @@
 </head>
 <body>
 
+<div id="Stats-output">
+</div>
+
 <div id="WebGL-output">
 </div>
 
+<div id="versionInfo" class="displayInfo">
+    <p>FAST Music Visualiser 0.1</p>
+</div>
+
+<div id="trackInfo" class="displayInfo">
+    <p id="trackInfoArtist">Artist: </p>
+    <p id="trackInfoTrack">Track: </p>
+</div>
 </body>
 </html>

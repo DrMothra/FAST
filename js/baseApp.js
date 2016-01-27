@@ -31,14 +31,14 @@ BaseApp.prototype.init = function(container) {
     this.createCamera();
     this.createControls();
     //this.raycaster = new THREE.Raycaster();
-    //this.stats = initStats();
+    this.stats = initStats();
     this.statsShowing = true;
 
 };
 
 BaseApp.prototype.createRenderer = function() {
     this.renderer = new THREE.WebGLRenderer( {antialias : true, alpha: true});
-    this.renderer.setClearColor(0x000000, 0.0);
+    this.renderer.setClearColor(0x5c5f64, 1.0);
     this.renderer.shadowMapEnabled = true;
     var isMSIE = /*@cc_on!@*/0;
 
@@ -146,7 +146,7 @@ BaseApp.prototype.createScene = function() {
 
 
     this.pointLight = new THREE.PointLight(0xffffff);
-    this.pointLight.position.set(200,200,500);
+    this.pointLight.position.set(0,200,0);
     this.pointLight.name = 'PointLight';
     this.scene.add(this.pointLight);
 

@@ -5,3 +5,16 @@
     margin: 0;
     overflow: hidden;
 }
+.displayInfo {
+    position: absolute;
+    color: #7fa5ff;
+    font-size: 1.3vw;
+}
+#versionInfo {
+    top: 20px;
+    left: 100px;
+}
+#trackInfo {
+    top: 60px;
+    left: 100px;
+}
