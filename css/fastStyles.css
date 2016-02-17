@@ -1,5 +1,8 @@
 /* Styles for FAST music visualisation */
 
+.centred {
+    text-align: center;
+}
 #WebGL-output {
     /* set margin to 0 and overflow to hidden, to go fullscreen */
     margin: 0;
@@ -32,7 +35,7 @@
     right: 0;
     min-width: 100%;
     min-height: 100%;
-    font-size: 100px;
+    font-size: 2.3vw;
     text-align: right;
     filter: alpha(opacity=0);
     opacity: 0;

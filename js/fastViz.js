@@ -43,12 +43,15 @@ FastApp.prototype.createScene = function() {
     var _this = this;
     this.dataLoader = new dataLoader();
 
+    //DEBUG
+
     this.dataLoader.load("data/metallica_EndoftheLine.json", function(data) {
         _this.data = data;
         //DEBUG
         console.log("File loaded");
         _this.parseData();
     });
+
 };
 
 FastApp.prototype.loadNewFile = function(fileName) {
