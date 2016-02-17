@@ -13,6 +13,7 @@ FastApp.prototype = new BaseApp();
 
 FastApp.prototype.init = function(container) {
     BaseApp.prototype.init.call(this, container);
+    this.fileName = null;
     this.data = null;
     this.artistName = null;
     this.trackName = null;
@@ -40,15 +41,42 @@ FastApp.prototype.createScene = function() {
 
     //Load json data
     var _this = this;
-    var dataLoad = new dataLoader();
-    var dataParser = function(data) {
+    this.dataLoader = new dataLoader();
+
+    this.dataLoader.load("data/metallica_EndoftheLine.json", function(data) {
         _this.data = data;
         //DEBUG
         console.log("File loaded");
         _this.parseData();
-    };
+    });
+};
 
-    dataLoad.load("data/song.json", dataParser);
+FastApp.prototype.loadNewFile = function(fileName) {
+    if(!fileName) {
+        alert("No file selected!");
+        return;
+    }
+    this.fileName = fileName;
+    //Reset current scene
+    var removeGroup = this.scene.getObjectByName('timbre');
+    if(!removeGroup) {
+        console.log("No timbre group");
+    }
+    this.scene.remove(removeGroup);
+    removeGroup = this.scene.getObjectByName('pitch');
+    if(!removeGroup) {
+        console.log("No pitch group");
+    }
+    this.scene.remove(removeGroup);
+
+    //Render new data
+    var _this = this;
+    this.dataLoader.load("data/" + this.fileName, function(data) {
+        _this.data = data;
+        //DEBUG
+        console.log("File loaded");
+        _this.parseData();
+    });
 };
 
 FastApp.prototype.parseData = function() {
@@ -125,7 +153,7 @@ FastApp.prototype.renderTimbre = function() {
     var geom, mesh;
 
     var coefficients, height;
-    for(var i=0; i<800; ++i) {
+    for(var i=0; i<numSegments/2; ++i) {
         coefficients = this.timbreSegments[i];
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
@@ -155,7 +183,7 @@ FastApp.prototype.renderPitches = function() {
     var geom, mesh;
 
     var coefficients, height;
-    for(var i=0; i<800; ++i) {
+    for(var i=0; i<numSegments/2; ++i) {
         coefficients = this.pitchSegments[i];
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
@@ -304,11 +332,20 @@ FastApp.prototype.onLightChanged = function(axis, value) {
 $(document).ready(function() {
 
     //Init app
+    if(!fileManager.init()) {
+        alert("Cannot read files!");
+    }
+
     var container = document.getElementById("WebGL-output");
     var app = new FastApp();
     app.init(container);
     app.createScene();
     app.createGUI();
+
+    //GUI callbacks
+    $("#chooseFile").on("change", function(evt) {
+        app.loadNewFile(fileManager.onSelectFile(evt));
+    });
 
     app.run();
 });
