@@ -21,8 +21,11 @@ FastApp.prototype.init = function(container) {
     this.data = null;
     this.artistName = null;
     this.trackName = null;
+    this.numCoefficients = 12;
     this.timbreSegments = [];
+    this.timbreSegmentsNormalised = [];
     this.pitchSegments = [];
+    this.pitchSegmentsNormalised = [];
     this.visibleModel = undefined;
     this.cameraStartZPos = 700;
 };
@@ -158,22 +161,39 @@ FastApp.prototype.renderTimbre = function() {
     var interZgap = 1, interXgap = 1;
     var width = 2, depth = 5;
 
-    var boxMat = new THREE.MeshLambertMaterial( {color: 0xff0000} );
-    var geom, mesh;
+    this.normaliseData(this.timbreSegments);
+
+    //var boxMat = new THREE.MeshLambertMaterial( {color: 0xff0000} );
+
+    //Points for now
+    var geom = new THREE.BufferGeometry();
+
+    var numPoints = numSegments;
+    var positions = new Float32Array(numPoints * 3);
+    var sizes = new Float32Array(numPoints);
 
     var coefficients, height;
-    for(var i=0; i<numSegments/2; ++i) {
+    var pointNum = 0;
+    for(var i= 0; i<numPoints; ++i) {
         coefficients = this.timbreSegments[i];
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
             startY = coefficients[j] < 0 ? -height/2 : height/2;
-            geom = new THREE.BoxGeometry(width, height, depth, 1, 1, 1);
-            mesh = new THREE.Mesh(geom, boxMat);
-            mesh.position.set(startX, startY, startZ - (j * (interZgap + depth)));
-            timbreGroup.add(mesh);
+            positions[pointNum++] = startX;
+            positions[pointNum++] = startY;
+            positions[pointNum++] = startZ - (j * (interZgap + depth));
         }
         startX += interXgap;
     }
+
+    geom.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geom.computeBoundingSphere();
+
+    //var mesh = new THREE.Mesh(geom, boxMat);
+    var pointSize = 1.5;
+    var mat = new THREE.PointsMaterial( { size: pointSize, vertexColors: THREE.VertexColors } );
+    var particles = new THREE.Points(geom, mat);
+    timbreGroup.add(particles);
 
     this.scene.add(timbreGroup);
 };
@@ -206,6 +226,34 @@ FastApp.prototype.renderPitches = function() {
     }
 
     this.scene.add(pitchGroup);
+};
+
+FastApp.prototype.normaliseData = function(data) {
+    var minArray = [];
+    var maxArray = [];
+    var value, minValue = 1000000, maxValue = -1000000;
+    var coefficients;
+    for(var i=0; i<data.length; ++i) {
+        coefficients = data[i];
+        for(var j=0; j<this.numCoefficients; ++j) {
+            value = coefficients[j];
+            value < minValue ? minValue = value : null;
+            value > maxValue ? maxValue = value : null;
+        }
+        minArray.push(minValue);
+        maxArray.push(maxValue);
+        minValue = 1000000;
+        maxValue = -1000000;
+    }
+    maxValue = Math.max.apply(null, maxArray);
+    minValue = Math.min.apply(null, minArray);
+    var range = maxValue - minValue;
+
+    //Normalise data
+    for(i=0; i<data.length; ++i) {
+        value = (data[i] - minValue) / range;
+        this.timbreSegmentsNormalised.push(value);
+    }
 };
 
 FastApp.prototype.onShowGroup = function(name, value) {
