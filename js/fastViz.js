@@ -3,6 +3,10 @@
  */
 
 var X_AXIS= 0, Y_AXIS= 1, Z_AXIS=2;
+var ROT_UP = 0, ROT_LEFT = 1, ROT_RIGHT = 2, ROT_DOWN = 3;
+var ROT_INC = Math.PI/32;
+var ZOOM_IN = 0, ZOOM_OUT = 1, PAN_UP = 2, PAN_DOWN = 3, PAN_LEFT = 4, PAN_RIGHT = 5;
+var MOVE_INC = 10;
 
 //Init this app from base
 function FastApp() {
@@ -19,6 +23,8 @@ FastApp.prototype.init = function(container) {
     this.trackName = null;
     this.timbreSegments = [];
     this.pitchSegments = [];
+    this.visibleModel = undefined;
+    this.cameraStartZPos = 700;
 };
 
 FastApp.prototype.update = function() {
@@ -206,6 +212,9 @@ FastApp.prototype.onShowGroup = function(name, value) {
     //Show relevant dataset
     var group = this.scene.getObjectByName(name);
     if(group) {
+        if(value) {
+            this.visibleModel = group;
+        }
         group.traverse(function (obj) {
             if (obj instanceof THREE.Mesh) {
                 obj.visible = value;
@@ -332,6 +341,66 @@ FastApp.prototype.onLightChanged = function(axis, value) {
     lightBox.position.set(light.position.x, light.position.y, light.position.z);
 };
 
+FastApp.prototype.rotateObject = function(direction) {
+    //Get rotation
+    if(this.visibleModel === undefined) return;
+    switch(direction) {
+        case ROT_UP:
+            this.visibleModel.rotation.x += ROT_INC;
+            break;
+        case ROT_DOWN:
+            this.visibleModel.rotation.x -= ROT_INC;
+            break;
+        case ROT_LEFT:
+            this.visibleModel.rotation.y += ROT_INC;
+            break;
+        case ROT_RIGHT:
+            this.visibleModel.rotation.y -= ROT_INC;
+            break;
+        default:
+            break;
+    }
+};
+
+FastApp.prototype.translateObject = function(direction) {
+    if(this.visibleModel === undefined) return;
+    switch (direction) {
+        case ZOOM_IN:
+            this.visibleModel.position.z += MOVE_INC;
+            break;
+        case ZOOM_OUT:
+            this.visibleModel.position.z -= MOVE_INC;
+            break;
+        case PAN_UP:
+            this.visibleModel.position.y += MOVE_INC;
+            break;
+        case PAN_DOWN:
+            this.visibleModel.position.y -= MOVE_INC;
+            break;
+        case PAN_LEFT:
+            this.visibleModel.position.x -= MOVE_INC;
+            break;
+        case PAN_RIGHT:
+            this.visibleModel.position.x += MOVE_INC;
+            break;
+        default:
+            break;
+    }
+};
+
+FastApp.prototype.resetObject = function() {
+    if(this.visibleModel === undefined) return;
+
+    this.visibleModel.position.set(0, 0, 0);
+    this.visibleModel.rotation.set(0, 0, 0);
+
+    //Reset camera as well
+    this.controls.reset();
+    this.camera.position.set(0, 0, this.cameraStartZPos );
+    this.controls.setLookAt(new THREE.Vector3(0, 0, 0));
+    this.camera.rotation.set(0, 0, 0 );
+};
+
 $(document).ready(function() {
 
     //Init app
@@ -348,6 +417,62 @@ $(document).ready(function() {
     //GUI callbacks
     $("#chooseFile").on("change", function(evt) {
         app.loadNewFile(fileManager.onSelectFile(evt));
+    });
+
+    //Model movement
+    $('#rotateUp').on("click", function(event) {
+        event.preventDefault();
+        app.rotateObject(ROT_UP);
+    });
+
+    $('#rotateDown').on("click", function(event) {
+        event.preventDefault();
+        app.rotateObject(ROT_DOWN);
+    });
+
+    $('#rotateLeft').on("click", function(event) {
+        event.preventDefault();
+        app.rotateObject(ROT_LEFT);
+    });
+
+    $('#rotateRight').on("click", function(event) {
+        event.preventDefault();
+        app.rotateObject(ROT_RIGHT);
+    });
+
+    $('#zoomIn').on("click", function(event) {
+        event.preventDefault();
+        app.translateObject(ZOOM_IN);
+    });
+
+    $('#zoomOut').on("click", function(event) {
+        event.preventDefault();
+        app.translateObject(ZOOM_OUT);
+    });
+
+    $('#panUp').on("click", function(event){
+        event.preventDefault();
+        app.translateObject(PAN_UP);
+    });
+
+    $('#panDown').on("click", function(event){
+        event.preventDefault();
+        app.translateObject(PAN_DOWN);
+    });
+
+    $('#panLeft').on("click", function(event){
+        event.preventDefault();
+        app.translateObject(PAN_LEFT);
+    });
+
+    $('#panRight').on("click", function(event){
+        event.preventDefault();
+        app.translateObject(PAN_RIGHT);
+    });
+
+    $('#reset').on("click", function(event) {
+        event.preventDefault();
+        app.resetObject();
     });
 
     app.run();
