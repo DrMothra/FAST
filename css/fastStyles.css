@@ -44,3 +44,6 @@
     cursor: inherit;
     display: block;
 }
+#controls button {
+    margin-bottom: 10%;
+}

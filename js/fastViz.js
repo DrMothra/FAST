@@ -3,9 +3,9 @@
  */
 
 var X_AXIS= 0, Y_AXIS= 1, Z_AXIS=2;
-var ROT_UP = 0, ROT_LEFT = 1, ROT_RIGHT = 2, ROT_DOWN = 3;
+var STOP = -1, ROT_UP = 0, ROT_LEFT = 1, ROT_RIGHT = 2, ROT_DOWN = 3;
 var ROT_INC = Math.PI/32;
-var ZOOM_IN = 0, ZOOM_OUT = 1, PAN_UP = 2, PAN_DOWN = 3, PAN_LEFT = 4, PAN_RIGHT = 5;
+var ZOOM_IN = 4, ZOOM_OUT = 5, PAN_UP = 6, PAN_DOWN = 7, PAN_LEFT = 8, PAN_RIGHT = 9;
 var MOVE_INC = 10;
 
 //Init this app from base
@@ -23,11 +23,17 @@ FastApp.prototype.init = function(container) {
     this.trackName = null;
     this.numCoefficients = 12;
     this.timbreSegments = [];
-    this.timbreSegmentsNormalised = [];
+    this.timbreSegmentsNormalised = null;
     this.pitchSegments = [];
-    this.pitchSegmentsNormalised = [];
     this.visibleModel = undefined;
     this.cameraStartZPos = 700;
+    this.xRot = 0;
+    this.yRot = 0;
+    this.xTrans = 0;
+    this.yTrans = 0;
+    this.zTrans = 0;
+    this.rotating = false;
+    this.checkTime = 100;
 };
 
 FastApp.prototype.update = function() {
@@ -161,40 +167,27 @@ FastApp.prototype.renderTimbre = function() {
     var interZgap = 1, interXgap = 1;
     var width = 2, depth = 5;
 
-    this.normaliseData(this.timbreSegments);
+    this.timbreSegmentsNormalised = this.normaliseData(this.timbreSegments);
 
-    //var boxMat = new THREE.MeshLambertMaterial( {color: 0xff0000} );
+    var boxMat = new THREE.MeshLambertMaterial( {color: 0xff0000} );
 
-    //Points for now
-    var geom = new THREE.BufferGeometry();
-
-    var numPoints = numSegments;
-    var positions = new Float32Array(numPoints * 3);
-    var sizes = new Float32Array(numPoints);
+    var geom, mesh;
 
     var coefficients, height;
-    var pointNum = 0;
-    for(var i= 0; i<numPoints; ++i) {
+    for(var i=0; i<numSegments; ++i) {
         coefficients = this.timbreSegments[i];
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
             startY = coefficients[j] < 0 ? -height/2 : height/2;
-            positions[pointNum++] = startX;
-            positions[pointNum++] = startY;
-            positions[pointNum++] = startZ - (j * (interZgap + depth));
+            geom = new THREE.BoxGeometry(width, height, depth, 1, 1, 1);
+            mesh = new THREE.Mesh(geom, boxMat);
+            mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
+            timbreGroup.add(mesh);
         }
         startX += interXgap;
     }
 
-    geom.addAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geom.computeBoundingSphere();
-
-    //var mesh = new THREE.Mesh(geom, boxMat);
-    var pointSize = 1.5;
-    var mat = new THREE.PointsMaterial( { size: pointSize, vertexColors: THREE.VertexColors } );
-    var particles = new THREE.Points(geom, mat);
-    timbreGroup.add(particles);
-
+    timbreGroup.scale.set(this.guiControls.ScaleX, this.guiControls.ScaleY, this.guiControls.ScaleZ);
     this.scene.add(timbreGroup);
 };
 
@@ -212,14 +205,14 @@ FastApp.prototype.renderPitches = function() {
     var geom, mesh;
 
     var coefficients, height;
-    for(var i=0; i<numSegments/2; ++i) {
+    for(var i=0; i<numSegments; ++i) {
         coefficients = this.pitchSegments[i];
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
             startY = coefficients[j] < 0 ? -height/2 : height/2;
             geom = new THREE.BoxGeometry(width, height, depth, 1, 1, 1);
             mesh = new THREE.Mesh(geom, boxMat);
-            mesh.position.set(startX, startY, startZ - (j * (interZgap + depth)));
+            mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
             pitchGroup.add(mesh);
         }
         startX += interXgap;
@@ -250,10 +243,18 @@ FastApp.prototype.normaliseData = function(data) {
     var range = maxValue - minValue;
 
     //Normalise data
+    var normalData = data.slice();
+    var normalCoeffs;
     for(i=0; i<data.length; ++i) {
-        value = (data[i] - minValue) / range;
-        this.timbreSegmentsNormalised.push(value);
+        coefficients = data[i];
+        normalCoeffs = normalData[i];
+        for(j=0; j<this.numCoefficients; ++j) {
+            value = (coefficients[j] - minValue) / range;
+            normalCoeffs[j] = value;
+        }
     }
+
+    return normalData;
 };
 
 FastApp.prototype.onShowGroup = function(name, value) {
@@ -276,7 +277,7 @@ FastApp.prototype.createGUI = function() {
         this.Timbre = true;
         this.Pitch = false;
         this.ScaleX = 1.0;
-        this.ScaleY = 1.0;
+        this.ScaleY = 10.0;
         this.ScaleZ = 1.0;
         this.LightX = 0.0;
         this.LightY = 200;
@@ -293,7 +294,7 @@ FastApp.prototype.createGUI = function() {
     scaleX.onChange(function(value) {
         _this.onScaleChanged(X_AXIS, value);
     });
-    var scaleY = this.guiAppear.add(this.guiControls, 'ScaleY', 0.25, 20).step(0.25);
+    var scaleY = this.guiAppear.add(this.guiControls, 'ScaleY', 0.25, 100).step(0.25);
     scaleY.listen();
     scaleY.onChange(function(value) {
         _this.onScaleChanged(Y_AXIS, value);
@@ -389,21 +390,111 @@ FastApp.prototype.onLightChanged = function(axis, value) {
     lightBox.position.set(light.position.x, light.position.y, light.position.z);
 };
 
+FastApp.prototype.repeat = function(direction) {
+    if(direction === STOP) {
+        if(this.repeatTimer) {
+            clearInterval(this.repeatTimer);
+        }
+        return;
+    }
+
+    var _this = this;
+    switch(direction) {
+        case ROT_UP:
+            this.xRot = -ROT_INC;
+            this.yRot = 0;
+            this.rotating = true;
+            break;
+
+        case ROT_DOWN:
+            this.xRot = ROT_INC;
+            this.yRot = 0;
+            this.rotating = true;
+            break;
+
+        case ROT_LEFT:
+            this.xRot = 0;
+            this.yRot = -ROT_INC;
+            this.rotating = true;
+            break;
+
+        case ROT_RIGHT:
+            this.xRot = 0;
+            this.yRot = ROT_INC;
+            this.rotating = true;
+            break;
+
+        case ZOOM_IN:
+            this.xTrans = this.yTrans = this.zTrans = 0;
+            this.zTrans = MOVE_INC;
+            this.rotating = false;
+            break;
+
+        case ZOOM_OUT:
+            this.xTrans = this.yTrans = this.zTrans = 0;
+            this.zTrans = -MOVE_INC;
+            this.rotating = false;
+            break;
+
+        case PAN_UP:
+            this.xTrans = this.yTrans = this.zTrans = 0;
+            this.yTrans = MOVE_INC;
+            this.rotating = false;
+            break;
+
+        case PAN_DOWN:
+            this.xTrans = this.yTrans = this.zTrans = 0;
+            this.yTrans = -MOVE_INC;
+            this.rotating = false;
+            break;
+
+        case PAN_LEFT:
+            this.xTrans = this.yTrans = this.zTrans = 0;
+            this.xTrans = -MOVE_INC;
+            this.rotating = false;
+            break;
+
+        case PAN_RIGHT:
+            this.xTrans = this.yTrans = this.zTrans = 0;
+            this.xTrans = MOVE_INC;
+            this.rotating = false;
+            break;
+
+        default:
+            break;
+    }
+
+    this.repeatTimer = setInterval(function() {
+        if(_this.rotating) {
+            _this.visibleModel.rotation.x += _this.xRot;
+            _this.visibleModel.rotation.y += _this.yRot;
+        } else {
+            _this.visibleModel.position.x += _this.xTrans;
+            _this.visibleModel.position.y += _this.yTrans;
+            _this.visibleModel.position.z += _this.zTrans;
+        }
+    }, this.checkTime)
+};
+
 FastApp.prototype.rotateObject = function(direction) {
     //Get rotation
     if(this.visibleModel === undefined) return;
     switch(direction) {
         case ROT_UP:
-            this.visibleModel.rotation.x += ROT_INC;
+            this.visibleModel.rotation.x -= ROT_INC;
+            this.repeat(ROT_UP);
             break;
         case ROT_DOWN:
-            this.visibleModel.rotation.x -= ROT_INC;
+            this.visibleModel.rotation.x += ROT_INC;
+            this.repeat(ROT_DOWN);
             break;
         case ROT_LEFT:
-            this.visibleModel.rotation.y += ROT_INC;
+            this.visibleModel.rotation.y -= ROT_INC;
+            this.repeat(ROT_LEFT);
             break;
         case ROT_RIGHT:
-            this.visibleModel.rotation.y -= ROT_INC;
+            this.visibleModel.rotation.y += ROT_INC;
+            this.repeat(ROT_RIGHT);
             break;
         default:
             break;
@@ -415,21 +506,27 @@ FastApp.prototype.translateObject = function(direction) {
     switch (direction) {
         case ZOOM_IN:
             this.visibleModel.position.z += MOVE_INC;
+            this.repeat(ZOOM_IN);
             break;
         case ZOOM_OUT:
             this.visibleModel.position.z -= MOVE_INC;
+            this.repeat(ZOOM_OUT);
             break;
         case PAN_UP:
             this.visibleModel.position.y += MOVE_INC;
+            this.repeat(PAN_UP);
             break;
         case PAN_DOWN:
             this.visibleModel.position.y -= MOVE_INC;
+            this.repeat(PAN_DOWN);
             break;
         case PAN_LEFT:
             this.visibleModel.position.x -= MOVE_INC;
+            this.repeat(PAN_LEFT);
             break;
         case PAN_RIGHT:
             this.visibleModel.position.x += MOVE_INC;
+            this.repeat(PAN_RIGHT);
             break;
         default:
             break;
@@ -468,54 +565,68 @@ $(document).ready(function() {
     });
 
     //Model movement
-    $('#rotateUp').on("click", function(event) {
+    $('#rotateUp').on("mousedown", function(event) {
         event.preventDefault();
         app.rotateObject(ROT_UP);
     });
 
-    $('#rotateDown').on("click", function(event) {
+    $('#rotateDown').on("mousedown", function(event) {
         event.preventDefault();
         app.rotateObject(ROT_DOWN);
     });
 
-    $('#rotateLeft').on("click", function(event) {
+    $('#rotateLeft').on("mousedown", function(event) {
         event.preventDefault();
         app.rotateObject(ROT_LEFT);
     });
 
-    $('#rotateRight').on("click", function(event) {
+    $('#rotateRight').on("mousedown", function(event) {
         event.preventDefault();
         app.rotateObject(ROT_RIGHT);
     });
 
-    $('#zoomIn').on("click", function(event) {
+    $('[id^=rotate]').on("mouseup", function(event) {
+        app.repeat(STOP);
+    });
+
+    $('#zoomIn').on("mousedown", function(event) {
         event.preventDefault();
         app.translateObject(ZOOM_IN);
     });
 
-    $('#zoomOut').on("click", function(event) {
+    $('#zoomOut').on("mousedown", function(event) {
         event.preventDefault();
         app.translateObject(ZOOM_OUT);
     });
 
-    $('#panUp').on("click", function(event){
+    $('[id^=zoom]').on("mouseup", function(event) {
+        event.preventDefault();
+        app.repeat(STOP);
+    });
+
+    $('#panUp').on("mousedown", function(event){
         event.preventDefault();
         app.translateObject(PAN_UP);
     });
 
-    $('#panDown').on("click", function(event){
+    $('#panDown').on("mousedown", function(event){
         event.preventDefault();
         app.translateObject(PAN_DOWN);
     });
 
-    $('#panLeft').on("click", function(event){
+    $('#panLeft').on("mousedown", function(event){
         event.preventDefault();
         app.translateObject(PAN_LEFT);
     });
 
-    $('#panRight').on("click", function(event){
+    $('#panRight').on("mousedown", function(event){
         event.preventDefault();
         app.translateObject(PAN_RIGHT);
+    });
+
+    $('[id^=pan]').on("mouseup", function(event) {
+        event.preventDefault();
+        app.repeat(STOP);
     });
 
     $('#reset').on("click", function(event) {
