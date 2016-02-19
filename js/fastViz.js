@@ -22,6 +22,7 @@ FastApp.prototype.init = function(container) {
     this.artistName = null;
     this.trackName = null;
     this.numCoefficients = 12;
+    this.segments = [];
     this.timbreSegments = [];
     this.timbreSegmentsNormalised = null;
     this.pitchSegments = [];
@@ -115,6 +116,16 @@ FastApp.prototype.parseData = function() {
         }
     }
 
+    //Get segments
+    for(prop in datasets) {
+        alias = datasets[prop].alias;
+        if(alias[0] === '/analysis/segments_start') {
+            this.segments = datasets[prop].value;
+            console.log("Got segments");
+            break;
+        }
+    }
+
     for(prop in datasets) {
         alias = datasets[prop].alias;
         if(alias[0] === '/analysis/segments_timbre') {
@@ -164,27 +175,36 @@ FastApp.prototype.renderTimbre = function() {
     timbreGroup.name = 'timbre';
     var numCoefficients = 12, numSegments = this.timbreSegments.length;
     var startX = 0, startY = 0, startZ = 0;
-    var interZgap = 1, interXgap = 1;
-    var width = 2, depth = 5;
+    var interZgap = 1, interXgap = 2;
+    var width = 2, depth = 2;
 
     this.timbreSegmentsNormalised = this.normaliseData(this.timbreSegments);
 
     var boxMat = new THREE.MeshLambertMaterial( {color: 0xff0000} );
 
-    var geom, mesh;
+    var geom = new THREE.BoxGeometry(width, 1, depth, 1, 1, 1);
+    var mesh;
+    var timeSlice, nextTimeSlice;
+    var defaultTimeSlice = this.segments[numSegments - 1] / numSegments;
+    var xDist, nextXDist;
 
     var coefficients, height;
     for(var i=0; i<numSegments; ++i) {
         coefficients = this.timbreSegments[i];
+        timeSlice = this.segments[i+1] - this.segments[i];
+        xDist = timeSlice/defaultTimeSlice;
+        nextTimeSlice = this.segments[i+2] - this.segments[i+1];
+        nextXDist =
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
             startY = coefficients[j] < 0 ? -height/2 : height/2;
-            geom = new THREE.BoxGeometry(width, height, depth, 1, 1, 1);
             mesh = new THREE.Mesh(geom, boxMat);
             mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
+            mesh.scale.y = height <= 0 ? 0.001 : height;
+            mesh.scale.x = xDist;
             timbreGroup.add(mesh);
         }
-        startX += interXgap;
+        startX = startX + xDist + interXgap;
     }
 
     timbreGroup.scale.set(this.guiControls.ScaleX, this.guiControls.ScaleY, this.guiControls.ScaleZ);
@@ -547,6 +567,11 @@ FastApp.prototype.resetObject = function() {
 };
 
 $(document).ready(function() {
+
+    //See if we have WebGL support
+    if(!Detector.webgl) {
+        $('#notSupported').show();
+    }
 
     //Init app
     if(!fileManager.init()) {

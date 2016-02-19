@@ -3,6 +3,9 @@
 .centred {
     text-align: center;
 }
+.noDisplay {
+    display: none;
+}
 #WebGL-output {
     /* set margin to 0 and overflow to hidden, to go fullscreen */
     margin: 0;
@@ -46,4 +49,12 @@
 }
 #controls button {
     margin-bottom: 10%;
+}
+#notSupported {
+    top: 25%;
+    left: 30%;
+    background: darkgrey;
+    border-radius: 15px;
+    color: black;
+    padding: 2%;
 }
