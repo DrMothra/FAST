@@ -135,6 +135,8 @@ FastApp.prototype.parseData = function() {
         }
     }
 
+    //Calculate segments per second
+
     this.renderTimbre();
     this.onShowGroup('timbre', this.guiControls.Timbre);
 
@@ -175,7 +177,7 @@ FastApp.prototype.renderTimbre = function() {
     timbreGroup.name = 'timbre';
     var numCoefficients = 12, numSegments = this.timbreSegments.length;
     var startX = 0, startY = 0, startZ = 0;
-    var interZgap = 1, interXgap = 2;
+    var interZgap = 1, interXgap = 0.1;
     var width = 2, depth = 2;
 
     this.timbreSegmentsNormalised = this.normaliseData(this.timbreSegments);
@@ -186,25 +188,41 @@ FastApp.prototype.renderTimbre = function() {
     var mesh;
     var timeSlice, nextTimeSlice;
     var defaultTimeSlice = this.segments[numSegments - 1] / numSegments;
-    var xDist, nextXDist;
+    var xScale, xOffeset;
 
+    //Render first segment
     var coefficients, height;
-    for(var i=0; i<numSegments; ++i) {
+    coefficients = this.timbreSegments[0];
+    timeSlice = this.segments[1] - this.segments[0];
+    xScale = timeSlice/defaultTimeSlice;
+    xOffeset = (xScale * width)/2;
+    for(var j=0; j<numCoefficients; ++j) {
+        height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
+        startY = coefficients[j] < 0 ? -height/2 : height/2;
+        mesh = new THREE.Mesh(geom, boxMat);
+        mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
+        mesh.scale.y = height <= 0 ? 0.001 : height;
+        mesh.scale.x = xScale;
+        timbreGroup.add(mesh);
+    }
+    startX = startX + xOffeset+ interXgap;
+
+    for(var i=1; i<numSegments; ++i) {
         coefficients = this.timbreSegments[i];
         timeSlice = this.segments[i+1] - this.segments[i];
-        xDist = timeSlice/defaultTimeSlice;
-        nextTimeSlice = this.segments[i+2] - this.segments[i+1];
-        nextXDist =
+        xScale = timeSlice/defaultTimeSlice;
+        xOffeset = (xScale * width)/2;
+
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
             startY = coefficients[j] < 0 ? -height/2 : height/2;
             mesh = new THREE.Mesh(geom, boxMat);
-            mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
+            mesh.position.set(startX + xOffeset, startY, startZ + (j * (interZgap + depth)));
             mesh.scale.y = height <= 0 ? 0.001 : height;
-            mesh.scale.x = xDist;
+            mesh.scale.x = xScale;
             timbreGroup.add(mesh);
         }
-        startX = startX + xDist + interXgap;
+        startX = startX + (xOffeset*2) + interXgap;
     }
 
     timbreGroup.scale.set(this.guiControls.ScaleX, this.guiControls.ScaleY, this.guiControls.ScaleZ);
