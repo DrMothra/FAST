@@ -23,7 +23,10 @@ FastApp.prototype.init = function(container) {
     this.trackName = null;
     this.numCoefficients = 12;
     this.segments = [];
+    this.segmentGap = 0.1;
+    this.segmentWidth = 2;
     this.timbreSegments = [];
+    this.markers = [];
     this.timbreSegmentsNormalised = null;
     this.pitchSegments = [];
     this.visibleModel = undefined;
@@ -136,6 +139,20 @@ FastApp.prototype.parseData = function() {
     }
 
     //Calculate segments per second
+    var numSegments = this.segments.length;
+    var segmentWidth = 2;
+    var distance;
+
+    this.secondsPerUnit = (numSegments*segmentWidth)/this.segments[numSegments-1];
+    var totalTime = 0, currentSecond = 1;
+    for(var i=0; i<this.segments.length; ++i){
+        totalTime = this.segments[i];
+        if(totalTime >= currentSecond) {
+            distance = (currentSecond * this.secondsPerUnit) + ((i-1)*this.segmentGap);
+            this.markers.push(distance);
+            ++currentSecond;
+        }
+    }
 
     this.renderTimbre();
     this.onShowGroup('timbre', this.guiControls.Timbre);
@@ -177,14 +194,14 @@ FastApp.prototype.renderTimbre = function() {
     timbreGroup.name = 'timbre';
     var numCoefficients = 12, numSegments = this.timbreSegments.length;
     var startX = 0, startY = 0, startZ = 0;
-    var interZgap = 1, interXgap = 0.1;
+    var interZgap = 1;
     var width = 2, depth = 2;
 
     this.timbreSegmentsNormalised = this.normaliseData(this.timbreSegments);
 
     var boxMat = new THREE.MeshLambertMaterial( {color: 0xff0000} );
 
-    var geom = new THREE.BoxGeometry(width, 1, depth, 1, 1, 1);
+    var geom = new THREE.BoxGeometry(this.segmentWidth, 1, depth, 1, 1, 1);
     var mesh;
     var timeSlice, nextTimeSlice;
     var defaultTimeSlice = this.segments[numSegments - 1] / numSegments;
@@ -195,7 +212,7 @@ FastApp.prototype.renderTimbre = function() {
     coefficients = this.timbreSegments[0];
     timeSlice = this.segments[1] - this.segments[0];
     xScale = timeSlice/defaultTimeSlice;
-    xOffeset = (xScale * width)/2;
+    xOffeset = (xScale * this.segmentWidth)/2;
     for(var j=0; j<numCoefficients; ++j) {
         height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
         startY = coefficients[j] < 0 ? -height/2 : height/2;
@@ -205,13 +222,13 @@ FastApp.prototype.renderTimbre = function() {
         mesh.scale.x = xScale;
         timbreGroup.add(mesh);
     }
-    startX = startX + xOffeset+ interXgap;
+    startX = startX + xOffeset+ this.segmentGap;
 
     for(var i=1; i<numSegments; ++i) {
         coefficients = this.timbreSegments[i];
         timeSlice = this.segments[i+1] - this.segments[i];
         xScale = timeSlice/defaultTimeSlice;
-        xOffeset = (xScale * width)/2;
+        xOffeset = (xScale * this.segmentWidth)/2;
 
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
@@ -222,10 +239,40 @@ FastApp.prototype.renderTimbre = function() {
             mesh.scale.x = xScale;
             timbreGroup.add(mesh);
         }
-        startX = startX + (xOffeset*2) + interXgap;
+        startX = startX + (xOffeset*2) + this.segmentGap;
     }
 
     timbreGroup.scale.set(this.guiControls.ScaleX, this.guiControls.ScaleY, this.guiControls.ScaleZ);
+
+    //Timeline
+    var lineGeom = new THREE.Geometry();
+    var timeLineX = (numSegments * this.segmentWidth) + ((numSegments-2) * this.segmentGap);
+    var timeLineZ = (numCoefficients-1) * (depth + interZgap) + 7.5;
+    lineGeom.vertices.push(new THREE.Vector3(0, 0, timeLineZ));
+    lineGeom.vertices.push(new THREE.Vector3(timeLineX, 0, timeLineZ));
+    var lineMat = new THREE.MeshBasicMaterial( {color: 0xffffff});
+    var line = new THREE.Line(lineGeom, lineMat);
+    timbreGroup.add(line);
+
+    //Divisions
+    var labelPos = new THREE.Vector3(-1, -2, timeLineZ), labelScale = new THREE.Vector3(12, 4, 1);
+    var timeLabel = spriteManager.create("Time", labelPos, labelScale, 12, 1, true, false);
+    this.scene.add(timeLabel);
+    //Time every 5 seconds
+    spriteManager.setTextColour([255, 255, 255]);
+    labelPos.x = 0;
+    labelPos.y = -0.4;
+    labelScale.x = 7.5;
+    labelScale.y = 1;
+    var numberLabel = spriteManager.create("0 s", labelPos, labelScale, 12, 1, true, false);
+    timbreGroup.add(numberLabel);
+    for(var i=5; i<this.markers.length; i+=5) {
+        labelPos.x = this.markers[i];
+        labelPos.y = -0.4;
+        numberLabel = spriteManager.create(i + " s", labelPos, labelScale, 12, 1, true, false);
+        timbreGroup.add(numberLabel);
+    }
+
     this.scene.add(timbreGroup);
 };
 
