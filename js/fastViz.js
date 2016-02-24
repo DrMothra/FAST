@@ -38,10 +38,16 @@ FastApp.prototype.init = function(container) {
     this.zTrans = 0;
     this.rotating = false;
     this.checkTime = 100;
+    this.playHead = undefined;
 };
 
 FastApp.prototype.update = function() {
-    var clicked = this.mouseDown;
+    var delta = this.clock.getDelta();
+
+    //Animate
+    if(this.playing) {
+        this.playHead.position.x += (this.secondsPerUnit * delta);
+    }
 
     BaseApp.prototype.update.call(this);
 };
@@ -58,11 +64,20 @@ FastApp.prototype.createScene = function() {
     lightMesh.position.set(0, 200, 0);
     this.scene.add(lightMesh);
 
-    //Load json data
+    //Load objects
     var _this = this;
-    this.dataLoader = new dataLoader();
+    var manager = new THREE.LoadingManager();
+    var loader = new THREE.OBJLoader( manager );
+    loader.load("models/arrow.obj", function(object) {
+        object.scale.set(0.05, 0.05, 0.05);
+        object.position.set(0, 0, 35);
+        _this.scene.add(object);
+        _this.playHead = object;
+    });
 
-    //DEBUG
+    //Load json data
+
+    this.dataLoader = new dataLoader();
 
     this.dataLoader.load("data/metallica_EndoftheLine.json", function(data) {
         _this.data = data;
@@ -631,6 +646,14 @@ FastApp.prototype.resetObject = function() {
     this.camera.rotation.set(0, 0, 0 );
 };
 
+FastApp.prototype.playTrack = function(trackState) {
+    this.playing = trackState;
+};
+
+FastApp.prototype.isPlaying = function() {
+    return this.playing;
+};
+
 $(document).ready(function() {
 
     //See if we have WebGL support
@@ -724,5 +747,9 @@ $(document).ready(function() {
         app.resetObject();
     });
 
+    $('#musicControls').on("click", function() {
+        app.playTrack(!app.isPlaying());
+        $('#playState').attr("src", app.isPlaying() ? "images/pause.png" : "images/play.png");
+    });
     app.run();
 });

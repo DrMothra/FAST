@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14000e9b-94ff-43d3-8c4a-3ba3a420475e" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/fastStyles.css" afterPath="$PROJECT_DIR$/css/fastStyles.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fastViz.html" afterPath="$PROJECT_DIR$/fastViz.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/fastViz.js" afterPath="$PROJECT_DIR$/js/fastViz.js" />
     </list>
@@ -27,8 +28,8 @@
       <file leaf-file-name="fastViz.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fastViz.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.5">
-              <caret line="13" column="67" selection-start-line="13" selection-start-column="67" selection-end-line="13" selection-end-column="67" />
+            <state vertical-scroll-proportion="-26.076923">
+              <caret line="86" column="22" selection-start-line="86" selection-start-column="13" selection-end-line="86" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -37,8 +38,8 @@
       <file leaf-file-name="fastViz.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/fastViz.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.644086">
-              <caret line="270" column="25" selection-start-line="270" selection-start-column="25" selection-end-line="270" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.744086">
+              <caret line="746" column="26" selection-start-line="746" selection-start-column="26" selection-end-line="746" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -47,7 +48,7 @@
       <file leaf-file-name="spriteManager.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/spriteManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="17.448277">
+            <state vertical-scroll-proportion="0.0">
               <caret line="39" column="36" selection-start-line="39" selection-start-column="36" selection-end-line="39" selection-end-column="36" />
               <folding />
             </state>
@@ -91,8 +92,8 @@
       <file leaf-file-name="fastStyles.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/fastStyles.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+            <state vertical-scroll-proportion="-21.576923">
+              <caret line="33" column="1" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -117,9 +118,9 @@
         <option value="$PROJECT_DIR$/js/dataLoader.js" />
         <option value="$PROJECT_DIR$/js/baseApp.js" />
         <option value="$PROJECT_DIR$/js/fileManager.js" />
+        <option value="$PROJECT_DIR$/js/spriteManager.js" />
         <option value="$PROJECT_DIR$/css/fastStyles.css" />
         <option value="$PROJECT_DIR$/fastViz.html" />
-        <option value="$PROJECT_DIR$/js/spriteManager.js" />
         <option value="$PROJECT_DIR$/js/fastViz.js" />
       </list>
     </option>
@@ -176,6 +177,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="FAST" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FAST" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FAST" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="models" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -309,7 +324,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1672" y="-60" width="1936" height="1096" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18854167" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -742,34 +757,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/fastStyles.css">
+    <entry file="file://$PROJECT_DIR$/js/spriteManager.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+          <caret line="39" column="36" selection-start-line="39" selection-start-column="36" selection-end-line="39" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/fastStyles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-21.576923">
+          <caret line="33" column="1" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fastViz.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.5">
-          <caret line="13" column="67" selection-start-line="13" selection-start-column="67" selection-end-line="13" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/spriteManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="17.448277">
-          <caret line="39" column="36" selection-start-line="39" selection-start-column="36" selection-end-line="39" selection-end-column="36" />
+        <state vertical-scroll-proportion="-26.076923">
+          <caret line="86" column="22" selection-start-line="86" selection-start-column="13" selection-end-line="86" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/fastViz.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.644086">
-          <caret line="270" column="25" selection-start-line="270" selection-start-column="25" selection-end-line="270" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.744086">
+          <caret line="746" column="26" selection-start-line="746" selection-start-column="26" selection-end-line="746" selection-end-column="26" />
           <folding />
         </state>
       </provider>

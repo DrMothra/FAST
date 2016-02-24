@@ -28,6 +28,13 @@
     top: 17.5%;
     left: 5%;
 }
+#musicControls {
+    bottom: 5%;
+    left: 45%;
+}
+#musicControls img {
+    width: 50%;
+}
 .btn-file {
     position: relative;
     overflow: hidden;
