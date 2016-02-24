@@ -3,6 +3,12 @@
 .centred {
     text-align: center;
 }
+.lefted {
+    text-align: left;
+}
+.righted {
+    text-align: right;
+}
 .noDisplay {
     display: none;
 }
