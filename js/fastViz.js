@@ -183,6 +183,36 @@ FastApp.prototype.parseData = function() {
 
     this.renderPitches();
     this.onShowGroup('pitch', this.guiControls.Pitch);
+
+    this.getAudioData();
+};
+
+FastApp.prototype.getAudioData = function() {
+    //Get audio preview
+    var xhr = new XMLHttpRequest();
+    var url = "http://previews.7digital.com/clip/";
+    var trackID = 2315490;
+    var key = "?oauth_consumer_key=7dqw7pfc7sbw";
+    var country = "&country=GB";
+    var oauthNonce = "&oauth_nonce=617563411";
+    var sigMethod = "&oauth_signature_method=HMAC-SHA1";
+    var oauthTimestamp = "&oauth_timestamp=1456876956";
+    var oauthVersion = "&oauth_version=1.0";
+    var oauthSig = "&oauth_signature=uATMVLzbxV8PD11DgJkWkz0u3II%3D";
+
+    var previewURL = url + trackID + key + country + oauthNonce + sigMethod + oauthTimestamp + oauthVersion + oauthSig;
+    xhr.open("GET", previewURL, true);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200) {
+                console.log(xhr.responseText);
+            } else {
+                console.log("Error uploading");
+            }
+        }
+    };
+
+    xhr.send();
 };
 
 function addGroundPlane(scene, width, height) {
