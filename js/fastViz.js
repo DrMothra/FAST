@@ -189,41 +189,51 @@ FastApp.prototype.parseData = function() {
 
 FastApp.prototype.getAudioData = function() {
     //Get audio preview
-    var now = Math.round(new Date().getTime() / 1000);
-    var httpMethod = 'GET',
-        url = 'http://previews.7digital.com/clip/8514023',
+    var now = Math.floor(new Date().getTime() / 1000);
+    var trackID = 2315490;
+    var httpMethod = "GET",
+        url = "http://previews.7digital.com/clip/",
         parameters = {
-            oauth_consumer_key : '7dqw7pfc7sbw',
-            oauth_nonce : '343385748',
+            country : "GB",
+            oauth_consumer_key : "7dqw7pfc7sbw",
+            oauth_nonce : "633782801",
+            oauth_signature_method : "HMAC-SHA1",
             oauth_timestamp : now,
-            oauth_signature_method : 'HMAC-SHA1',
-            oauth_version : '1.0'
+            oauth_version : "1.0"
         },
-        consumerSecret = 'qqx9pe6s6rfhnv37',
-        tokenSecret = '',
+        consumerSecret = "qqx9pe6s6rfhnv37",
+        tokenSecret = "",
     // generates a RFC 3986 encoded, BASE64 encoded HMAC-SHA1 hash
-        encodedSignature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret),
+        encodedSignature = oauthSignature.generate(httpMethod, url+trackID, parameters, consumerSecret, tokenSecret),
     // generates a BASE64 encode HMAC-SHA1 hash
         signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret,
             { encodeSignature: false});
 
     var xhr = new XMLHttpRequest();
-    var url = "http://previews.7digital.com/clip/";
-    var trackID = 8514023;
-    var key = "?oauth_consumer_key=7dqw7pfc7sbw";
-    var country = "&country=GB";
-    var oauthNonce = "&oauth_nonce=343385748";
-    var sigMethod = "&oauth_signature_method=HMAC-SHA1";
+    url = "http://previews.7digital.com/clip/";
+    var key = "&oauth_consumer_key=" + parameters.oauth_consumer_key;
+    var country = "?country=GB";
+    var oauthNonce = "&oauth_nonce=" + parameters.oauth_nonce;
+    var sigMethod = "&oauth_signature_method=" + parameters.oauth_signature_method;
     var oauthTimestamp = "&oauth_timestamp=" + now;
     var oauthVersion = "&oauth_version=1.0";
     var oauthSig = "&oauth_signature=" + encodedSignature;
 
-    var previewURL = url + trackID + key + country + oauthNonce + sigMethod + oauthTimestamp + oauthVersion + oauthSig;
+    var previewURL = url + trackID + country + key + oauthNonce + sigMethod + oauthTimestamp + oauthVersion + oauthSig;
     xhr.open("GET", previewURL, true);
     xhr.onreadystatechange = function() {
         if(xhr.readyState === 4) {
             if(xhr.status === 200) {
-                console.log(xhr.responseText);
+                console.log("Downloaded preview");
+                var player = document.getElementById("previewer");
+                //player.autoplay = true;
+                //DEBUG
+                console.log("Response type = ", xhr.responseType);
+                player.src = xhr.response;
+                player.load();
+                player.play();
+                //DEBUG
+                console.log("Error = ", player.error.code);
             } else {
                 console.log("Error uploading");
             }
