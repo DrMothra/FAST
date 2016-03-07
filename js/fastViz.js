@@ -39,6 +39,9 @@ FastApp.prototype.init = function(container) {
     this.rotating = false;
     this.checkTime = 100;
     this.playHead = undefined;
+    //Web audio
+    var webkitAudio = window.AudioContext || window.webkitAudioContext;
+    this.audioContext = new webkitAudio();
 };
 
 FastApp.prototype.update = function() {
@@ -189,6 +192,7 @@ FastApp.prototype.parseData = function() {
 
 FastApp.prototype.getAudioData = function() {
     //Get audio preview
+    var _this = this;
     var now = Math.floor(new Date().getTime() / 1000);
     var trackID = 2315490;
     var httpMethod = "GET",
@@ -221,19 +225,18 @@ FastApp.prototype.getAudioData = function() {
 
     var previewURL = url + trackID + country + key + oauthNonce + sigMethod + oauthTimestamp + oauthVersion + oauthSig;
     xhr.open("GET", previewURL, true);
+    xhr.responseType = 'arraybuffer';
     xhr.onreadystatechange = function() {
         if(xhr.readyState === 4) {
             if(xhr.status === 200) {
                 console.log("Downloaded preview");
-                var player = document.getElementById("previewer");
-                //player.autoplay = true;
-                //DEBUG
-                console.log("Response type = ", xhr.responseType);
-                player.src = xhr.response;
-                player.load();
-                player.play();
-                //DEBUG
-                console.log("Error = ", player.error.code);
+                _this.audioContext.decodeAudioData(xhr.response, function(buffer) {
+                    _this.audioBuffer = buffer;
+                    var source = _this.audioContext.createBufferSource();
+                    source.buffer = _this.audioBuffer;
+                    source.connect(_this.audioContext.destination);
+                    source.start(0);
+                }, onError);
             } else {
                 console.log("Error uploading");
             }
@@ -241,6 +244,11 @@ FastApp.prototype.getAudioData = function() {
     };
 
     xhr.send();
+
+    function onError() {
+        //DEBUG
+        console.log("There was an audio error");
+    }
 };
 
 function addGroundPlane(scene, width, height) {
