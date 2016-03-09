@@ -7,6 +7,8 @@ var STOP = -1, ROT_UP = 0, ROT_LEFT = 1, ROT_RIGHT = 2, ROT_DOWN = 3;
 var ROT_INC = Math.PI/32;
 var ZOOM_IN = 4, ZOOM_OUT = 5, PAN_UP = 6, PAN_DOWN = 7, PAN_LEFT = 8, PAN_RIGHT = 9;
 var MOVE_INC = 10;
+var START_TIME = 30;
+var SAMPLE_RATE = 44100;
 
 //Init this app from base
 function FastApp() {
@@ -82,7 +84,7 @@ FastApp.prototype.createScene = function() {
 
     this.dataLoader = new dataLoader();
 
-    this.dataLoader.load("data/metallica_EndoftheLine.json", function(data) {
+    this.dataLoader.load("data/ledZeppelin_ImmigrantSong.json", function(data) {
         _this.data = data;
         //DEBUG
         console.log("File loaded");
@@ -109,6 +111,9 @@ FastApp.prototype.loadNewFile = function(fileName) {
     }
     this.scene.remove(removeGroup);
 
+    //Reset any data
+    this.markers = [];
+
     //Render new data
     var _this = this;
     this.dataLoader.load("data/" + this.fileName, function(data) {
@@ -130,6 +135,7 @@ FastApp.prototype.parseData = function() {
             songData = datasets[prop].value;
             this.artistName = songData[0][9];
             this.trackName = songData[0][18];
+            this.trackID = songData[0][19];
             $('#trackInfoArtist').html("Artist: " + this.artistName);
             $('#trackInfoTrack').html("Track: " + this.trackName);
             console.log(this.artistName + ' ' + this.trackName);
@@ -156,25 +162,6 @@ FastApp.prototype.parseData = function() {
         }
     }
 
-    //Calculate segments per second
-    var numSegments = this.segments.length;
-    var segmentWidth = 2;
-    var distance;
-
-    this.secondsPerUnit = (numSegments*segmentWidth)/this.segments[numSegments-1];
-    var totalTime = 0, currentSecond = 1;
-    for(var i=0; i<this.segments.length; ++i){
-        totalTime = this.segments[i];
-        if(totalTime >= currentSecond) {
-            distance = (currentSecond * this.secondsPerUnit) + ((i-1)*this.segmentGap);
-            this.markers.push(distance);
-            ++currentSecond;
-        }
-    }
-
-    this.renderTimbre();
-    this.onShowGroup('timbre', this.guiControls.Timbre);
-
     for(prop in datasets) {
         alias = datasets[prop].alias;
         if(alias[0] === '/analysis/segments_pitches') {
@@ -184,17 +171,47 @@ FastApp.prototype.parseData = function() {
         }
     }
 
-    this.renderPitches();
-    this.onShowGroup('pitch', this.guiControls.Pitch);
+    //Calculate segments per second
+    var numSegments = this.segments.length;
+    var segmentWidth = 2;
+    var distance;
 
-    this.getAudioData();
+    var _this = this;
+    this.getAudioData(function() {
+        //Set up audio
+        _this.source = _this.audioContext.createBufferSource();
+        _this.source.buffer = _this.audioBuffer;
+        _this.source.connect(_this.audioContext.destination);
+        _this.playbackTime = 0;
+
+        _this.secondsPerUnit = (numSegments*segmentWidth)/_this.segments[numSegments-1];
+        var totalTime = 0, currentSecond = START_TIME, endTime = START_TIME + _this.source.buffer.duration;
+        for(var i=0; i<_this.segments.length; ++i){
+            totalTime = _this.segments[i];
+            if(totalTime >= currentSecond) {
+                distance = (currentSecond * _this.secondsPerUnit) + ((i-1)*_this.segmentGap);
+                _this.markers.push(distance);
+                if(_this.markers.length === 1) _this.startSegment = i;
+                if(totalTime >= endTime) {
+                    _this.endSegment = i;
+                    break;
+                }
+                ++currentSecond;
+            }
+        }
+
+        _this.renderTimbre();
+        _this.onShowGroup('timbre', _this.guiControls.Timbre);
+
+        _this.renderPitches();
+        _this.onShowGroup('pitch', _this.guiControls.Pitch);
+    });
 };
 
-FastApp.prototype.getAudioData = function() {
+FastApp.prototype.getAudioData = function(callback) {
     //Get audio preview
     var _this = this;
     var now = Math.floor(new Date().getTime() / 1000);
-    var trackID = 2315490;
     var httpMethod = "GET",
         url = "http://previews.7digital.com/clip/",
         parameters = {
@@ -208,7 +225,7 @@ FastApp.prototype.getAudioData = function() {
         consumerSecret = "qqx9pe6s6rfhnv37",
         tokenSecret = "",
     // generates a RFC 3986 encoded, BASE64 encoded HMAC-SHA1 hash
-        encodedSignature = oauthSignature.generate(httpMethod, url+trackID, parameters, consumerSecret, tokenSecret),
+        encodedSignature = oauthSignature.generate(httpMethod, url+this.trackID, parameters, consumerSecret, tokenSecret),
     // generates a BASE64 encode HMAC-SHA1 hash
         signature = oauthSignature.generate(httpMethod, url, parameters, consumerSecret, tokenSecret,
             { encodeSignature: false});
@@ -223,7 +240,7 @@ FastApp.prototype.getAudioData = function() {
     var oauthVersion = "&oauth_version=1.0";
     var oauthSig = "&oauth_signature=" + encodedSignature;
 
-    var previewURL = url + trackID + country + key + oauthNonce + sigMethod + oauthTimestamp + oauthVersion + oauthSig;
+    var previewURL = url + this.trackID + country + key + oauthNonce + sigMethod + oauthTimestamp + oauthVersion + oauthSig;
     xhr.open("GET", previewURL, true);
     xhr.responseType = 'arraybuffer';
     xhr.onreadystatechange = function() {
@@ -232,10 +249,7 @@ FastApp.prototype.getAudioData = function() {
                 console.log("Downloaded preview");
                 _this.audioContext.decodeAudioData(xhr.response, function(buffer) {
                     _this.audioBuffer = buffer;
-                    var source = _this.audioContext.createBufferSource();
-                    source.buffer = _this.audioBuffer;
-                    source.connect(_this.audioContext.destination);
-                    source.start(0);
+                    callback();
                 }, onError);
             } else {
                 console.log("Error uploading");
@@ -273,7 +287,7 @@ FastApp.prototype.renderTimbre = function() {
     //12 coefficients per segment
     var timbreGroup = new THREE.Object3D();
     timbreGroup.name = 'timbre';
-    var numCoefficients = 12, numSegments = this.timbreSegments.length;
+    var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
     var startX = 0, startY = 0, startZ = 0;
     var interZgap = 1;
     var width = 2, depth = 2;
@@ -290,8 +304,8 @@ FastApp.prototype.renderTimbre = function() {
 
     //Render first segment
     var coefficients, height;
-    coefficients = this.timbreSegments[0];
-    timeSlice = this.segments[1] - this.segments[0];
+    coefficients = this.timbreSegments[this.startSegment];
+    timeSlice = this.segments[this.startSegment+1] - this.segments[this.startSegment];
     xScale = timeSlice/defaultTimeSlice;
     xOffeset = (xScale * this.segmentWidth)/2;
     for(var j=0; j<numCoefficients; ++j) {
@@ -345,12 +359,14 @@ FastApp.prototype.renderTimbre = function() {
     labelPos.y = -0.4;
     labelScale.x = 7.5;
     labelScale.y = 1;
-    var numberLabel = spriteManager.create("0 s", labelPos, labelScale, 12, 1, true, false);
+    var labelTime;
+    var numberLabel = spriteManager.create("30 s", labelPos, labelScale, 12, 1, true, false);
     timbreGroup.add(numberLabel);
-    for(var i=5; i<this.markers.length; i+=5) {
-        labelPos.x = this.markers[i];
+    for(i=5; i<this.markers.length; i+=5) {
+        labelPos.x = this.markers[i] - this.markers[0];
         labelPos.y = -0.4;
-        numberLabel = spriteManager.create(i + " s", labelPos, labelScale, 12, 1, true, false);
+        labelTime = i + 30;
+        numberLabel = spriteManager.create(labelTime + " s", labelPos, labelScale, 12, 1, true, false);
         timbreGroup.add(numberLabel);
     }
 
@@ -713,7 +729,31 @@ FastApp.prototype.resetObject = function() {
 };
 
 FastApp.prototype.playTrack = function(trackState) {
+    var _this = this;
     this.playing = trackState;
+    if(this.playing) {
+        this.playbackStartTime = Date.now();
+        this.source.start(0, this.playbackTime);
+    } else {
+        this.playbackTime += ((Date.now() - this.playbackStartTime)/1000);
+        this.source.stop(0);
+        this.source = this.audioContext.createBufferSource();
+        this.source.buffer = this.audioBuffer;
+        this.source.connect(this.audioContext.destination);
+    }
+};
+
+FastApp.prototype.resetTrack = function() {
+    if(this.playing) {
+        this.source.stop(0);
+        this.source = this.audioContext.createBufferSource();
+        this.source.buffer = this.audioBuffer;
+        this.source.connect(this.audioContext.destination);
+    }
+    this.playing = false;
+    this.playbackTime = 0;
+    this.playHead.position.set(0, 0, 35);
+    $('#playState').attr("src", "images/play.png");
 };
 
 FastApp.prototype.isPlaying = function() {
@@ -813,9 +853,13 @@ $(document).ready(function() {
         app.resetObject();
     });
 
-    $('#musicControls').on("click", function() {
+    $('#playState').on("click", function() {
         app.playTrack(!app.isPlaying());
         $('#playState').attr("src", app.isPlaying() ? "images/pause.png" : "images/play.png");
+    });
+
+    $('#rewind').on("click", function() {
+        app.resetTrack();
     });
     app.run();
 });
