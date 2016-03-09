@@ -25,7 +25,7 @@ FastApp.prototype.init = function(container) {
     this.trackName = null;
     this.numCoefficients = 12;
     this.segments = [];
-    this.segmentGap = 0.1;
+    this.segmentGap = 0;
     this.segmentWidth = 2;
     this.timbreSegments = [];
     this.markers = [];
@@ -378,26 +378,51 @@ FastApp.prototype.renderPitches = function() {
     //12 coefficients per segment
     var pitchGroup = new THREE.Object3D();
     pitchGroup.name = 'pitch';
-    var numCoefficients = 12, numSegments = this.pitchSegments.length;
+    var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
     var startX = 0, startY = 0, startZ = 0;
-    var interZgap = 1, interXgap = 1;
+    var interZgap = 1;
+    var timeSlice, nextTimeSlice;
     var width = 2, depth = 2;
+    var xScale, xOffset;
 
     var boxMat = new THREE.MeshLambertMaterial( {color: 0x0000ff} );
-    var geom, mesh;
+    var geom = new THREE.BoxGeometry(this.segmentWidth, 1, depth, 1, 1, 1);
+    var defaultTimeSlice = this.segments[numSegments - 1] / numSegments;
+    var mesh;
 
+    //Render first segment
     var coefficients, height;
-    for(var i=0; i<numSegments; ++i) {
+    coefficients = this.pitchSegments[this.startSegment];
+    timeSlice = this.segments[this.startSegment+1] - this.segments[this.startSegment];
+    xScale = timeSlice/defaultTimeSlice;
+    xOffset = (xScale * this.segmentWidth)/2;
+    for(var j=0; j<numCoefficients; ++j) {
+        height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
+        startY = coefficients[j] < 0 ? -height/2 : height/2;
+        mesh = new THREE.Mesh(geom, boxMat);
+        mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
+        mesh.scale.y = height <= 0 ? 0.001 : height;
+        mesh.scale.x = xScale;
+        pitchGroup.add(mesh);
+    }
+    startX = startX + xOffset+ this.segmentGap;
+
+    for(var i=1; i<numSegments; ++i) {
         coefficients = this.pitchSegments[i];
+        timeSlice = this.segments[i+1] - this.segments[i];
+        xScale = timeSlice/defaultTimeSlice;
+        xOffset = (xScale * this.segmentWidth)/2;
+
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
             startY = coefficients[j] < 0 ? -height/2 : height/2;
-            geom = new THREE.BoxGeometry(width, height, depth, 1, 1, 1);
             mesh = new THREE.Mesh(geom, boxMat);
-            mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
+            mesh.position.set(startX + xOffset, startY, startZ + (j * (interZgap + depth)));
+            mesh.scale.y = height <= 0 ? 0.001 : height;
+            mesh.scale.x = xScale;
             pitchGroup.add(mesh);
         }
-        startX += interXgap;
+        startX = startX + (xOffset*2) + this.segmentGap;
     }
 
     this.scene.add(pitchGroup);
