@@ -191,19 +191,19 @@ FastApp.prototype.parseData = function() {
             if(totalTime >= currentSecond) {
                 distance = (currentSecond * _this.secondsPerUnit) + ((i-1)*_this.segmentGap);
                 _this.markers.push(distance);
-                if(_this.markers.length === 1) _this.startSegment = i;
+                if(_this.markers.length === 1) _this.startSegment = i-1;
                 if(totalTime >= endTime) {
-                    _this.endSegment = i;
+                    _this.endSegment = i-1;
                     break;
                 }
                 ++currentSecond;
             }
         }
 
-        _this.renderTimbre();
+        _this.renderAttribute('timbre', true);
         _this.onShowGroup('timbre', _this.guiControls.Timbre);
 
-        _this.renderPitches();
+        _this.renderAttribute('pitch', false);
         _this.onShowGroup('pitch', _this.guiControls.Pitch);
     });
 };
@@ -282,102 +282,10 @@ function addGroundPlane(scene, width, height) {
     scene.add(plane);
 }
 
-FastApp.prototype.renderTimbre = function() {
-    //Render timbre
-    //12 coefficients per segment
-    var timbreGroup = new THREE.Object3D();
-    timbreGroup.name = 'timbre';
-    var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
-    var startX = 0, startY = 0, startZ = 0;
-    var interZgap = 1;
-    var width = 2, depth = 2;
-
-    this.timbreSegmentsNormalised = this.normaliseData(this.timbreSegments);
-
-    var boxMat = new THREE.MeshLambertMaterial( {color: 0xff0000} );
-
-    var geom = new THREE.BoxGeometry(this.segmentWidth, 1, depth, 1, 1, 1);
-    var mesh;
-    var timeSlice, nextTimeSlice;
-    var defaultTimeSlice = this.segments[numSegments - 1] / numSegments;
-    var xScale, xOffeset;
-
-    //Render first segment
-    var coefficients, height;
-    coefficients = this.timbreSegments[this.startSegment];
-    timeSlice = this.segments[this.startSegment+1] - this.segments[this.startSegment];
-    xScale = timeSlice/defaultTimeSlice;
-    xOffeset = (xScale * this.segmentWidth)/2;
-    for(var j=0; j<numCoefficients; ++j) {
-        height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
-        startY = coefficients[j] < 0 ? -height/2 : height/2;
-        mesh = new THREE.Mesh(geom, boxMat);
-        mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
-        mesh.scale.y = height <= 0 ? 0.001 : height;
-        mesh.scale.x = xScale;
-        timbreGroup.add(mesh);
-    }
-    startX = startX + xOffeset+ this.segmentGap;
-
-    for(var i=1; i<numSegments; ++i) {
-        coefficients = this.timbreSegments[i];
-        timeSlice = this.segments[i+1] - this.segments[i];
-        xScale = timeSlice/defaultTimeSlice;
-        xOffeset = (xScale * this.segmentWidth)/2;
-
-        for(var j=0; j<numCoefficients; ++j) {
-            height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
-            startY = coefficients[j] < 0 ? -height/2 : height/2;
-            mesh = new THREE.Mesh(geom, boxMat);
-            mesh.position.set(startX + xOffeset, startY, startZ + (j * (interZgap + depth)));
-            mesh.scale.y = height <= 0 ? 0.001 : height;
-            mesh.scale.x = xScale;
-            timbreGroup.add(mesh);
-        }
-        startX = startX + (xOffeset*2) + this.segmentGap;
-    }
-
-    timbreGroup.scale.set(this.guiControls.ScaleX, this.guiControls.ScaleY, this.guiControls.ScaleZ);
-
-    //Timeline
-    var lineGeom = new THREE.Geometry();
-    var timeLineX = (numSegments * this.segmentWidth) + ((numSegments-2) * this.segmentGap);
-    var timeLineZ = (numCoefficients-1) * (depth + interZgap) + 7.5;
-    lineGeom.vertices.push(new THREE.Vector3(0, 0, timeLineZ));
-    lineGeom.vertices.push(new THREE.Vector3(timeLineX, 0, timeLineZ));
-    var lineMat = new THREE.MeshBasicMaterial( {color: 0xffffff});
-    var line = new THREE.Line(lineGeom, lineMat);
-    timbreGroup.add(line);
-
-    //Divisions
-    var labelPos = new THREE.Vector3(-1, -2, timeLineZ), labelScale = new THREE.Vector3(12, 4, 1);
-    var timeLabel = spriteManager.create("Time", labelPos, labelScale, 12, 1, true, false);
-    this.scene.add(timeLabel);
-    //Time every 5 seconds
-    spriteManager.setTextColour([255, 255, 255]);
-    labelPos.x = 0;
-    labelPos.y = -0.4;
-    labelScale.x = 7.5;
-    labelScale.y = 1;
-    var labelTime;
-    var numberLabel = spriteManager.create("30 s", labelPos, labelScale, 12, 1, true, false);
-    timbreGroup.add(numberLabel);
-    for(i=5; i<this.markers.length; i+=5) {
-        labelPos.x = this.markers[i] - this.markers[0];
-        labelPos.y = -0.4;
-        labelTime = i + 30;
-        numberLabel = spriteManager.create(labelTime + " s", labelPos, labelScale, 12, 1, true, false);
-        timbreGroup.add(numberLabel);
-    }
-
-    this.scene.add(timbreGroup);
-};
-
-FastApp.prototype.renderPitches = function() {
-    //Render pitches
-    //12 coefficients per segment
-    var pitchGroup = new THREE.Object3D();
-    pitchGroup.name = 'pitch';
+FastApp.prototype.renderAttribute = function(name, normal) {
+    //Render data attribute
+    var dataGroup = new THREE.Object3D();
+    dataGroup.name = name;
     var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
     var startX = 0, startY = 0, startZ = 0;
     var interZgap = 1;
@@ -387,12 +295,32 @@ FastApp.prototype.renderPitches = function() {
 
     var boxMat = new THREE.MeshLambertMaterial( {color: 0x0000ff} );
     var geom = new THREE.BoxGeometry(this.segmentWidth, 1, depth, 1, 1, 1);
-    var defaultTimeSlice = this.segments[numSegments - 1] / numSegments;
+    var defaultTimeSlice = (this.segments[this.endSegment + 1] - this.segments[this.startSegment]) / numSegments;
     var mesh;
+
+    //Get relevant data
+    var segmentData;
+    switch (name) {
+        case 'timbre' :
+            segmentData = this.timbreSegments;
+            break;
+
+        case 'pitch' :
+            segmentData = this.pitchSegments;
+            break;
+
+        default :
+            console.log("No relevant data");
+            break;
+    }
+
+    if(normal) {
+        segmentData = this.normaliseData(segmentData);
+    }
 
     //Render first segment
     var coefficients, height;
-    coefficients = this.pitchSegments[this.startSegment];
+    coefficients = segmentData[this.startSegment];
     timeSlice = this.segments[this.startSegment+1] - this.segments[this.startSegment];
     xScale = timeSlice/defaultTimeSlice;
     xOffset = (xScale * this.segmentWidth)/2;
@@ -403,12 +331,12 @@ FastApp.prototype.renderPitches = function() {
         mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
         mesh.scale.y = height <= 0 ? 0.001 : height;
         mesh.scale.x = xScale;
-        pitchGroup.add(mesh);
+        dataGroup.add(mesh);
     }
     startX = startX + xOffset+ this.segmentGap;
 
-    for(var i=1; i<numSegments; ++i) {
-        coefficients = this.pitchSegments[i];
+    for(var i=this.startSegment+1; i<=this.endSegment; ++i) {
+        coefficients = segmentData[i];
         timeSlice = this.segments[i+1] - this.segments[i];
         xScale = timeSlice/defaultTimeSlice;
         xOffset = (xScale * this.segmentWidth)/2;
@@ -420,12 +348,12 @@ FastApp.prototype.renderPitches = function() {
             mesh.position.set(startX + xOffset, startY, startZ + (j * (interZgap + depth)));
             mesh.scale.y = height <= 0 ? 0.001 : height;
             mesh.scale.x = xScale;
-            pitchGroup.add(mesh);
+            dataGroup.add(mesh);
         }
         startX = startX + (xOffset*2) + this.segmentGap;
     }
 
-    this.scene.add(pitchGroup);
+    this.scene.add(dataGroup);
 };
 
 FastApp.prototype.normaliseData = function(data) {
