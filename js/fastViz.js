@@ -200,10 +200,10 @@ FastApp.prototype.parseData = function() {
             }
         }
 
-        _this.renderAttribute('timbre', true);
+        _this.renderAttribute('timbre', _this.timbreSegments, true);
         _this.onShowGroup('timbre', _this.guiControls.Timbre);
 
-        _this.renderAttribute('pitch', false);
+        _this.renderAttribute('pitch', _this.pitchSegments, false);
         _this.onShowGroup('pitch', _this.guiControls.Pitch);
     });
 };
@@ -282,7 +282,7 @@ function addGroundPlane(scene, width, height) {
     scene.add(plane);
 }
 
-FastApp.prototype.renderAttribute = function(name, normal) {
+FastApp.prototype.renderAttribute = function(name, data, normalise) {
     //Render data attribute
     var dataGroup = new THREE.Object3D();
     dataGroup.name = name;
@@ -299,22 +299,9 @@ FastApp.prototype.renderAttribute = function(name, normal) {
     var mesh;
 
     //Get relevant data
-    var segmentData;
-    switch (name) {
-        case 'timbre' :
-            segmentData = this.timbreSegments;
-            break;
+    var segmentData = data;
 
-        case 'pitch' :
-            segmentData = this.pitchSegments;
-            break;
-
-        default :
-            console.log("No relevant data");
-            break;
-    }
-
-    if(normal) {
+    if(normalise) {
         segmentData = this.normaliseData(segmentData);
     }
 
