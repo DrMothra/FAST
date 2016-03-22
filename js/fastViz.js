@@ -51,7 +51,7 @@ FastApp.prototype.update = function() {
 
     //Animate
     if(this.playing) {
-        this.playHead.position.x += (this.secondsPerUnit * delta);
+        this.playHead.position.x += (this.unitsPerSecond * delta);
     }
 
     BaseApp.prototype.update.call(this);
@@ -79,6 +79,15 @@ FastApp.prototype.createScene = function() {
         _this.scene.add(object);
         _this.playHead = object;
     });
+
+    //Rendering attributes
+    this.timbreAttributes = {
+        colour: 0xff0000
+    };
+
+    this.pitchAttributes = {
+        colour: 0x0000ff
+    };
 
     //Load json data
 
@@ -184,12 +193,14 @@ FastApp.prototype.parseData = function() {
         _this.source.connect(_this.audioContext.destination);
         _this.playbackTime = 0;
 
-        _this.secondsPerUnit = (numSegments*segmentWidth)/_this.segments[numSegments-1];
+        //DEBUG
+        _this.unitsPerSecond = 1;
+
         var totalTime = 0, currentSecond = START_TIME, endTime = START_TIME + _this.source.buffer.duration;
         for(var i=0; i<_this.segments.length; ++i){
             totalTime = _this.segments[i];
             if(totalTime >= currentSecond) {
-                distance = (currentSecond * _this.secondsPerUnit) + ((i-1)*_this.segmentGap);
+                distance = (currentSecond * _this.unitsPerSecond) + ((i-1)*_this.segmentGap);
                 _this.markers.push(distance);
                 if(_this.markers.length === 1) _this.startSegment = i-1;
                 if(totalTime >= endTime) {
@@ -200,10 +211,16 @@ FastApp.prototype.parseData = function() {
             }
         }
 
-        _this.renderAttribute('timbre', _this.timbreSegments, true);
+        //Calculate playback speed
+        var time = _this.segments[_this.endSegment+1] - _this.segments[_this.startSegment];
+        var distance = (_this.endSegment - _this.startSegment) + 1;
+        distance = distance * _this.segmentWidth;
+        _this.unitsPerSecond = distance/time;
+
+        _this.renderAttribute('timbre', _this.timbreSegments, _this.timbreAttributes, true);
         _this.onShowGroup('timbre', _this.guiControls.Timbre);
 
-        _this.renderAttribute('pitch', _this.pitchSegments, false);
+        _this.renderAttribute('pitch', _this.pitchSegments, _this.pitchAttributes, false);
         _this.onShowGroup('pitch', _this.guiControls.Pitch);
     });
 };
@@ -282,7 +299,7 @@ function addGroundPlane(scene, width, height) {
     scene.add(plane);
 }
 
-FastApp.prototype.renderAttribute = function(name, data, normalise) {
+FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) {
     //Render data attribute
     var dataGroup = new THREE.Object3D();
     dataGroup.name = name;
@@ -293,7 +310,7 @@ FastApp.prototype.renderAttribute = function(name, data, normalise) {
     var width = 2, depth = 2;
     var xScale, xOffset;
 
-    var boxMat = new THREE.MeshLambertMaterial( {color: 0x0000ff} );
+    var boxMat = new THREE.MeshLambertMaterial( {color: attributes.colour} );
     var geom = new THREE.BoxGeometry(this.segmentWidth, 1, depth, 1, 1, 1);
     var defaultTimeSlice = (this.segments[this.endSegment + 1] - this.segments[this.startSegment]) / numSegments;
     var mesh;
@@ -406,6 +423,8 @@ FastApp.prototype.createGUI = function() {
         this.LightZ = 0;
     };
 
+
+
     //Create GUI
     var gui = new dat.GUI();
     var _this = this;
@@ -454,6 +473,8 @@ FastApp.prototype.createGUI = function() {
         _this.onShowGroup('pitch', value);
     });
     pitch.listen();
+
+    this.guiDimensions = gui.addFolder("Dimensions");
 };
 
 FastApp.prototype.onScaleChanged = function(axis, value) {
@@ -669,7 +690,6 @@ FastApp.prototype.resetObject = function() {
 };
 
 FastApp.prototype.playTrack = function(trackState) {
-    var _this = this;
     this.playing = trackState;
     if(this.playing) {
         this.playbackStartTime = Date.now();
