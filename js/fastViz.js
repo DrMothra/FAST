@@ -7,7 +7,7 @@ var STOP = -1, ROT_UP = 0, ROT_LEFT = 1, ROT_RIGHT = 2, ROT_DOWN = 3;
 var ROT_INC = Math.PI/32;
 var ZOOM_IN = 4, ZOOM_OUT = 5, PAN_UP = 6, PAN_DOWN = 7, PAN_LEFT = 8, PAN_RIGHT = 9;
 var MOVE_INC = 10;
-var START_TIME = 30;
+var START_TIME = 43;
 var SAMPLE_RATE = 44100;
 
 //Init this app from base
@@ -28,6 +28,7 @@ FastApp.prototype.init = function(container) {
     this.segmentGap = 0;
     this.segmentWidth = 2;
     this.timbreSegments = [];
+    this.startSegment = undefined;
     this.markers = [];
     this.timbreSegmentsNormalised = null;
     this.pitchSegments = [];
@@ -193,21 +194,16 @@ FastApp.prototype.parseData = function() {
         _this.source.connect(_this.audioContext.destination);
         _this.playbackTime = 0;
 
-        //DEBUG
-        _this.unitsPerSecond = 1;
-
-        var totalTime = 0, currentSecond = START_TIME, endTime = START_TIME + _this.source.buffer.duration;
-        for(var i=0; i<_this.segments.length; ++i){
+        var totalTime = 0, startTime = START_TIME, endTime = START_TIME + _this.source.buffer.duration;
+        var i;
+        for(i=0; i<_this.segments.length; ++i){
             totalTime = _this.segments[i];
-            if(totalTime >= currentSecond) {
-                distance = (currentSecond * _this.unitsPerSecond) + ((i-1)*_this.segmentGap);
-                _this.markers.push(distance);
-                if(_this.markers.length === 1) _this.startSegment = i-1;
+            if(totalTime >= startTime) {
+                _this.startSegment = _this.startSegment === undefined ? i-1 : _this.startSegment;
                 if(totalTime >= endTime) {
                     _this.endSegment = i-1;
                     break;
                 }
-                ++currentSecond;
             }
         }
 
@@ -217,6 +213,23 @@ FastApp.prototype.parseData = function() {
         distance = distance * _this.segmentWidth;
         _this.unitsPerSecond = distance/time;
 
+        //Create markers
+        var MARKER_INC = 5;
+        var markerObj;
+        var currentSecond = Math.round(_this.segments[_this.startSegment]);
+        for(i=_this.startSegment; i<_this.endSegment+1; ++i) {
+            totalTime = _this.segments[i];
+            if(totalTime >= currentSecond) {
+                distance = (currentSecond * _this.unitsPerSecond);
+                markerObj = {};
+                markerObj.distance = distance;
+                markerObj.time = currentSecond;
+                _this.markers.push(markerObj);
+                currentSecond += MARKER_INC;
+            }
+        }
+
+        _this.renderTimeline();
         _this.renderAttribute('timbre', _this.timbreSegments, _this.timbreAttributes, true);
         _this.onShowGroup('timbre', _this.guiControls.Timbre);
 
@@ -332,6 +345,7 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
         height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
         startY = coefficients[j] < 0 ? -height/2 : height/2;
         mesh = new THREE.Mesh(geom, boxMat);
+        mesh.name = "row" + j + "col" + this.startSegment;
         mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
         mesh.scale.y = height <= 0 ? 0.001 : height;
         mesh.scale.x = xScale;
@@ -349,6 +363,7 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
             startY = coefficients[j] < 0 ? -height/2 : height/2;
             mesh = new THREE.Mesh(geom, boxMat);
+            mesh.name = "row" + j + "col" + i;
             mesh.position.set(startX + xOffset, startY, startZ + (j * (interZgap + depth)));
             mesh.scale.y = height <= 0 ? 0.001 : height;
             mesh.scale.x = xScale;
@@ -358,6 +373,35 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
     }
 
     this.scene.add(dataGroup);
+};
+
+FastApp.prototype.renderTimeline = function() {
+    //Timeline
+    var depth = 2, interZgap = 1;
+    var numSegments = this.endSegment - this.startSegment + 1;
+    var lineGeom = new THREE.Geometry();
+    var timeLineX = (numSegments * this.segmentWidth);
+    var timeLineZ = (this.numCoefficients-1) * (depth + interZgap) + 7.5;
+    lineGeom.vertices.push(new THREE.Vector3(0, 0, timeLineZ));
+    lineGeom.vertices.push(new THREE.Vector3(timeLineX, 0, timeLineZ));
+    var lineMat = new THREE.MeshBasicMaterial( {color: 0xffffff});
+    var line = new THREE.Line(lineGeom, lineMat);
+    this.scene.add(line);
+
+    //Divisions
+    var labelPos = new THREE.Vector3(-3, -4, timeLineZ), labelScale = new THREE.Vector3(24, 8, 1);
+    var timeLabel = spriteManager.create("Time", labelPos, labelScale, 12, 1, true, false);
+    this.scene.add(timeLabel);
+    //Time markers
+    labelPos.x = 0;
+    spriteManager.setTextColour([255, 255, 255]);
+    var numberLabel = spriteManager.create(this.markers[0].time + " s", labelPos, labelScale, 12, 1, true, false);
+    this.scene.add(numberLabel);
+    for(var i=1; i<this.markers.length; ++i) {
+        labelPos.x = this.markers[i].distance - this.markers[0].distance;
+        numberLabel = spriteManager.create(this.markers[i].time + " s", labelPos, labelScale, 12, 1, true, false);
+        this.scene.add(numberLabel);
+    }
 };
 
 FastApp.prototype.normaliseData = function(data) {
@@ -411,6 +455,35 @@ FastApp.prototype.onShowGroup = function(name, value) {
     }
 };
 
+FastApp.prototype.onShowDimension = function(value, dim) {
+    //DEBUG
+    //console.log("Value = ", value, dim);
+    //Get group and traverse meshes
+    var groupName = this.guiControls.Timbre ? "timbre" : "pitch";
+    var group = this.scene.getObjectByName(groupName);
+    if(group) {
+        group.traverse(function(obj) {
+            if (obj instanceof THREE.Mesh) {
+                if(obj.name.indexOf("row"+dim+"col") !== -1) {
+                    obj.visible = value;
+                }
+            }
+        });
+    }
+};
+
+FastApp.prototype.onShowAllDimensions = function(status) {
+    var groupName = this.guiControls.Timbre ? "timbre" : "pitch";
+    var group = this.scene.getObjectByName(groupName);
+    if(group) {
+        group.traverse(function(obj) {
+            if (obj instanceof THREE.Mesh) {
+                obj.visible = status;
+            }
+        });
+    }
+};
+
 FastApp.prototype.createGUI = function() {
     this.guiControls = new function() {
         this.Timbre = true;
@@ -422,8 +495,6 @@ FastApp.prototype.createGUI = function() {
         this.LightY = 200;
         this.LightZ = 0;
     };
-
-
 
     //Create GUI
     var gui = new dat.GUI();
@@ -464,17 +535,40 @@ FastApp.prototype.createGUI = function() {
     });
 
     this.guiData = gui.addFolder("Data");
-    var timbre = this.guiData.add(this.guiControls, 'Timbre', this.Timbre).onChange(function(value) {
+    var timbre = this.guiData.add(this.guiControls, 'Timbre').onChange(function(value) {
         _this.onShowGroup('timbre', value);
     });
     timbre.listen();
 
-    var pitch = this.guiData.add(this.guiControls, 'Pitch', this.Pitch).onChange(function(value) {
+    var pitch = this.guiData.add(this.guiControls, 'Pitch').onChange(function(value) {
         _this.onShowGroup('pitch', value);
     });
     pitch.listen();
 
+    //Dimensions
+    var i;
     this.guiDimensions = gui.addFolder("Dimensions");
+    gui.dimensions = [];
+    gui.ShowAll = true;
+
+    for (i=1; i<=this.numCoefficients; i++) {
+        gui.dimensions[i] = true;
+    }
+
+    var dimFunc;
+    for (i=1; i<=this.numCoefficients; i++) (function(n){
+        dimFunc = _this.guiDimensions.add(gui.dimensions, n).onChange(function(value) {
+            _this.onShowDimension(value, n-1);
+        });
+        dimFunc.listen();
+    })(i);
+
+    this.guiDimensions.add(gui, "ShowAll").onChange(function(value) {
+        for (i=1; i<=_this.numCoefficients; i++) {
+            gui.dimensions[i] = value;
+        }
+        _this.onShowAllDimensions(value);
+    });
 };
 
 FastApp.prototype.onScaleChanged = function(axis, value) {
