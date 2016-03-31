@@ -42,6 +42,7 @@ FastApp.prototype.init = function(container) {
     this.rotating = false;
     this.checkTime = 100;
     this.playHead = undefined;
+    this.timeMargin = 3;
     //Web audio
     var webkitAudio = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new webkitAudio();
@@ -53,6 +54,7 @@ FastApp.prototype.update = function() {
     //Animate
     if(this.playing) {
         this.playHead.position.x += (this.unitsPerSecond * delta);
+        this.timelineIndicator.position.x = this.playHead.position.x-0.25;
     }
 
     BaseApp.prototype.update.call(this);
@@ -80,6 +82,14 @@ FastApp.prototype.createScene = function() {
         _this.scene.add(object);
         _this.playHead = object;
     });
+
+    //Timeline indicator
+    var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff});
+    var timelineGeom = new THREE.BoxGeometry(0.5, 0.5, 37.5);
+    this.timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
+    this.timelineIndicator.name = "timeline";
+    this.timelineIndicator.position.set(-0.25, 1, 17.5);
+    this.scene.add(this.timelineIndicator);
 
     //Rendering attributes
     this.timbreAttributes = {
@@ -194,7 +204,7 @@ FastApp.prototype.parseData = function() {
         _this.source.connect(_this.audioContext.destination);
         _this.playbackTime = 0;
 
-        var totalTime = 0, startTime = START_TIME, endTime = START_TIME + _this.source.buffer.duration;
+        var totalTime = 0, startTime = START_TIME - _this.timeMargin, endTime = START_TIME + _this.source.buffer.duration + _this.timeMargin;
         var i;
         for(i=0; i<_this.segments.length; ++i){
             totalTime = _this.segments[i];
@@ -277,12 +287,13 @@ FastApp.prototype.getAudioData = function(callback) {
         if(xhr.readyState === 4) {
             if(xhr.status === 200) {
                 console.log("Downloaded preview");
+                $('#downloadError').hide();
                 _this.audioContext.decodeAudioData(xhr.response, function(buffer) {
                     _this.audioBuffer = buffer;
                     callback();
                 }, onError);
             } else {
-                console.log("Error uploading");
+                $('#downloadError').show();
             }
         }
     };
@@ -484,10 +495,15 @@ FastApp.prototype.onShowAllDimensions = function(status) {
     }
 };
 
+FastApp.prototype.onStartChanged = function(value) {
+
+};
+
 FastApp.prototype.createGUI = function() {
     this.guiControls = new function() {
         this.Timbre = true;
         this.Pitch = false;
+        this.Start = 0.01;
         this.ScaleX = 1.0;
         this.ScaleY = 10.0;
         this.ScaleZ = 1.0;
@@ -544,6 +560,11 @@ FastApp.prototype.createGUI = function() {
         _this.onShowGroup('pitch', value);
     });
     pitch.listen();
+
+    var start = this.guiData.add(this.guiControls, 'Start', 0, 3).step(0.1);
+    start.onChange(function(value) {
+        _this.onStartChanged(value);
+    });
 
     //Dimensions
     var i;
@@ -807,6 +828,7 @@ FastApp.prototype.resetTrack = function() {
     this.playing = false;
     this.playbackTime = 0;
     this.playHead.position.set(0, 0, 35);
+    this.timelineIndicator.position.set(-0.25, 1, 17.5);
     $('#playState').attr("src", "images/play.png");
 };
 

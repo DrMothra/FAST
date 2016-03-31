@@ -63,11 +63,18 @@
 #controls button {
     margin-bottom: 10%;
 }
-#notSupported {
-    top: 25%;
-    left: 30%;
+#notSupported,
+#downloadError {
     background: darkgrey;
     border-radius: 15px;
     color: black;
     padding: 2%;
+}
+#notSupported {
+    top: 25%;
+    left: 30%;
+}
+#downloadError {
+    bottom: 30%;
+    left: 40%;
 }
