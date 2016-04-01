@@ -7,7 +7,7 @@ var STOP = -1, ROT_UP = 0, ROT_LEFT = 1, ROT_RIGHT = 2, ROT_DOWN = 3;
 var ROT_INC = Math.PI/32;
 var ZOOM_IN = 4, ZOOM_OUT = 5, PAN_UP = 6, PAN_DOWN = 7, PAN_LEFT = 8, PAN_RIGHT = 9;
 var MOVE_INC = 10;
-var START_TIME = 43;
+var START_TIME = 30;
 var SAMPLE_RATE = 44100;
 
 //Init this app from base
@@ -42,7 +42,8 @@ FastApp.prototype.init = function(container) {
     this.rotating = false;
     this.checkTime = 100;
     this.playHead = undefined;
-    this.timeMargin = 3;
+    this.startPlayhead = 0;
+    this.timeMargin = 2;
     //Web audio
     var webkitAudio = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new webkitAudio();
@@ -78,7 +79,7 @@ FastApp.prototype.createScene = function() {
     var loader = new THREE.OBJLoader( manager );
     loader.load("models/arrow.obj", function(object) {
         object.scale.set(0.05, 0.05, 0.05);
-        object.position.set(0, 0, 35);
+        object.position.set(_this.startPlayhead, 0, 35);
         _this.scene.add(object);
         _this.playHead = object;
     });
@@ -88,23 +89,25 @@ FastApp.prototype.createScene = function() {
     var timelineGeom = new THREE.BoxGeometry(0.5, 0.5, 37.5);
     this.timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
     this.timelineIndicator.name = "timeline";
-    this.timelineIndicator.position.set(-0.25, 1, 17.5);
+    this.timelineIndicator.position.set(this.startPlayhead-0.25, 1, 17.5);
     this.scene.add(this.timelineIndicator);
 
     //Rendering attributes
     this.timbreAttributes = {
-        colour: 0xff0000
+        colour: 0xff0000,
+        yOffset: 20
     };
 
     this.pitchAttributes = {
-        colour: 0x0000ff
+        colour: 0x0000ff,
+        yOffset: 0
     };
 
     //Load json data
 
     this.dataLoader = new dataLoader();
 
-    this.dataLoader.load("data/ledZeppelin_ImmigrantSong.json", function(data) {
+    this.dataLoader.load("data/williams.json", function(data) {
         _this.data = data;
         //DEBUG
         console.log("File loaded");
@@ -327,6 +330,7 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
     //Render data attribute
     var dataGroup = new THREE.Object3D();
     dataGroup.name = name;
+    dataGroup.position.y = attributes.yOffset;
     var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
     var startX = 0, startY = 0, startZ = 0;
     var interZgap = 1;
@@ -496,7 +500,10 @@ FastApp.prototype.onShowAllDimensions = function(status) {
 };
 
 FastApp.prototype.onStartChanged = function(value) {
-
+    //Adjust playhead
+    this.startPlayhead = value * this.unitsPerSecond;
+    this.playHead.position.x = this.startPlayhead;
+    this.timelineIndicator.position.x = this.startPlayhead -0.25;
 };
 
 FastApp.prototype.createGUI = function() {
@@ -827,8 +834,8 @@ FastApp.prototype.resetTrack = function() {
     }
     this.playing = false;
     this.playbackTime = 0;
-    this.playHead.position.set(0, 0, 35);
-    this.timelineIndicator.position.set(-0.25, 1, 17.5);
+    this.playHead.position.set(this.startPlayhead, 0, 35);
+    this.timelineIndicator.position.set(this.startPlayhead-0.25, 1, 17.5);
     $('#playState').attr("src", "images/play.png");
 };
 
