@@ -44,6 +44,8 @@ FastApp.prototype.init = function(container) {
     this.playHead = undefined;
     this.startPlayhead = 0;
     this.timeMargin = 2;
+    this.timelineDimensions = new THREE.Vector3(0.5, 15, 37.5);
+    this.timelineZPos = 17.5;
     //Web audio
     var webkitAudio = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new webkitAudio();
@@ -85,29 +87,15 @@ FastApp.prototype.createScene = function() {
         _this.playHead = object;
     });
 
-    //Timeline indicator
-    var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff});
-    var timelineGeom = new THREE.BoxGeometry(0.5, 0.5, 37.5);
-    //Timeline pitch
-    this.timelineIndicatorPitch = new THREE.Mesh(timelineGeom, timelineMat);
-    this.timelineIndicatorPitch.name = "timelinePitch";
-    this.timelineIndicatorPitch.position.set(this.startPlayhead-0.25, 1, 17.5);
-    this.scene.add(this.timelineIndicatorPitch);
-
-    //Timeline timbre
-    this.timelineIndicatorTimbre = new THREE.Mesh(timelineGeom, timelineMat);
-    this.timelineIndicatorTimbre.name = "timelineTimbre";
-    this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, 21, 17.5);
-    this.scene.add(this.timelineIndicatorTimbre);
-
     //Rendering attributes
     this.timbreAttributes = {
         scaleX: 1,
-        scaleY: 10,
+        scaleY: 1,
         scaleZ: 1,
         opacity: 1,
         colour: 0xff0000,
-        yOffset: 20
+        yOffset: 20,
+        dimensions: [true, true, true, true, true, true, true, true, true, true, true, true]
     };
 
     this.pitchAttributes = {
@@ -116,7 +104,8 @@ FastApp.prototype.createScene = function() {
         scaleZ: 1,
         opacity: 1,
         colour: 0x0000ff,
-        yOffset: 0
+        yOffset: 0,
+        dimensions: [true, true, true, true, true, true, true, true, true, true, true, true]
     };
 
     //Load json data
@@ -139,12 +128,12 @@ FastApp.prototype.loadNewFile = function(fileName) {
     }
     this.fileName = fileName;
     //Reset current scene
-    var removeGroup = this.scene.getObjectByName('timbre');
+    var removeGroup = this.scene.getObjectByName('Timbre');
     if(!removeGroup) {
         console.log("No timbre group");
     }
     this.scene.remove(removeGroup);
-    removeGroup = this.scene.getObjectByName('pitch');
+    removeGroup = this.scene.getObjectByName('Pitch');
     if(!removeGroup) {
         console.log("No pitch group");
     }
@@ -259,8 +248,16 @@ FastApp.prototype.parseData = function() {
         }
 
         _this.renderTimeline();
-        _this.renderAttribute('timbre', _this.timbreSegments, _this.timbreAttributes, true);
-        _this.renderAttribute('pitch', _this.pitchSegments, _this.pitchAttributes, false);
+        _this.renderAttribute('Timbre', _this.timbreSegments, _this.timbreAttributes, true);
+        _this.renderAttribute('Pitch', _this.pitchSegments, _this.pitchAttributes, false);
+        _this.timelineIndicatorTimbre = _this.scene.getObjectByName('timelineTimbre');
+        if(!_this.timelineIndicatorTimbre) {
+            alert("No timbre timeline");
+        }
+        _this.timelineIndicatorPitch = _this.scene.getObjectByName('timelinePitch');
+        if(!_this.timelineIndicatorPitch) {
+            alert("No pitch timeline");
+        }
     });
 };
 
@@ -344,6 +341,17 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
     var dataGroup = new THREE.Object3D();
     dataGroup.name = name;
     dataGroup.position.y = attributes.yOffset;
+    //Timeline indicator
+    var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff,
+                                                     opacity: 0.25,
+                                                     transparent: true});
+    var timelineGeom = new THREE.BoxGeometry(this.timelineDimensions.x,
+        this.timelineDimensions.y, this.timelineDimensions.z);
+    var timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
+    timelineIndicator.name = "timeline" + name;
+    timelineIndicator.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
+    dataGroup.add(timelineIndicator);
+
     var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
     var startX = 0, startY = 0, startZ = 0;
     var interZgap = 1;
@@ -485,8 +493,6 @@ FastApp.prototype.onShowGroup = function(name, value) {
                 obj.visible = value;
             }
         });
-        var timeline = name === 'timbre' ? this.timelineIndicatorTimbre : this.timelineIndicatorPitch;
-        timeline.visible = value;
     }
 };
 
@@ -494,8 +500,8 @@ FastApp.prototype.onShowDimension = function(value, dim) {
     //DEBUG
     //console.log("Value = ", value, dim);
     //Get group and traverse meshes
-    var groupName = this.guiControls.Timbre ? "timbre" : "pitch";
-    var group = this.scene.getObjectByName(groupName);
+    var attribute = this.guiControls.Attribute === 'Timbre' ? this.timbreAttributes : this.pitchAttributes;
+    var group = this.scene.getObjectByName(this.guiControls.Attribute);
     if(group) {
         group.traverse(function(obj) {
             if (obj instanceof THREE.Mesh) {
@@ -504,12 +510,12 @@ FastApp.prototype.onShowDimension = function(value, dim) {
                 }
             }
         });
+        attribute.dimensions[dim] = value;
     }
 };
 
 FastApp.prototype.onShowAllDimensions = function(status) {
-    var groupName = this.guiControls.Timbre ? "timbre" : "pitch";
-    var group = this.scene.getObjectByName(groupName);
+    var group = this.scene.getObjectByName(this.guiControls.Attribute);
     if(group) {
         group.traverse(function(obj) {
             if (obj instanceof THREE.Mesh) {
@@ -534,7 +540,7 @@ FastApp.prototype.createGUI = function() {
         this.Attribute = 'Timbre';
         this.Start = 0.01;
         this.ScaleX = 1.0;
-        this.ScaleY = 10.0;
+        this.ScaleY = 1.0;
         this.ScaleZ = 1.0;
         this.Opacity = 1;
         this.TimbreOffset = 0;
@@ -594,12 +600,12 @@ FastApp.prototype.createGUI = function() {
 
     this.guiData = gui.addFolder("Data");
     var timbre = this.guiData.add(this.guiControls, 'Timbre').onChange(function(value) {
-        _this.onShowGroup('timbre', value);
+        _this.onShowGroup('Timbre', value);
     });
     timbre.listen();
 
     var pitch = this.guiData.add(this.guiControls, 'Pitch').onChange(function(value) {
-        _this.onShowGroup('pitch', value);
+        _this.onShowGroup('Pitch', value);
     });
     pitch.listen();
 
@@ -611,16 +617,16 @@ FastApp.prototype.createGUI = function() {
     //Dimensions
     var i;
     this.guiDimensions = gui.addFolder("Dimensions");
-    gui.dimensions = [];
+    this.dimensions = [];
     gui.ShowAll = true;
 
     for (i=1; i<=this.numCoefficients; i++) {
-        gui.dimensions[i] = true;
+        this.dimensions[i] = true;
     }
 
     var dimFunc;
     for (i=1; i<=this.numCoefficients; i++) (function(n){
-        dimFunc = _this.guiDimensions.add(gui.dimensions, n).onChange(function(value) {
+        dimFunc = _this.guiDimensions.add(_this.dimensions, n).onChange(function(value) {
             _this.onShowDimension(value, n-1);
         });
         dimFunc.listen();
@@ -628,7 +634,7 @@ FastApp.prototype.createGUI = function() {
 
     this.guiDimensions.add(gui, "ShowAll").onChange(function(value) {
         for (i=1; i<=_this.numCoefficients; i++) {
-            gui.dimensions[i] = value;
+            _this.dimensions[i] = value;
         }
         _this.onShowAllDimensions(value);
     });
@@ -640,18 +646,19 @@ FastApp.prototype.onAttributeChanged = function(value) {
     this.guiControls.ScaleY = attribute.scaleY;
     this.guiControls.ScaleZ = attribute.scaleZ;
     this.guiControls.Opacity = attribute.opacity;
+    this.dimensions = attribute.dimensions;
 };
 
 FastApp.prototype.onOffsetChanged = function(value) {
     //Alter timbre group only
-    var group = this.scene.getObjectByName('timbre');
+    var group = this.scene.getObjectByName('Timbre');
     if(group) {
         group.position.y = this.timbreAttributes.yOffset + value;
     }
 };
 
 FastApp.prototype.onOpacityChanged = function(value) {
-    var group = this.guiControls.Attribute === 'Timbre' ? this.scene.getObjectByName('timbre') : this.scene.getObjectByName('pitch');
+    var group = this.guiControls.Attribute === 'Timbre' ? this.scene.getObjectByName('Timbre') : this.scene.getObjectByName('Pitch');
     if(group) {
         var attributes = this.guiControls.Attribute === 'Timbre' ? this.timbreAttributes : this.pitchAttributes;
         for(var child=0; child<group.children.length; ++child) {
@@ -663,13 +670,15 @@ FastApp.prototype.onOpacityChanged = function(value) {
 
 FastApp.prototype.onScaleChanged = function(axis, value) {
     //Scale along relevant axis
-    var group, attribute;
+    var group, attribute, timeline;
     if(this.guiControls.Attribute === 'Timbre') {
-        group = this.scene.getObjectByName('timbre');
+        group = this.scene.getObjectByName('Timbre');
         attribute = this.timbreAttributes;
+        timeline = this.timelineIndicatorTimbre;
     } else {
-        group = this.scene.getObjectByName('pitch');
+        group = this.scene.getObjectByName('Pitch');
         attribute = this.pitchAttributes;
+        timeline = this.timelineIndicatorPitch;
     }
     if(!group) {
         console.log("No group!");
@@ -685,6 +694,8 @@ FastApp.prototype.onScaleChanged = function(axis, value) {
         case Y_AXIS:
             group.scale.y = value;
             attribute.scaleY = value;
+            timeline.scale.y = 1/value;
+            timeline.position.y = (this.timelineDimensions.y/2) * timeline.scale.y;
             break;
 
         case Z_AXIS:
@@ -908,8 +919,8 @@ FastApp.prototype.resetTrack = function() {
     this.playing = false;
     this.playbackTime = 0;
     this.playHead.position.set(this.startPlayhead, 0, 35);
-    this.timelineIndicatorPitch.position.set(this.startPlayhead-0.25, 1, 17.5);
-    this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, 21, 17.5);
+    this.timelineIndicatorPitch.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
+    this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
     $('#playState').attr("src", "images/play.png");
 };
 
