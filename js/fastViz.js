@@ -55,7 +55,8 @@ FastApp.prototype.update = function() {
     //Animate
     if(this.playing) {
         this.playHead.position.x += (this.unitsPerSecond * delta);
-        this.timelineIndicator.position.x = this.playHead.position.x-0.25;
+        this.timelineIndicatorPitch.position.x = this.playHead.position.x-0.25;
+        this.timelineIndicatorTimbre.position.x = this.playHead.position.x-0.25;
     }
 
     BaseApp.prototype.update.call(this);
@@ -87,18 +88,33 @@ FastApp.prototype.createScene = function() {
     //Timeline indicator
     var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff});
     var timelineGeom = new THREE.BoxGeometry(0.5, 0.5, 37.5);
-    this.timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
-    this.timelineIndicator.name = "timeline";
-    this.timelineIndicator.position.set(this.startPlayhead-0.25, 1, 17.5);
-    this.scene.add(this.timelineIndicator);
+    //Timeline pitch
+    this.timelineIndicatorPitch = new THREE.Mesh(timelineGeom, timelineMat);
+    this.timelineIndicatorPitch.name = "timelinePitch";
+    this.timelineIndicatorPitch.position.set(this.startPlayhead-0.25, 1, 17.5);
+    this.scene.add(this.timelineIndicatorPitch);
+
+    //Timeline timbre
+    this.timelineIndicatorTimbre = new THREE.Mesh(timelineGeom, timelineMat);
+    this.timelineIndicatorTimbre.name = "timelineTimbre";
+    this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, 21, 17.5);
+    this.scene.add(this.timelineIndicatorTimbre);
 
     //Rendering attributes
     this.timbreAttributes = {
+        scaleX: 1,
+        scaleY: 10,
+        scaleZ: 1,
+        opacity: 1,
         colour: 0xff0000,
         yOffset: 20
     };
 
     this.pitchAttributes = {
+        scaleX: 1,
+        scaleY: 1,
+        scaleZ: 1,
+        opacity: 1,
         colour: 0x0000ff,
         yOffset: 0
     };
@@ -244,10 +260,7 @@ FastApp.prototype.parseData = function() {
 
         _this.renderTimeline();
         _this.renderAttribute('timbre', _this.timbreSegments, _this.timbreAttributes, true);
-        _this.onShowGroup('timbre', _this.guiControls.Timbre);
-
         _this.renderAttribute('pitch', _this.pitchSegments, _this.pitchAttributes, false);
-        _this.onShowGroup('pitch', _this.guiControls.Pitch);
     });
 };
 
@@ -338,7 +351,10 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
     var width = 2, depth = 2;
     var xScale, xOffset;
 
-    var boxMat = new THREE.MeshLambertMaterial( {color: attributes.colour} );
+    var boxMat = new THREE.MeshLambertMaterial( {color: attributes.colour,
+                                                 opacity: attributes.opacity,
+                                                 transparent: true
+    } );
     var geom = new THREE.BoxGeometry(this.segmentWidth, 1, depth, 1, 1, 1);
     var defaultTimeSlice = (this.segments[this.endSegment + 1] - this.segments[this.startSegment]) / numSegments;
     var mesh;
@@ -362,6 +378,7 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
         mesh = new THREE.Mesh(geom, boxMat);
         mesh.name = "row" + j + "col" + this.startSegment;
         mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
+        mesh.visible = height > 0;
         mesh.scale.y = height <= 0 ? 0.001 : height;
         mesh.scale.x = xScale;
         dataGroup.add(mesh);
@@ -380,6 +397,7 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
             mesh = new THREE.Mesh(geom, boxMat);
             mesh.name = "row" + j + "col" + i;
             mesh.position.set(startX + xOffset, startY, startZ + (j * (interZgap + depth)));
+            mesh.visible = height > 0;
             mesh.scale.y = height <= 0 ? 0.001 : height;
             mesh.scale.x = xScale;
             dataGroup.add(mesh);
@@ -467,6 +485,8 @@ FastApp.prototype.onShowGroup = function(name, value) {
                 obj.visible = value;
             }
         });
+        var timeline = name === 'timbre' ? this.timelineIndicatorTimbre : this.timelineIndicatorPitch;
+        timeline.visible = value;
     }
 };
 
@@ -503,17 +523,21 @@ FastApp.prototype.onStartChanged = function(value) {
     //Adjust playhead
     this.startPlayhead = value * this.unitsPerSecond;
     this.playHead.position.x = this.startPlayhead;
-    this.timelineIndicator.position.x = this.startPlayhead -0.25;
+    this.timelineIndicatorPitch.position.x = this.startPlayhead -0.25;
+    this.timelineIndicatorTimbre.position.x = this.startPlayhead -0.25;
 };
 
 FastApp.prototype.createGUI = function() {
     this.guiControls = new function() {
         this.Timbre = true;
-        this.Pitch = false;
+        this.Pitch = true;
+        this.Attribute = 'Timbre';
         this.Start = 0.01;
         this.ScaleX = 1.0;
         this.ScaleY = 10.0;
         this.ScaleZ = 1.0;
+        this.Opacity = 1;
+        this.TimbreOffset = 0;
         this.LightX = 0.0;
         this.LightY = 200;
         this.LightZ = 0;
@@ -524,6 +548,9 @@ FastApp.prototype.createGUI = function() {
     var _this = this;
     this.guiAppear = gui.addFolder("Appearance");
     //Scale the dataset
+    this.guiAppear.add(this.guiControls, 'Attribute', ['Timbre', 'Pitch']).onChange(function(value) {
+        _this.onAttributeChanged(value);
+    });
     var scaleX = this.guiAppear.add(this.guiControls, 'ScaleX', 0.25, 20).step(0.25);
     scaleX.listen();
     scaleX.onChange(function(value) {
@@ -538,6 +565,14 @@ FastApp.prototype.createGUI = function() {
     scaleZ.listen();
     scaleZ.onChange(function(value) {
         _this.onScaleChanged(Z_AXIS, value);
+    });
+    var opacity = this.guiAppear.add(this.guiControls, 'Opacity', 0, 1);
+    opacity.onChange(function(value) {
+        _this.onOpacityChanged(value);
+    });
+    opacity.listen();
+    this.guiAppear.add(this.guiControls, 'TimbreOffset', -20, 20).onChange(function(value) {
+        _this.onOffsetChanged(value);
     });
 
     //Move the light
@@ -599,24 +634,62 @@ FastApp.prototype.createGUI = function() {
     });
 };
 
+FastApp.prototype.onAttributeChanged = function(value) {
+    var attribute = value === 'Timbre' ? this.timbreAttributes : this.pitchAttributes;
+    this.guiControls.ScaleX = attribute.scaleX;
+    this.guiControls.ScaleY = attribute.scaleY;
+    this.guiControls.ScaleZ = attribute.scaleZ;
+    this.guiControls.Opacity = attribute.opacity;
+};
+
+FastApp.prototype.onOffsetChanged = function(value) {
+    //Alter timbre group only
+    var group = this.scene.getObjectByName('timbre');
+    if(group) {
+        group.position.y = this.timbreAttributes.yOffset + value;
+    }
+};
+
+FastApp.prototype.onOpacityChanged = function(value) {
+    var group = this.guiControls.Attribute === 'Timbre' ? this.scene.getObjectByName('timbre') : this.scene.getObjectByName('pitch');
+    if(group) {
+        var attributes = this.guiControls.Attribute === 'Timbre' ? this.timbreAttributes : this.pitchAttributes;
+        for(var child=0; child<group.children.length; ++child) {
+            group.children[child].material.opacity = value;
+        }
+        attributes.opacity = value;
+    }
+};
+
 FastApp.prototype.onScaleChanged = function(axis, value) {
     //Scale along relevant axis
-    var group = this.guiControls.Timbre ? this.scene.getObjectByName('timbre') : this.scene.getObjectByName('pitch');
+    var group, attribute;
+    if(this.guiControls.Attribute === 'Timbre') {
+        group = this.scene.getObjectByName('timbre');
+        attribute = this.timbreAttributes;
+    } else {
+        group = this.scene.getObjectByName('pitch');
+        attribute = this.pitchAttributes;
+    }
     if(!group) {
         console.log("No group!");
         return;
     }
+
     switch(axis) {
         case X_AXIS:
             group.scale.x = value;
+            attribute.scaleX = value;
             break;
 
         case Y_AXIS:
             group.scale.y = value;
+            attribute.scaleY = value;
             break;
 
         case Z_AXIS:
             group.scale.z = value;
+            attribute.scaleZ = value;
             break;
 
         default:
@@ -835,7 +908,8 @@ FastApp.prototype.resetTrack = function() {
     this.playing = false;
     this.playbackTime = 0;
     this.playHead.position.set(this.startPlayhead, 0, 35);
-    this.timelineIndicator.position.set(this.startPlayhead-0.25, 1, 17.5);
+    this.timelineIndicatorPitch.position.set(this.startPlayhead-0.25, 1, 17.5);
+    this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, 21, 17.5);
     $('#playState').attr("src", "images/play.png");
 };
 

@@ -1,5 +1,8 @@
 /* Styles for FAST music visualisation */
 
+select {
+    color: black;
+}
 .centred {
     text-align: center;
 }
