@@ -34,6 +34,7 @@ FastApp.prototype.init = function(container) {
     this.pitchSegments = [];
     this.visibleModel = undefined;
     this.cameraStartZPos = 700;
+    this.lookAt = new THREE.Vector3(46, 2, 0);
     this.xRot = 0;
     this.yRot = 0;
     this.xTrans = 0;
@@ -56,7 +57,11 @@ FastApp.prototype.update = function() {
 
     //Animate
     if(this.playing) {
-        this.playHead.position.x += (this.unitsPerSecond * delta);
+        var deltaPos = this.unitsPerSecond * delta;
+        this.playHead.position.x += deltaPos;
+        this.camera.position.x += deltaPos;
+        this.lookAt.x += deltaPos;
+        this.controls.setLookAt(this.lookAt);
         this.timelineIndicatorPitch.position.x = this.playHead.position.x-0.25;
         this.timelineIndicatorTimbre.position.x = this.playHead.position.x-0.25;
     }
@@ -95,7 +100,7 @@ FastApp.prototype.createScene = function() {
         opacity: 1,
         colour: 0xff0000,
         yOffset: 20,
-        dimensions: [true, true, true, true, true, true, true, true, true, true, true, true]
+        dimensions: [true, true, true, true, true, true, true, true, true, true, true, true, true]
     };
 
     this.pitchAttributes = {
@@ -105,7 +110,7 @@ FastApp.prototype.createScene = function() {
         opacity: 1,
         colour: 0x0000ff,
         yOffset: 0,
-        dimensions: [true, true, true, true, true, true, true, true, true, true, true, true]
+        dimensions: [true, true, true, true, true, true, true, true, true, true, true, true, true]
     };
 
     //Load json data
@@ -503,9 +508,10 @@ FastApp.prototype.onShowDimension = function(value, dim) {
     var attribute = this.guiControls.Attribute === 'Timbre' ? this.timbreAttributes : this.pitchAttributes;
     var group = this.scene.getObjectByName(this.guiControls.Attribute);
     if(group) {
+        var rowName = dim-1;
         group.traverse(function(obj) {
             if (obj instanceof THREE.Mesh) {
-                if(obj.name.indexOf("row"+dim+"col") !== -1) {
+                if(obj.name.indexOf("row"+rowName+"col") !== -1) {
                     obj.visible = value;
                 }
             }
@@ -620,14 +626,16 @@ FastApp.prototype.createGUI = function() {
     this.dimensions = [];
     gui.ShowAll = true;
 
+    //Dimension numbering starts from 1
     for (i=1; i<=this.numCoefficients; i++) {
         this.dimensions[i] = true;
     }
 
     var dimFunc;
     for (i=1; i<=this.numCoefficients; i++) (function(n){
-        dimFunc = _this.guiDimensions.add(_this.dimensions, n).onChange(function(value) {
-            _this.onShowDimension(value, n-1);
+        dimFunc = _this.guiDimensions.add(_this.dimensions, n);
+        dimFunc.onChange(function(value) {
+            _this.onShowDimension(value, n);
         });
         dimFunc.listen();
     })(i);
@@ -646,7 +654,9 @@ FastApp.prototype.onAttributeChanged = function(value) {
     this.guiControls.ScaleY = attribute.scaleY;
     this.guiControls.ScaleZ = attribute.scaleZ;
     this.guiControls.Opacity = attribute.opacity;
-    this.dimensions = attribute.dimensions;
+    for(var i=0; i<this.dimensions.length; ++i) {
+        this.dimensions[i] = attribute.dimensions[i];
+    }
 };
 
 FastApp.prototype.onOffsetChanged = function(value) {
@@ -919,8 +929,10 @@ FastApp.prototype.resetTrack = function() {
     this.playing = false;
     this.playbackTime = 0;
     this.playHead.position.set(this.startPlayhead, 0, 35);
-    this.timelineIndicatorPitch.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
-    this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
+    this.timelineIndicatorPitch.position.set(this.startPlayhead-0.25, (this.timelineDimensions.y/2) * this.timelineIndicatorPitch.scale.y,
+        this.timelineZPos);
+    this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, (this.timelineDimensions.y/2) * this.timelineIndicatorTimbre.scale.y,
+        this.timelineZPos);
     $('#playState').attr("src", "images/play.png");
 };
 
