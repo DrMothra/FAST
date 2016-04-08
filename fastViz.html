@@ -44,21 +44,20 @@
 </div>
 
 <div id="controls" class="displayInfo centred">
-    <div>
-        <span id="chooseFile" class="btn btn-default btn-file">Load<input type="file"></span>
-    </div>
     <div id="camControls">
+        <div id="camImage">
+            <img src="images/camera.png">
+        </div>
+        <div id="camViews">
+            <button id="camFront" type="button" class="btn btn-primary">Front</button>
+            <button id="camTop" type="button" class="btn btn-primary">Top</button>
+            <button id="camEnd" type="button" class="btn btn-primary">End</button>
+        </div>
         <div id="rotate">
             <p>Rotate</p>
             <div>
-                <button id="rotateUp" type="button" class="btn btn-primary">^</button>
-            </div>
-            <div>
                 <button id="rotateLeft" type="button" class="btn btn-primary"><</button>
                 <button id="rotateRight" type="button" class="btn btn-primary">></button>
-            </div>
-            <div>
-                <button id="rotateDown" type="button" class="btn btn-primary">v</button>
             </div>
         </div>
         <div id="zoom">
@@ -68,22 +67,12 @@
                 <button id="zoomIn" type="button" class="btn btn-primary">+</button>
             </div>
         </div>
-        <div id="pan">
-            <p>Pan</p>
-            <div>
-                <button id="panUp" type="button" class="btn btn-primary">^</button>
-            </div>
-            <div>
-                <button id="panLeft" type="button" class="btn btn-primary"><</button>
-                <button id="panRight" type="button" class="btn btn-primary">></button>
-            </div>
-            <div>
-                <button id="panDown" type="button" class="btn btn-primary">v</button>
-            </div>
-        </div>
         <div>
             <button id="reset" type="button" class="btn btn-primary">Reset</button>
         </div>
+    </div>
+    <div>
+        <span id="chooseFile" class="btn btn-default btn-file">Load<input type="file"></span>
     </div>
 </div>
 

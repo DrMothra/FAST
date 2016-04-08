@@ -66,6 +66,9 @@ select {
 #controls button {
     margin-bottom: 10%;
 }
+#camImage img {
+    width: 50%;
+}
 #notSupported,
 #downloadError {
     background: darkgrey;

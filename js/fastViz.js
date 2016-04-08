@@ -10,6 +10,16 @@ var MOVE_INC = 10;
 var START_TIME = 30;
 var SAMPLE_RATE = 44100;
 
+//Camera views
+var cameraViews = {
+    front: [ new THREE.Vector3(45, 60, 120),
+             new THREE.Vector3(46, 0, 0)],
+    end: [ new THREE.Vector3(286, 36, 16),
+           new THREE.Vector3(60, 0, 0)],
+    top: [ new THREE.Vector3(80, 170, 20),
+           new THREE.Vector3(80, 0, 10)]
+};
+
 //Init this app from base
 function FastApp() {
     BaseApp.call(this);
@@ -19,6 +29,9 @@ FastApp.prototype = new BaseApp();
 
 FastApp.prototype.init = function(container) {
     BaseApp.prototype.init.call(this, container);
+    this.controls.disableMovement();
+    this.setCamera(cameraViews.front);
+    this.cameraView = 'front';
     this.fileName = null;
     this.data = null;
     this.artistName = null;
@@ -34,7 +47,7 @@ FastApp.prototype.init = function(container) {
     this.pitchSegments = [];
     this.visibleModel = undefined;
     this.cameraStartZPos = 700;
-    this.lookAt = new THREE.Vector3(46, 2, 0);
+    this.lookAt = new THREE.Vector3();
     this.xRot = 0;
     this.yRot = 0;
     this.xTrans = 0;
@@ -60,6 +73,7 @@ FastApp.prototype.update = function() {
         var deltaPos = this.unitsPerSecond * delta;
         this.playHead.position.x += deltaPos;
         this.camera.position.x += deltaPos;
+        this.lookAt = this.controls.getLookAt();
         this.lookAt.x += deltaPos;
         this.controls.setLookAt(this.lookAt);
         this.timelineIndicatorPitch.position.x = this.playHead.position.x-0.25;
@@ -835,6 +849,15 @@ FastApp.prototype.repeat = function(direction) {
     }, this.checkTime)
 };
 
+FastApp.prototype.changeView = function(viewName) {
+    if(!viewName) {
+        console.log("No camera view name!");
+        return;
+    }
+    this.cameraView = viewName;
+    this.setCamera(cameraViews[this.cameraView]);
+};
+
 FastApp.prototype.rotateObject = function(direction) {
     //Get rotation
     if(this.visibleModel === undefined) return;
@@ -934,6 +957,7 @@ FastApp.prototype.resetTrack = function() {
     this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, (this.timelineDimensions.y/2) * this.timelineIndicatorTimbre.scale.y,
         this.timelineZPos);
     $('#playState').attr("src", "images/play.png");
+    this.setCamera(cameraViews[this.cameraView]);
 };
 
 FastApp.prototype.isPlaying = function() {
@@ -959,21 +983,21 @@ $(document).ready(function() {
     app.createGUI();
 
     //GUI callbacks
+    $('#camFront').on("click", function() {
+        app.changeView('front');
+    });
+    $('#camTop').on("click", function() {
+        app.changeView('top');
+    });
+    $('#camEnd').on("click", function() {
+        app.changeView('end');
+    });
+
     $("#chooseFile").on("change", function(evt) {
         app.loadNewFile(fileManager.onSelectFile(evt));
     });
 
-    //Model movement
-    $('#rotateUp').on("mousedown", function(event) {
-        event.preventDefault();
-        app.rotateObject(ROT_UP);
-    });
-
-    $('#rotateDown').on("mousedown", function(event) {
-        event.preventDefault();
-        app.rotateObject(ROT_DOWN);
-    });
-
+    //View movement
     $('#rotateLeft').on("mousedown", function(event) {
         event.preventDefault();
         app.rotateObject(ROT_LEFT);
@@ -999,31 +1023,6 @@ $(document).ready(function() {
     });
 
     $('[id^=zoom]').on("mouseup", function(event) {
-        event.preventDefault();
-        app.repeat(STOP);
-    });
-
-    $('#panUp').on("mousedown", function(event){
-        event.preventDefault();
-        app.translateObject(PAN_UP);
-    });
-
-    $('#panDown').on("mousedown", function(event){
-        event.preventDefault();
-        app.translateObject(PAN_DOWN);
-    });
-
-    $('#panLeft').on("mousedown", function(event){
-        event.preventDefault();
-        app.translateObject(PAN_LEFT);
-    });
-
-    $('#panRight').on("mousedown", function(event){
-        event.preventDefault();
-        app.translateObject(PAN_RIGHT);
-    });
-
-    $('[id^=pan]').on("mouseup", function(event) {
         event.preventDefault();
         app.repeat(STOP);
     });

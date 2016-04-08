@@ -155,7 +155,7 @@ BaseApp.prototype.createScene = function() {
 BaseApp.prototype.createCamera = function() {
 
     this.camera = new THREE.PerspectiveCamera(45, this.container.clientWidth / window.innerHeight, 0.1, 5000 );
-    this.camera.position.set(45, 60, 120 );
+    this.camera.position.set(100, 0, 0 );
 
     console.log('dom =', this.renderer.domElement);
 };
@@ -166,16 +166,18 @@ BaseApp.prototype.createControls = function() {
     this.controls.zoomSpeed = 1.0;
     this.controls.panSpeed = 1.0;
 
-    this.controls.noZoom = false;
-    this.controls.noPan = false;
-
     this.controls.staticMoving = true;
     this.controls.dynamicDampingFactor = 0.3;
 
     this.controls.keys = [ 65, 83, 68 ];
 
-    var lookAt = new THREE.Vector3(46, 2, 0);
+    var lookAt = new THREE.Vector3(0, 0, 0);
     this.controls.setLookAt(lookAt);
+};
+
+BaseApp.prototype.setCamera = function(cameraProp) {
+    this.camera.position.set(cameraProp[0].x, cameraProp[0].y, cameraProp[0].z);
+    this.controls.setLookAt(cameraProp[1]);
 };
 
 BaseApp.prototype.update = function() {
@@ -185,11 +187,11 @@ BaseApp.prototype.update = function() {
 
 BaseApp.prototype.run = function() {
     this.renderer.render( this.scene, this.camera );
-    var self = this;
+    var _this = this;
     this.update();
     if(this.stats) this.stats.update();
     requestAnimationFrame(function() {
-        self.run();
+        _this.run();
     });
 };
 
