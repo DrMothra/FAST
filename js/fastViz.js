@@ -12,8 +12,8 @@ var SAMPLE_RATE = 44100;
 
 //Camera views
 var cameraViews = {
-    front: [ new THREE.Vector3(45, 60, 120),
-             new THREE.Vector3(46, 0, 0)],
+    front: [ new THREE.Vector3(50, 70, 120),
+             new THREE.Vector3(50, 10, 20)],
     end: [ new THREE.Vector3(286, 36, 16),
            new THREE.Vector3(60, 0, 0)],
     top: [ new THREE.Vector3(80, 170, 20),
@@ -32,6 +32,7 @@ FastApp.prototype.init = function(container) {
     this.controls.disableMovement();
     this.setCamera(cameraViews.front);
     this.cameraView = 'front';
+    this.freeMovement = false;
     this.fileName = null;
     this.data = null;
     this.artistName = null;
@@ -45,7 +46,6 @@ FastApp.prototype.init = function(container) {
     this.markers = [];
     this.timbreSegmentsNormalised = null;
     this.pitchSegments = [];
-    this.visibleModel = undefined;
     this.cameraStartZPos = 700;
     this.lookAt = new THREE.Vector3();
     this.xRot = 0;
@@ -53,6 +53,8 @@ FastApp.prototype.init = function(container) {
     this.xTrans = 0;
     this.yTrans = 0;
     this.zTrans = 0;
+    this.rotQuat = new THREE.Quaternion();
+    this.rotQuat.setFromAxisAngle(new THREE.Vector3(0, 1, 0), ROT_INC);
     this.rotating = false;
     this.checkTime = 100;
     this.playHead = undefined;
@@ -86,6 +88,10 @@ FastApp.prototype.update = function() {
 FastApp.prototype.createScene = function() {
     BaseApp.prototype.createScene.call(this);
 
+    //Root object
+    this.root = new THREE.Object3D();
+    this.scene.add(this.root);
+
     //Light box
     var size = 0.5;
     var lightMat = new THREE.MeshBasicMaterial( { color: 0xffffff});
@@ -93,7 +99,7 @@ FastApp.prototype.createScene = function() {
     var lightMesh = new THREE.Mesh(lightGeom, lightMat);
     lightMesh.name = "LightBox";
     lightMesh.position.set(0, 200, 0);
-    this.scene.add(lightMesh);
+    this.root.add(lightMesh);
 
     //Load objects
     var _this = this;
@@ -102,7 +108,7 @@ FastApp.prototype.createScene = function() {
     loader.load("models/arrow.obj", function(object) {
         object.scale.set(0.05, 0.05, 0.05);
         object.position.set(_this.startPlayhead, 0, 35);
-        _this.scene.add(object);
+        _this.root.add(object);
         _this.playHead = object;
     });
 
@@ -338,23 +344,6 @@ FastApp.prototype.getAudioData = function(callback) {
     }
 };
 
-function addGroundPlane(scene, width, height) {
-    // create the ground plane
-    var planeGeometry = new THREE.PlaneGeometry(width,height,1,1);
-    var planeMaterial = new THREE.MeshLambertMaterial({color: 0xb5b5b5, transparent: false, opacity: 0.5});
-    var plane = new THREE.Mesh(planeGeometry,planeMaterial);
-
-    //plane.receiveShadow  = true;
-
-    // rotate and position the plane
-    plane.rotation.x=-0.5*Math.PI;
-    plane.position.x=0;
-    plane.position.y=-59.9;
-    plane.position.z=0;
-
-    scene.add(plane);
-}
-
 FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) {
     //Render data attribute
     var dataGroup = new THREE.Object3D();
@@ -432,11 +421,13 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
         startX = startX + (xOffset*2) + this.segmentGap;
     }
 
-    this.scene.add(dataGroup);
+    this.root.add(dataGroup);
 };
 
 FastApp.prototype.renderTimeline = function() {
     //Timeline
+    var timelineGroup = new THREE.Object3D();
+    this.root.add(timelineGroup);
     var depth = 2, interZgap = 1;
     var numSegments = this.endSegment - this.startSegment + 1;
     var lineGeom = new THREE.Geometry();
@@ -446,21 +437,21 @@ FastApp.prototype.renderTimeline = function() {
     lineGeom.vertices.push(new THREE.Vector3(timeLineX, 0, timeLineZ));
     var lineMat = new THREE.MeshBasicMaterial( {color: 0xffffff});
     var line = new THREE.Line(lineGeom, lineMat);
-    this.scene.add(line);
+    timelineGroup.add(line);
 
     //Divisions
     var labelPos = new THREE.Vector3(-3, -4, timeLineZ), labelScale = new THREE.Vector3(24, 8, 1);
     var timeLabel = spriteManager.create("Time", labelPos, labelScale, 12, 1, true, false);
-    this.scene.add(timeLabel);
+    timelineGroup.add(timeLabel);
     //Time markers
     labelPos.x = 0;
     spriteManager.setTextColour([255, 255, 255]);
     var numberLabel = spriteManager.create(this.markers[0].time + " s", labelPos, labelScale, 12, 1, true, false);
-    this.scene.add(numberLabel);
+    timelineGroup.add(numberLabel);
     for(var i=1; i<this.markers.length; ++i) {
         labelPos.x = this.markers[i].distance - this.markers[0].distance;
         numberLabel = spriteManager.create(this.markers[i].time + " s", labelPos, labelScale, 12, 1, true, false);
-        this.scene.add(numberLabel);
+        timelineGroup.add(numberLabel);
     }
 };
 
@@ -504,9 +495,6 @@ FastApp.prototype.onShowGroup = function(name, value) {
     //Show relevant dataset
     var group = this.scene.getObjectByName(name);
     if(group) {
-        if(value) {
-            this.visibleModel = group;
-        }
         group.traverse(function (obj) {
             if (obj instanceof THREE.Mesh) {
                 obj.visible = value;
@@ -763,6 +751,38 @@ FastApp.prototype.onLightChanged = function(axis, value) {
     lightBox.position.set(light.position.x, light.position.y, light.position.z);
 };
 
+FastApp.prototype.rotateScene = function(direction) {
+    //Get vector from camera to lookat
+    var lookAt = this.controls.getLookAt();
+    //this.root.applyMatrix( new THREE.Matrix4().makeTranslation(0, 0, -5));
+    switch (direction) {
+        case ROT_LEFT:
+            this.root.rotation.y += ROT_INC;
+            break;
+
+        case ROT_RIGHT:
+            this.root.rotation.y -= ROT_INC;
+            break;
+
+        default:
+            break;
+    }
+};
+
+FastApp.prototype.rotateCamera = function(direction) {
+
+};
+
+FastApp.prototype.translateCamera = function(direction) {
+
+};
+
+FastApp.prototype.resetCamera = function() {
+    //Camera back to start position
+    this.controls.reset();
+    this.setCamera(cameraViews[this.cameraView]);
+};
+
 FastApp.prototype.repeat = function(direction) {
     if(direction === STOP) {
         if(this.repeatTimer) {
@@ -839,12 +859,9 @@ FastApp.prototype.repeat = function(direction) {
 
     this.repeatTimer = setInterval(function() {
         if(_this.rotating) {
-            _this.visibleModel.rotation.x += _this.xRot;
-            _this.visibleModel.rotation.y += _this.yRot;
+
         } else {
-            _this.visibleModel.position.x += _this.xTrans;
-            _this.visibleModel.position.y += _this.yTrans;
-            _this.visibleModel.position.z += _this.zTrans;
+
         }
     }, this.checkTime)
 };
@@ -858,74 +875,9 @@ FastApp.prototype.changeView = function(viewName) {
     this.setCamera(cameraViews[this.cameraView]);
 };
 
-FastApp.prototype.rotateObject = function(direction) {
-    //Get rotation
-    if(this.visibleModel === undefined) return;
-    switch(direction) {
-        case ROT_UP:
-            this.visibleModel.rotation.x -= ROT_INC;
-            this.repeat(ROT_UP);
-            break;
-        case ROT_DOWN:
-            this.visibleModel.rotation.x += ROT_INC;
-            this.repeat(ROT_DOWN);
-            break;
-        case ROT_LEFT:
-            this.visibleModel.rotation.y -= ROT_INC;
-            this.repeat(ROT_LEFT);
-            break;
-        case ROT_RIGHT:
-            this.visibleModel.rotation.y += ROT_INC;
-            this.repeat(ROT_RIGHT);
-            break;
-        default:
-            break;
-    }
-};
-
-FastApp.prototype.translateObject = function(direction) {
-    if(this.visibleModel === undefined) return;
-    switch (direction) {
-        case ZOOM_IN:
-            this.visibleModel.position.z += MOVE_INC;
-            this.repeat(ZOOM_IN);
-            break;
-        case ZOOM_OUT:
-            this.visibleModel.position.z -= MOVE_INC;
-            this.repeat(ZOOM_OUT);
-            break;
-        case PAN_UP:
-            this.visibleModel.position.y += MOVE_INC;
-            this.repeat(PAN_UP);
-            break;
-        case PAN_DOWN:
-            this.visibleModel.position.y -= MOVE_INC;
-            this.repeat(PAN_DOWN);
-            break;
-        case PAN_LEFT:
-            this.visibleModel.position.x -= MOVE_INC;
-            this.repeat(PAN_LEFT);
-            break;
-        case PAN_RIGHT:
-            this.visibleModel.position.x += MOVE_INC;
-            this.repeat(PAN_RIGHT);
-            break;
-        default:
-            break;
-    }
-};
-
-FastApp.prototype.resetObject = function() {
-    if(this.visibleModel === undefined) return;
-
-    this.visibleModel.position.set(0, 0, 0);
-    this.visibleModel.rotation.set(0, 0, 0);
-
-    //Reset camera as well
-    this.controls.reset();
-    this.camera.position.set(0, 0, this.cameraStartZPos );
-    this.controls.setLookAt(new THREE.Vector3(0, 0, 0));
-    this.camera.rotation.set(0, 0, 0 );
+FastApp.prototype.changeControls = function() {
+    this.freeMovement = !this.freeMovement;
+    this.freeMovement ? this.controls.enableMovement() : this.controls.disableMovement();
 };
 
 FastApp.prototype.playTrack = function(trackState) {
@@ -1000,12 +952,12 @@ $(document).ready(function() {
     //View movement
     $('#rotateLeft').on("mousedown", function(event) {
         event.preventDefault();
-        app.rotateObject(ROT_LEFT);
+        app.rotateCamera(ROT_LEFT);
     });
 
     $('#rotateRight').on("mousedown", function(event) {
         event.preventDefault();
-        app.rotateObject(ROT_RIGHT);
+        app.rotateCamera(ROT_RIGHT);
     });
 
     $('[id^=rotate]').on("mouseup", function(event) {
@@ -1014,12 +966,12 @@ $(document).ready(function() {
 
     $('#zoomIn').on("mousedown", function(event) {
         event.preventDefault();
-        app.translateObject(ZOOM_IN);
+        app.translateCamera(ZOOM_IN);
     });
 
     $('#zoomOut').on("mousedown", function(event) {
         event.preventDefault();
-        app.translateObject(ZOOM_OUT);
+        app.translateCamera(ZOOM_OUT);
     });
 
     $('[id^=zoom]').on("mouseup", function(event) {
@@ -1027,9 +979,14 @@ $(document).ready(function() {
         app.repeat(STOP);
     });
 
+    $('#freeMove').on("change", function(event) {
+        event.preventDefault();
+        app.changeControls();
+    });
+    
     $('#reset').on("click", function(event) {
         event.preventDefault();
-        app.resetObject();
+        app.resetCamera();
     });
 
     $('#playState').on("click", function() {

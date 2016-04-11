@@ -18,8 +18,10 @@ select {
 #WebGL-output {
     /* set margin to 0 and overflow to hidden, to go fullscreen */
     margin: 0;
+    padding: 0;
     overflow: hidden;
 }
+/* Floating elements */
 .displayInfo {
     position: absolute;
     color: #7fa5ff;
@@ -33,16 +35,26 @@ select {
     top: 60px;
     left: 100px;
 }
-#controls {
-    top: 17.5%;
-    left: 5%;
-}
 #musicControls {
     bottom: 5%;
     left: 45%;
 }
 #musicControls img {
     width: 40%;
+}
+#camControls {
+    top: 17.5%;
+    left: 5%;
+    font-size: 1vw;
+    border: 1px solid #629eff;
+    border-radius: 15px;
+    padding: 1%;
+}
+#camControls button {
+    margin-bottom: 10%;
+}
+#camControls input[type=checkbox] {
+    margin-bottom: 10%;
 }
 .btn-file {
     position: relative;
@@ -63,11 +75,8 @@ select {
     cursor: inherit;
     display: block;
 }
-#controls button {
-    margin-bottom: 10%;
-}
 #camImage img {
-    width: 50%;
+    width: 40%;
 }
 #notSupported,
 #downloadError {

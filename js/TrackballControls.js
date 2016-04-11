@@ -214,6 +214,13 @@ THREE.TrackballControls = function ( object, domElement ) {
         _this.target.copy(lookAt);
     };
 
+	this.enableMovement = function() {
+		this.noRotate = false;
+		this.noZoom = false;
+		this.noPan = false;
+		this.noRoll = false;
+	};
+
 	this.disableMovement = function() {
 		this.noRotate = true;
 		this.noZoom = true;
