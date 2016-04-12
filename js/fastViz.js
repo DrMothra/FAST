@@ -32,6 +32,7 @@ FastApp.prototype.init = function(container) {
     this.controls.disableMovement();
     this.setCamera(cameraViews.front);
     this.cameraView = 'front';
+    this.updateRequired = false;
     this.freeMovement = false;
     this.fileName = null;
     this.data = null;
@@ -83,6 +84,11 @@ FastApp.prototype.update = function() {
         this.controls.setLookAt(this.lookAt);
         this.timelineIndicatorPitch.position.x = this.playHead.position.x-0.25;
         this.timelineIndicatorTimbre.position.x = this.playHead.position.x-0.25;
+    }
+
+    if(this.updateRequired) {
+        this.camera.position.set(this.tempVec.x, this.tempVec.y, this.tempVec.z);
+        this.updateRequired = false;
     }
 
     BaseApp.prototype.update.call(this);
@@ -773,6 +779,7 @@ FastApp.prototype.rotateScene = function(direction) {
 };
 
 FastApp.prototype.rotateCamera = function(direction) {
+    //Rotate camera around lookat point
     this.tempVec.copy(this.camera.position);
     var vec = this.controls.getLookAt();
     this.tempVec.sub(vec);
@@ -791,7 +798,8 @@ FastApp.prototype.rotateCamera = function(direction) {
     }
 
     this.tempVec.add(this.controls.getLookAt());
-    this.camera.position.set(this.tempVec.x, this.tempVec.y, this.tempVec.z);
+    this.updateRequired = true;
+    //this.camera.position.set(this.tempVec.x, this.tempVec.y, this.tempVec.z);
 };
 
 FastApp.prototype.translateCamera = function(direction) {
