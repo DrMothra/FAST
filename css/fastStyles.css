@@ -35,20 +35,23 @@ select {
     top: 60px;
     left: 100px;
 }
-#musicControls {
-    bottom: 5%;
-    left: 45%;
-}
-#musicControls img {
-    width: 40%;
-}
-#camControls {
+#controls {
     top: 17.5%;
     left: 5%;
+}
+#musicControls {
+    margin-top: 5%;
+    border: 1px solid #629eff;
+    border-radius: 15px;
+}
+#musicControls img {
+    width: 20%;
+    padding: 3% 0;
+}
+#camControls {
     font-size: 1vw;
     border: 1px solid #629eff;
     border-radius: 15px;
-    padding: 1%;
 }
 #camControls button {
     margin-bottom: 10%;
@@ -77,6 +80,13 @@ select {
 }
 #camImage img {
     width: 40%;
+}
+#instructions {
+    bottom: 2%;
+    left: 2%;
+}
+#instructions img {
+    width: 50%;
 }
 #notSupported,
 #downloadError {

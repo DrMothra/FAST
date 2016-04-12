@@ -43,45 +43,54 @@
     <p id="trackInfoTrack">Track: </p>
 </div>
 
-<div id="camControls" class="displayInfo centred">
-    <div id="camImage">
-        <img src="images/camera.png">
-    </div>
-    <div id="camViews">
-        <button id="camFront" type="button" class="btn btn-primary">Front</button>
-        <button id="camTop" type="button" class="btn btn-primary">Top</button>
-        <button id="camEnd" type="button" class="btn btn-primary">End</button>
-    </div>
-    <div id="rotate">
-        <p>Rotate</p>
+<div id="controls" class="displayInfo centred">
+    <div id="camControls" >
+        <div id="camImage">
+            <img src="images/camera.png">
+        </div>
+        <div id="camViews">
+            <button id="camFront" type="button" class="btn btn-primary">Front</button>
+            <button id="camTop" type="button" class="btn btn-primary">Top</button>
+            <button id="camEnd" type="button" class="btn btn-primary">End</button>
+        </div>
+        <div id="rotate">
+            <p>Rotate</p>
+            <div>
+                <button id="rotateLeft" type="button" class="btn btn-primary"><</button>
+                <button id="rotateRight" type="button" class="btn btn-primary">></button>
+            </div>
+        </div>
+        <div id="zoom">
+            <p>Zoom</p>
+            <div>
+                <button id="zoomOut" type="button" class="btn btn-primary">-</button>
+                <button id="zoomIn" type="button" class="btn btn-primary">+</button>
+            </div>
+        </div>
         <div>
-            <button id="rotateLeft" type="button" class="btn btn-primary"><</button>
-            <button id="rotateRight" type="button" class="btn btn-primary">></button>
+            <input id="freeMove" type="checkbox">Free Camera
+        </div>
+        <div>
+            <button id="reset" type="button" class="btn btn-primary">Reset</button>
         </div>
     </div>
-    <div id="zoom">
-        <p>Zoom</p>
-        <div>
-            <button id="zoomOut" type="button" class="btn btn-primary">-</button>
-            <button id="zoomIn" type="button" class="btn btn-primary">+</button>
+
+    <div id="musicControls">
+        <div id="noteImage">
+            <img src="images/music.png">
         </div>
-    </div>
-    <div>
-        <input id="freeMove" type="checkbox">Free Camera
-    </div>
-    <div>
-        <button id="reset" type="button" class="btn btn-primary">Reset</button>
+        <div>
+            <span id="chooseFile" class="btn btn-primary btn-file">Load<input type="file"></span>
+        </div>
+        <div id="playControls">
+            <img id="rewind" src="images/rewind.png">
+            <img id="playState" src="images/play.png">
+        </div>
     </div>
 </div>
 
-<div id="musicControls" class="displayInfo">
-    <div>
-        <span id="chooseFile" class="btn btn-default btn-file">Load<input type="file"></span>
-    </div>
-    <div>
-        <img id="rewind" src="images/rewind.png">
-        <img id="playState" src="images/play.png">
-    </div>
+<div id="instructions" class="displayInfo">
+    <img src="images/info.png"
 </div>
 
 <div id="notSupported" class="displayInfo noDisplay">

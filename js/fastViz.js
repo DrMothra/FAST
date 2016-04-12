@@ -4,7 +4,7 @@
 
 var X_AXIS= 0, Y_AXIS= 1, Z_AXIS=2;
 var STOP = -1, ROT_UP = 0, ROT_LEFT = 1, ROT_RIGHT = 2, ROT_DOWN = 3;
-var ROT_INC = Math.PI/32;
+var ROT_INC = Math.PI/64;
 var ZOOM_IN = 4, ZOOM_OUT = 5, PAN_UP = 6, PAN_DOWN = 7, PAN_LEFT = 8, PAN_RIGHT = 9;
 var MOVE_INC = 10;
 var START_TIME = 30;
@@ -53,8 +53,10 @@ FastApp.prototype.init = function(container) {
     this.xTrans = 0;
     this.yTrans = 0;
     this.zTrans = 0;
-    this.rotQuat = new THREE.Quaternion();
-    this.rotQuat.setFromAxisAngle(new THREE.Vector3(0, 1, 0), ROT_INC);
+    this.rotQuatRight = new THREE.Quaternion();
+    this.rotQuatRight.setFromAxisAngle(new THREE.Vector3(0, 1, 0), ROT_INC);
+    this.rotQuatLeft = new THREE.Quaternion();
+    this.rotQuatLeft.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -ROT_INC);
     this.rotating = false;
     this.checkTime = 100;
     this.playHead = undefined;
@@ -62,6 +64,7 @@ FastApp.prototype.init = function(container) {
     this.timeMargin = 2;
     this.timelineDimensions = new THREE.Vector3(0.5, 15, 37.5);
     this.timelineZPos = 17.5;
+    this.tempVec = new THREE.Vector3();
     //Web audio
     var webkitAudio = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new webkitAudio();
@@ -770,7 +773,25 @@ FastApp.prototype.rotateScene = function(direction) {
 };
 
 FastApp.prototype.rotateCamera = function(direction) {
+    this.tempVec.copy(this.camera.position);
+    var vec = this.controls.getLookAt();
+    this.tempVec.sub(vec);
 
+    switch(direction) {
+        case ROT_RIGHT:
+            this.tempVec.applyQuaternion(this.rotQuatRight);
+            break;
+
+        case ROT_LEFT:
+            this.tempVec.applyQuaternion(this.rotQuatLeft);
+            break;
+
+        default:
+            break;
+    }
+
+    this.tempVec.add(this.controls.getLookAt());
+    this.camera.position.set(this.tempVec.x, this.tempVec.y, this.tempVec.z);
 };
 
 FastApp.prototype.translateCamera = function(direction) {

@@ -206,7 +206,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 
     this.getLookAt = function() {
         //Get lookat vector
-        return _this.target;
+		var lookAt = new THREE.Vector3();
+		return lookAt.copy(_this.target);
     };
 
     this.setLookAt = function(lookAt) {
