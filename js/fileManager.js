@@ -21,8 +21,7 @@ var fileManager = (function() {
                 return;
             }
             dataFile = files[0];
-            fileName = dataFile.name;
-            return fileName;
+            return dataFile;
         }
     }
 })();

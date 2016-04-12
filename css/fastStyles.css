@@ -37,7 +37,8 @@ select {
 }
 #controls {
     top: 17.5%;
-    left: 5%;
+    left: 2%;
+    width: 10%;
 }
 #musicControls {
     margin-top: 5%;
@@ -79,7 +80,7 @@ select {
     display: block;
 }
 #camImage img {
-    width: 40%;
+    width: 30%;
 }
 #instructions {
     bottom: 2%;

@@ -5,6 +5,7 @@
 var X_AXIS= 0, Y_AXIS= 1, Z_AXIS=2;
 var STOP = -1, ROT_UP = 0, ROT_LEFT = 1, ROT_RIGHT = 2, ROT_DOWN = 3;
 var ROT_INC = Math.PI/64;
+var ZOOMOUT_INC = 1.1, ZOOMIN_INC = 0.9;
 var ZOOM_IN = 4, ZOOM_OUT = 5, PAN_UP = 6, PAN_DOWN = 7, PAN_LEFT = 8, PAN_RIGHT = 9;
 var MOVE_INC = 10;
 var START_TIME = 30;
@@ -155,30 +156,33 @@ FastApp.prototype.createScene = function() {
 
 };
 
-FastApp.prototype.loadNewFile = function(fileName) {
-    if(!fileName) {
+FastApp.prototype.loadNewFile = function(file) {
+    if(!file) {
         alert("No file selected!");
         return;
     }
-    this.fileName = fileName;
+    this.file = file;
     //Reset current scene
     var removeGroup = this.scene.getObjectByName('Timbre');
     if(!removeGroup) {
         console.log("No timbre group");
     }
-    this.scene.remove(removeGroup);
+    this.root.remove(removeGroup);
     removeGroup = this.scene.getObjectByName('Pitch');
     if(!removeGroup) {
         console.log("No pitch group");
     }
-    this.scene.remove(removeGroup);
+    this.root.remove(removeGroup);
 
     //Reset any data
     this.markers = [];
 
     //Render new data
     var _this = this;
-    this.dataLoader.load("data/" + this.fileName, function(data) {
+    window.URL = window.URL || window.webkitURL;
+
+    var fileUrl = window.URL.createObjectURL(this.file);
+    this.dataLoader.load(fileUrl, function(data) {
         _this.data = data;
         //DEBUG
         console.log("File loaded");
@@ -233,13 +237,17 @@ FastApp.prototype.parseData = function() {
         }
     }
 
+    //Get mp3 and start time
+    this.startPlayhead = this.data["start_time"];
+    this.guiControls.Start = this.startPlayhead;
+
     //Calculate segments per second
     var numSegments = this.segments.length;
     var segmentWidth = 2;
     var distance;
 
     var _this = this;
-    this.getAudioData(function() {
+    this.getAudioData(url, function() {
         //Set up audio
         _this.source = _this.audioContext.createBufferSource();
         _this.source.buffer = _this.audioBuffer;
@@ -292,10 +300,11 @@ FastApp.prototype.parseData = function() {
         if(!_this.timelineIndicatorPitch) {
             alert("No pitch timeline");
         }
+        _this.onStartChanged(_this.startPlayhead);
     });
 };
 
-FastApp.prototype.getAudioData = function(callback) {
+FastApp.prototype.getAudioData = function(fileURL, callback) {
     //Get audio preview
     var _this = this;
     var now = Math.floor(new Date().getTime() / 1000);
@@ -351,6 +360,35 @@ FastApp.prototype.getAudioData = function(callback) {
         //DEBUG
         console.log("There was an audio error");
     }
+
+    /*
+    //Load mp3 file
+    var _this = this;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200) {
+                console.log("Loaded soundfile");
+                $('#downloadError').hide();
+                _this.audioContext.decodeAudioData(xhr.response, function(buffer) {
+                    _this.audioBuffer = buffer;
+                    callback();
+                }, onError);
+            } else {
+                $('#downloadError').show();
+            }
+        }
+    };
+
+    xhr.send();
+
+    function onError() {
+        //DEBUG
+        console.log("There was an audio error");
+    }
+    */
 };
 
 FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) {
@@ -551,11 +589,12 @@ FastApp.prototype.onStartChanged = function(value) {
 };
 
 FastApp.prototype.createGUI = function() {
+    var _this = this;
     this.guiControls = new function() {
         this.Timbre = true;
         this.Pitch = true;
         this.Attribute = 'Timbre';
-        this.Start = 0.01;
+        this.Start = 0.001;
         this.ScaleX = 1.0;
         this.ScaleY = 1.0;
         this.ScaleZ = 1.0;
@@ -568,7 +607,6 @@ FastApp.prototype.createGUI = function() {
 
     //Create GUI
     var gui = new dat.GUI();
-    var _this = this;
     this.guiAppear = gui.addFolder("Appearance");
     //Scale the dataset
     this.guiAppear.add(this.guiControls, 'Attribute', ['Timbre', 'Pitch']).onChange(function(value) {
@@ -630,6 +668,7 @@ FastApp.prototype.createGUI = function() {
     start.onChange(function(value) {
         _this.onStartChanged(value);
     });
+    start.listen();
 
     //Dimensions
     var i;
@@ -803,7 +842,23 @@ FastApp.prototype.rotateCamera = function(direction) {
 };
 
 FastApp.prototype.translateCamera = function(direction) {
+    //Translate along lookat vector
+    this.tempVec.copy(this.camera.position);
+    var vec = this.controls.getLookAt();
+    this.tempVec.sub(vec);
 
+    switch (direction) {
+        case ZOOM_IN:
+            this.tempVec.multiplyScalar(ZOOMIN_INC);
+            break;
+
+        case ZOOM_OUT:
+            this.tempVec.multiplyScalar(ZOOMOUT_INC);
+            break;
+    }
+
+    this.tempVec.add(this.controls.getLookAt());
+    this.updateRequired = true;
 };
 
 FastApp.prototype.resetCamera = function() {
@@ -960,8 +1015,8 @@ $(document).ready(function() {
     var container = document.getElementById("WebGL-output");
     var app = new FastApp();
     app.init(container);
-    app.createScene();
     app.createGUI();
+    app.createScene();
 
     //GUI callbacks
     $('#camFront').on("click", function() {
