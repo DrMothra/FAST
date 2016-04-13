@@ -66,6 +66,8 @@ FastApp.prototype.init = function(container) {
     this.timeMargin = 2;
     this.timelineDimensions = new THREE.Vector3(0.5, 15, 37.5);
     this.timelineZPos = 17.5;
+    this.duration = 0;
+    this.playingTime = 0;
     this.tempVec = new THREE.Vector3();
     //Web audio
     var webkitAudio = window.AudioContext || window.webkitAudioContext;
@@ -77,6 +79,12 @@ FastApp.prototype.update = function() {
 
     //Animate
     if(this.playing) {
+        this.playingTime += delta;
+        if(this.playingTime > this.duration) {
+            this.playingTime = 0;
+            this.resetTrack();
+            return;
+        }
         var deltaPos = this.unitsPerSecond * delta;
         this.playHead.position.x += deltaPos;
         this.camera.position.x += deltaPos;
@@ -255,6 +263,7 @@ FastApp.prototype.parseData = function() {
         _this.playbackTime = 0;
 
         var totalTime = 0, startTime = START_TIME - _this.timeMargin, endTime = START_TIME + _this.source.buffer.duration + _this.timeMargin;
+        _this.duration = endTime - startTime;
         var i;
         for(i=0; i<_this.segments.length; ++i){
             totalTime = _this.segments[i];

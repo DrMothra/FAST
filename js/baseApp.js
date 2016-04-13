@@ -32,8 +32,8 @@ BaseApp.prototype.init = function(container) {
     this.createControls();
     //this.raycaster = new THREE.Raycaster();
     this.stats = initStats();
-    this.statsShowing = true;
-
+    this.statsShowing = false;
+    this.statsShowing ? $("#Stats-output").show() : $("#Stats-output").hide();
 };
 
 BaseApp.prototype.createRenderer = function() {

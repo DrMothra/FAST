@@ -17,17 +17,133 @@
     <h2>FAST Music Visualisation Instructions</h2>
 </div>
 
-<div id="instructions">
+<div id="instructions" class="container-fluid">
+    <div class="row">
+        <div class="col-md-1">
+            &nbsp;
+        </div>
+        <div class="col-md-10">
+            <p>
+                Welcome to the FAST music visualiser.<br>
+                This app visualises timbre and pitch/key for a specified music clip and allows you to explore the data to see if there are any underlying patterns of interest.
+            </p>
+            <p class="bold">
+                About the App
+            </p>
+            <p>
+                What is timbre?<br>
+                Timbre denotes the quality of a musical note, sound or tone for differing types of sound production or instruments. The formal definition is
+                <a href="https://en.wikipedia.org/wiki/Timbre" target="_blank">here</a>.
+                The data used for the visualisation is a result of analysis by <a href="http://the.echonest.com/" target="_blank">Echonest's</a>
+                <a href="http://developer.echonest.com/docs/v4" target="_blank">Analyzer</a> software. An explanation of the process is given
+                <a href="http://developer.echonest.com/docs/v4/_static/AnalyzeDocumentation.pdf" target="_blank">here</a>.
+            </p>
+            <p>
+                The pitch/key values are defined in the Analyzer documentation as follows:
+            </p>
+            <p class="italic">
+                "pitch content is given by a 'chroma' vector, corresponding to the 12 pitch classes C, C#, D to B, with values ranging
+                from 0 to 1 that describe the relative dominance of every pitch in the chromatic scale. For example a C Major chord
+                would likely be represented by large values of C, E and G (i.e. classes 0, 4, and 7). Vectors are normalized to 1 by their
+                strongest dimension, therefore noisy sounds are likely represented by values that are all close to 1, while pure tones are
+                described by one value at 1 (the pitch) and others near 0."
+            </p>
+            <p class="bold">
+                Using the App
+            </p>
+            <p>
+                When the page first loads you'll see the rows of data that make up the pitch and timbre of the track. The timbre is shown on top in red and the pitch/key is shown below the timbre in blue.
+                The track details are shown in the top left corner.
+            </p>
+            <p>
+                There are 12 dimensions for a track's timbre which are each denoted as a row of data in the visualisation. There are also 12 values for pitch/key.
+                A transparent plane along with an arrow shows the current playing time of the track in question (don't worry that it's not at the start).
+                The controls on the left of the screen determine how the visualisation is viewed and control the playback of the song.
+            </p>
+            <p>
+                If you press the play icon on the left (beneath the note icon) the track will start playing.
+                You'll see the transparent plane move along the rows of data, denoting the current track time. The points at which the plane intersects with the data denote the values of
+                timbre and pitch that you are currently hearing.
+                You can pause the track by pressing the pause button or start again by pressing the rewind icon.
+            </p>
+            <p class="bold">
+                Viewing the Data
+            </p>
+            <p>
+                There are numerous ways in which the data may be manipulated to get a better understanding. The interface conrols on the left hand side control the view of the data and the music
+                playback. The camera controls (denoted by the camera icon) allow the view of the data to be changed. Presing the Front, Top or End buttons will show the visualisation from three differing
+                viewpoints as described. The rotate button will rotate the model around the central point. Likewise the zoom buttons will move the camera nearer or farther away respectively. The best way to
+                understand how these work is to have a play and experiment. If you get lost at any point, order can be restored via pressing the Reset button.
+            </p>
+            <p>
+                For those that are more familiar with 3D graphical apps you can manipulate the model more freely if you check the Free Camera button. This then allows the model to be manipulated via the mouse.
+                Left button to rotate the model around, right button to pan the model around the scene and the scroll wheel zooms in/out.
+            </p>
+            <p class="bold">
+                Manipulating the Data
+            </p>
+            <p>
+                There is another user interface in the top right corner that controls how the data looks. There are three sections - Appearance, Data and Dimensions. You can control the look of either the
+                timbre or the pitch. If you click on the Appearance option then you'll see a number of attributes that you can control. They will affect whichever attribute is selected in the attribute option.
+                So, if Timbre is selected then the controls will affect the timbre visualisation only, and vice versa for pitch.
+            </p>
+            <p>
+                From here you can control the scale of the visualisations. Once again the best way to see how to do this is to experiment and see the effect update in the viewer.
+                Options include scaling of the data, altering it's transparency and moving the timbre around with respect to the pitch.
+            </p>
+            <p>
+                The Data section denotes which attribute is currently being displayed, just select the one that you are interested in. The Start option denotes at which point the track is played from. This
+                is explained in more detail in the section below.
+            </p>
+            <p>
+                The final section, Dimensions, controls which rows are visible in the respective dimensions. These affect the attribute selected in the Appearance section, so timbre dimensions may be toggled
+                if the Timbre option is selected in the Attribute menu.
+            </p>
+            <p>
+                The gui in the top right may be minimised by clicking on the Close Controls button and may be hidden by pressing the 'H' key.<br>
+            </p>
+            <p class="bold">
+                Where does the data come from?
+            </p>
+            <p>
+                Each track is a preview clip from the <a href="http://developer.7digital.com/" target="_blank">7Digital</a> music library. This clip can come from anywhere in the song and is typically
+                between 30 and 60 seconds long. It may be that the particular track may not be available for download, in which case an appropriate message will be displayed and you should try refreshing the
+                page. As we have no way of determining where the clip starts within the track, the start time has been estimated manually. This is where the Start attribute comes in the Data section of the
+                gui.
+            </p>
+            <p>
+                The visualisation starts approximately 2 seconds from the point at which the preview track begins and the start time has then been adjusted to ensure it is as close to the real start time
+                as possible. So for example, if the clip starts 30 seconds in then the visualisation starts at 28 seconds and the start time is set to 2. This then allows users to alter the offset in case
+                they do not think that the start time is correct. The start time is contained within the music files so it should not need to be adjusted unless you think it is significantly wrong?
+            </p>
+            <p class="bold">
+                FAQ
+            </p>
+            <p class="italic">
+                The visualisation appears to be running quite slowly on my machine?
+            </p>
+            <p>
+                If you press the 'S' key then you'll see how quickly the visualisation is being rendered in terms of frames per second (fps). If this is significantly slow then the graphics card may
+                not be particularly powerful on your machine. Although the app is not too graphically intensive it may  be a good idea to update the graphics drivers on your machine.
+            </p>
+            <p class="italic">
+                Are there any more files to download?
+            </p>
+            <p>
+                Yes! These are coming and will be put online as soon as possible.
+            </p>
+            <p>
+                If there are any issues with the app or you have any suggestions, bugfixes, etc. then please contact
+                <a href="mailto:tony.glover@nottingham.ac.uk?Subject=FAST%20Visualiser" target="_top">me</a>. Thanks!
+            </p>
+        </div>
+        <div class="col-md-1">
+            &nbsp;
+        </div>
+    </div>
+
     <p>
-        Welcome to the FAST music visualiser.<br>
-        This app visualises timbre and pitch/key for a specified music clip.
-    </p>
-    <p>
-        When the page first loads you'll see the rows of data that make up the pitch and timbre of the track. The track name is
-        shown in the top left corner.
-        There are 12 dimensions for a track's timbre which are shown in red in the visualisation and 12 pitches/keys shown below.
-        A transparent plane along with an arrow shows the current playing time of the track in question (don't worry that it's not at the start).
-        The controls on the left of the screen determine how the visualisation is viewed and control the playback of the song.
+
     </p>
 </div>
 </body>

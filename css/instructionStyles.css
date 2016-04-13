@@ -1,8 +1,17 @@
 /* Styles for FAST music visualisation */
 
 body {
-    background: #777777;
+    background: #bdbdbd;
 }
 .centred {
     text-align: center;
+}
+.italic {
+    font-style: italic;
+}
+.bold {
+    font-weight: bold;
+}
+#instructions p {
+    font-size: 1vw;
 }
