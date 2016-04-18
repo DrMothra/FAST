@@ -247,6 +247,9 @@ FastApp.prototype.parseData = function() {
 
     //Get mp3 and start time
     this.startPlayhead = this.data["start_time"];
+    if(!this.startPlayhead) {
+        this.startPlayhead = 0;
+    }
     this.guiControls.Start = this.startPlayhead;
 
     //Calculate segments per second
@@ -315,6 +318,8 @@ FastApp.prototype.parseData = function() {
 
 FastApp.prototype.getAudioData = function(fileURL, callback) {
     //Get audio preview
+    $('#waiting').show();
+    $('#downloadError').hide();
     var _this = this;
     var now = Math.floor(new Date().getTime() / 1000);
     var httpMethod = "GET",
@@ -353,6 +358,7 @@ FastApp.prototype.getAudioData = function(fileURL, callback) {
             if(xhr.status === 200) {
                 console.log("Downloaded preview");
                 $('#downloadError').hide();
+                $('#waiting').hide();
                 _this.audioContext.decodeAudioData(xhr.response, function(buffer) {
                     _this.audioBuffer = buffer;
                     callback();

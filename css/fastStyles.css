@@ -90,7 +90,8 @@ select {
     width: 50%;
 }
 #notSupported,
-#downloadError {
+#downloadError,
+#waiting {
     background: darkgrey;
     border-radius: 15px;
     color: black;
@@ -101,6 +102,10 @@ select {
     left: 30%;
 }
 #downloadError {
+    bottom: 30%;
+    left: 40%;
+}
+#waiting {
     bottom: 30%;
     left: 40%;
 }
