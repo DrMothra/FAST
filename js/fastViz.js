@@ -62,6 +62,7 @@ FastApp.prototype.init = function(container) {
     this.rotating = false;
     this.checkTime = 100;
     this.playHead = undefined;
+    this.startTime = 0;
     this.startPlayhead = 0;
     this.timeMargin = 2;
     this.timelineDimensions = new THREE.Vector3(0.5, 15, 37.5);
@@ -169,6 +170,7 @@ FastApp.prototype.loadNewFile = function(file) {
         alert("No file selected!");
         return;
     }
+    //Reset everything
     this.file = file;
     //Reset current scene
     var removeGroup = this.scene.getObjectByName('Timbre');
@@ -181,6 +183,12 @@ FastApp.prototype.loadNewFile = function(file) {
         console.log("No pitch group");
     }
     this.root.remove(removeGroup);
+    removeGroup = this.scene.getObjectByName('TimelineGroup');
+    if(!removeGroup) {
+        console.log("No timeline group");
+    }
+    this.root.remove(removeGroup);
+    this.startSegment = undefined;
 
     //Reset any data
     this.markers = [];
@@ -246,10 +254,11 @@ FastApp.prototype.parseData = function() {
     }
 
     //Get mp3 and start time
-    this.startPlayhead = this.data["start_time"];
-    if(!this.startPlayhead) {
-        this.startPlayhead = 0;
+    this.startTime = this.data["start_time"];
+    if(!this.startTime) {
+        this.startTime = 30;
     }
+    this.startPlayhead = this.timeMargin;
     this.guiControls.Start = this.startPlayhead;
 
     //Calculate segments per second
@@ -265,7 +274,7 @@ FastApp.prototype.parseData = function() {
         _this.source.connect(_this.audioContext.destination);
         _this.playbackTime = 0;
 
-        var totalTime = 0, startTime = START_TIME - _this.timeMargin, endTime = START_TIME + _this.source.buffer.duration + _this.timeMargin;
+        var totalTime = 0, startTime = _this.startTime - _this.timeMargin, endTime = _this.startTime + _this.source.buffer.duration + _this.timeMargin;
         _this.duration = endTime - startTime;
         var i;
         for(i=0; i<_this.segments.length; ++i){
@@ -489,6 +498,7 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
 FastApp.prototype.renderTimeline = function() {
     //Timeline
     var timelineGroup = new THREE.Object3D();
+    timelineGroup.name = 'TimelineGroup';
     this.root.add(timelineGroup);
     var depth = 2, interZgap = 1;
     var numSegments = this.endSegment - this.startSegment + 1;
