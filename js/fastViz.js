@@ -70,9 +70,39 @@ FastApp.prototype.init = function(container) {
     this.duration = 0;
     this.playingTime = 0;
     this.tempVec = new THREE.Vector3();
+    //Materials
+    this.showHeatmap = false;
+    this.colourSteps = 7;
+    this.heatMap = [];
+    this.createMaterials();
     //Web audio
     var webkitAudio = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new webkitAudio();
+};
+
+FastApp.prototype.createMaterials = function() {
+    //Need material for each colour
+    var colours = [
+        { name: "black",
+            value: 0x000000 },
+        { name: "blue",
+            value: 0x0000ff },
+        { name: "cyan",
+            value: 0x00ffff },
+        { name: "green",
+            value: 0x00ff00 },
+        { name: "yellow",
+            value: 0xffff00 },
+        { name: "red",
+            value: 0xff0000 },
+        { name: "white",
+            value: 0xffffff }
+    ];
+    for(var i=0; i<this.colourSteps; ++i) {
+        this.heatMap.push(new THREE.MeshLambertMaterial( { color: colours[i].value,
+                                                opacity: 1.0,
+                                                transparent: true}));
+    }
 };
 
 FastApp.prototype.update = function() {
@@ -173,21 +203,9 @@ FastApp.prototype.loadNewFile = function(file) {
     //Reset everything
     this.file = file;
     //Reset current scene
-    var removeGroup = this.scene.getObjectByName('Timbre');
-    if(!removeGroup) {
-        console.log("No timbre group");
-    }
-    this.root.remove(removeGroup);
-    removeGroup = this.scene.getObjectByName('Pitch');
-    if(!removeGroup) {
-        console.log("No pitch group");
-    }
-    this.root.remove(removeGroup);
-    removeGroup = this.scene.getObjectByName('TimelineGroup');
-    if(!removeGroup) {
-        console.log("No timeline group");
-    }
-    this.root.remove(removeGroup);
+    var clearData = ['Timbre', 'Pitch', 'TimelineGroup'];
+    this.clearScene(clearData);
+
     this.startSegment = undefined;
 
     //Reset any data
@@ -423,7 +441,7 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
     //Timeline indicator
     var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff,
                                                      opacity: 0.25,
-                                                     transparent: true});
+                                                     transparent: true } );
     var timelineGeom = new THREE.BoxGeometry(this.timelineDimensions.x,
         this.timelineDimensions.y, this.timelineDimensions.z);
     var timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
@@ -454,7 +472,7 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
     }
 
     //Render first segment
-    var coefficients, height;
+    var coefficients, height, index;
     coefficients = segmentData[this.startSegment];
     timeSlice = this.segments[this.startSegment+1] - this.segments[this.startSegment];
     xScale = timeSlice/defaultTimeSlice;
@@ -462,7 +480,13 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
     for(var j=0; j<numCoefficients; ++j) {
         height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
         startY = coefficients[j] < 0 ? -height/2 : height/2;
-        mesh = new THREE.Mesh(geom, boxMat);
+        if(this.showHeatmap) {
+            index = Math.floor(height * this.colourSteps);
+            if(index === 7) index = 6;
+            mesh = new THREE.Mesh(geom, this.heatMap[index]);
+        } else {
+            mesh = new THREE.Mesh(geom, boxMat);
+        }
         mesh.name = "row" + j + "col" + this.startSegment;
         mesh.position.set(startX, startY, startZ + (j * (interZgap + depth)));
         mesh.visible = height > 0;
@@ -481,7 +505,13 @@ FastApp.prototype.renderAttribute = function(name, data, attributes, normalise) 
         for(var j=0; j<numCoefficients; ++j) {
             height = coefficients[j] < 0 ? coefficients[j] * -1 : coefficients[j];
             startY = coefficients[j] < 0 ? -height/2 : height/2;
-            mesh = new THREE.Mesh(geom, boxMat);
+            if(this.showHeatmap) {
+                index = Math.floor(height * this.colourSteps);
+                if(index === 7) index = 6;
+                mesh = new THREE.Mesh(geom, this.heatMap[index]);
+            } else {
+                mesh = new THREE.Mesh(geom, boxMat);
+            }
             mesh.name = "row" + j + "col" + i;
             mesh.position.set(startX + xOffset, startY, startZ + (j * (interZgap + depth)));
             mesh.visible = height > 0;
@@ -628,10 +658,12 @@ FastApp.prototype.createGUI = function() {
         this.LightX = 0.0;
         this.LightY = 200;
         this.LightZ = 0;
+        this.Heatmap = false;
     };
 
     //Create GUI
     var gui = new dat.GUI();
+    //Appearance
     this.guiAppear = gui.addFolder("Appearance");
     //Scale the dataset
     this.guiAppear.add(this.guiControls, 'Attribute', ['Timbre', 'Pitch']).onChange(function(value) {
@@ -677,7 +709,12 @@ FastApp.prototype.createGUI = function() {
     lightZ.onChange(function(value) {
         _this.onLightChanged(Z_AXIS, value);
     });
+    this.guiAppear.add(this.guiControls, 'Heatmap').onChange(function(value) {
+        _this.renderHeatmap(value);
+    });
 
+
+    //Data
     this.guiData = gui.addFolder("Data");
     var timbre = this.guiData.add(this.guiControls, 'Timbre').onChange(function(value) {
         _this.onShowGroup('Timbre', value);
@@ -694,6 +731,8 @@ FastApp.prototype.createGUI = function() {
         _this.onStartChanged(value);
     });
     start.listen();
+
+
 
     //Dimensions
     var i;
@@ -750,6 +789,32 @@ FastApp.prototype.onOpacityChanged = function(value) {
             group.children[child].material.opacity = value;
         }
         attributes.opacity = value;
+    }
+};
+
+FastApp.prototype.renderHeatmap = function(render) {
+    this.showHeatmap = render;
+    var elem = $('#heatmap');
+    this.showHeatmap ? elem.show() : elem.hide();
+    var clearData = ['Timbre', 'Pitch'];
+    this.clearScene(clearData);
+    this.renderAttribute('Timbre', this.timbreSegments, this.timbreAttributes, true);
+    this.renderAttribute('Pitch', this.pitchSegments, this.pitchAttributes, false);
+};
+
+FastApp.prototype.clearScene = function(groups) {
+    if(groups === undefined) {
+        console.log("Nothing to clear");
+        return;
+    }
+    var removeGroup;
+    for(var i=0; i<groups.length; ++i) {
+        removeGroup = this.scene.getObjectByName(groups[i]);
+        if(!removeGroup) {
+            console.log("No group ", groups[i]);
+            continue;
+        }
+        this.root.remove(removeGroup);
     }
 };
 

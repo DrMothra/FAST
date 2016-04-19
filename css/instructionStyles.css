@@ -15,3 +15,15 @@ body {
 #instructions p {
     font-size: 1vw;
 }
+#files {
+    margin-top: 3%;
+}
+#files p {
+    background: darkgrey;
+    border-radius: 15px;
+    color: black;
+    padding: 2%;
+}
+.row {
+    margin-bottom: 2%;
+}

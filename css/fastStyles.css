@@ -89,6 +89,13 @@ select {
 #instructions img {
     width: 50%;
 }
+#heatmap {
+    bottom: 2%;
+    right: 2%;
+}
+#heatmap img {
+    width: 100%;
+}
 #notSupported,
 #downloadError,
 #waiting {
