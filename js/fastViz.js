@@ -628,7 +628,7 @@ FastApp.prototype.onShowAllDimensions = function(status) {
     var group = this.scene.getObjectByName(this.guiControls.Attribute);
     if(group) {
         group.traverse(function(obj) {
-            if (obj instanceof THREE.Mesh) {
+            if (obj instanceof THREE.Mesh && obj.name.indexOf("timeline") === -1) {
                 obj.visible = status;
             }
         });
@@ -800,6 +800,14 @@ FastApp.prototype.renderHeatmap = function(render) {
     this.clearScene(clearData);
     this.renderAttribute('Timbre', this.timbreSegments, this.timbreAttributes, true);
     this.renderAttribute('Pitch', this.pitchSegments, this.pitchAttributes, false);
+    this.timelineIndicatorTimbre = this.scene.getObjectByName('timelineTimbre');
+    if(!this.timelineIndicatorTimbre) {
+        alert("No timbre timeline");
+    }
+    this.timelineIndicatorPitch = this.scene.getObjectByName('timelinePitch');
+    if(!this.timelineIndicatorPitch) {
+        alert("No pitch timeline");
+    }
 };
 
 FastApp.prototype.clearScene = function(groups) {
