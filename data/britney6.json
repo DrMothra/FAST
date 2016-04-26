@@ -1,0 +1,4802 @@
+{
+    "apiVersion": "1.0.0", 
+    "datasets": {
+        "75868ae1-0bfa-11e6-9712-74d435bebcd8": {
+            "alias": [
+                "/analysis/bars_confidence"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 28, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of confidence of bars"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2168
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    0
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": []
+        }, 
+        "75868ae2-0bfa-11e6-9cbe-74d435bebcd8": {
+            "alias": [
+                "/analysis/bars_start"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 29, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of start times of bars"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2167
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    0
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": []
+        }, 
+        "7586b1f0-0bfa-11e6-8eb6-74d435bebcd8": {
+            "alias": [
+                "/analysis/beats_confidence"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 32, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of confidence of sections"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2166
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    0
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": []
+        }, 
+        "7586b1f1-0bfa-11e6-ab18-74d435bebcd8": {
+            "alias": [
+                "/analysis/beats_start"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 30, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of start times of beats"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2165
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    0
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": []
+        }, 
+        "7586b1f2-0bfa-11e6-8680-74d435bebcd8": {
+            "alias": [
+                "/analysis/sections_confidence"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 32, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of confidence of sections"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2164
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    0
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": []
+        }, 
+        "7586d900-0bfa-11e6-ac9f-74d435bebcd8": {
+            "alias": [
+                "/analysis/sections_start"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 33, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of start times of sections"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2163
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    0
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": []
+        }, 
+        "7586d901-0bfa-11e6-b48f-74d435bebcd8": {
+            "alias": [
+                "/analysis/segments_confidence"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 32, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of confidence of segments"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2157
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                1.0, 
+                1.0, 
+                0.509, 
+                0.907
+            ]
+        }, 
+        "7587000f-0bfa-11e6-80a7-74d435bebcd8": {
+            "alias": [
+                "/analysis/segments_loudness_max"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 34, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of max loudness of segments"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2160
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                -30.439, 
+                -26.057, 
+                -26.598, 
+                -21.081
+            ]
+        }, 
+        "75870010-0bfa-11e6-8e6e-74d435bebcd8": {
+            "alias": [
+                "/analysis/segments_loudness_max_time"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 39, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of max loudness time of segments"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2161
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                0.07821, 
+                0.02982, 
+                0.02362, 
+                0.02478
+            ]
+        }, 
+        "7587271e-0bfa-11e6-b852-74d435bebcd8": {
+            "alias": [
+                "/analysis/segments_loudness_start"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 44, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of loudness of segments at start time"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2162
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                -50.605, 
+                -41.524, 
+                -32.522, 
+                -32.054
+            ]
+        }, 
+        "7587271f-0bfa-11e6-926c-74d435bebcd8": {
+            "alias": [
+                "/analysis/segments_pitches"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 39, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of pitches of segments (chromas)"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2158
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        85, 
+                        12
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4, 
+                    12
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED", 
+                    12
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                [
+                    0.033, 
+                    0.045, 
+                    0.268, 
+                    0.038, 
+                    0.034, 
+                    0.057, 
+                    0.055, 
+                    1.0, 
+                    0.042, 
+                    0.028, 
+                    0.029, 
+                    0.043
+                ], 
+                [
+                    0.01, 
+                    0.014, 
+                    0.117, 
+                    1.0, 
+                    0.119, 
+                    0.005, 
+                    0.008, 
+                    0.031, 
+                    0.084, 
+                    0.131, 
+                    0.101, 
+                    0.006
+                ], 
+                [
+                    0.007, 
+                    0.012, 
+                    0.123, 
+                    1.0, 
+                    0.118, 
+                    0.018, 
+                    0.01, 
+                    0.049, 
+                    0.107, 
+                    0.194, 
+                    0.81, 
+                    0.036
+                ], 
+                [
+                    0.513, 
+                    0.157, 
+                    0.051, 
+                    1.0, 
+                    0.215, 
+                    0.093, 
+                    0.219, 
+                    0.227, 
+                    0.411, 
+                    0.418, 
+                    0.664, 
+                    0.107
+                ]
+            ]
+        }, 
+        "75872720-0bfa-11e6-ba3d-74d435bebcd8": {
+            "alias": [
+                "/analysis/segments_start"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 33, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of start times of segments"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2156
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                0.0, 
+                0.50259, 
+                0.72694, 
+                0.95166
+            ]
+        }, 
+        "75874e2e-0bfa-11e6-9f82-74d435bebcd8": {
+            "alias": [
+                "/analysis/segments_timbre"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 40, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of timbre of segments (MFCC-like)"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2159
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        85, 
+                        12
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4, 
+                    12
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED", 
+                    12
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                [
+                    24.826, 
+                    -66.452, 
+                    13.685, 
+                    -6.448, 
+                    32.614, 
+                    32.699, 
+                    -24.225, 
+                    -7.777, 
+                    -21.602, 
+                    14.524, 
+                    38.986, 
+                    28.653
+                ], 
+                [
+                    30.601, 
+                    17.123, 
+                    -44.791, 
+                    -9.647, 
+                    -13.126, 
+                    0.393, 
+                    16.691, 
+                    -20.897, 
+                    12.303, 
+                    13.318, 
+                    24.345, 
+                    18.938
+                ], 
+                [
+                    30.628, 
+                    -12.776, 
+                    -51.871, 
+                    -20.656, 
+                    -29.041, 
+                    -26.867, 
+                    3.059, 
+                    -13.81, 
+                    -4.547, 
+                    -4.742, 
+                    9.863, 
+                    12.896
+                ], 
+                [
+                    36.826, 
+                    29.432, 
+                    9.072, 
+                    -12.148, 
+                    -25.681, 
+                    -18.077, 
+                    -22.802, 
+                    -11.066, 
+                    37.154, 
+                    16.476, 
+                    21.52, 
+                    58.786
+                ]
+            ]
+        }, 
+        "75874e2f-0bfa-11e6-9927-74d435bebcd8": {
+            "alias": [
+                "/analysis/songs"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 6, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "TABLE"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "2.6"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 41, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "table of Echo Nest analysis for one song"
+                }, 
+                {
+                    "name": "FIELD_0_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 21, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "analysis_sample_rate"
+                }, 
+                {
+                    "name": "FIELD_1_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 10, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "audio_md5"
+                }, 
+                {
+                    "name": "FIELD_2_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 13, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "danceability"
+                }, 
+                {
+                    "name": "FIELD_3_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 9, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "duration"
+                }, 
+                {
+                    "name": "FIELD_4_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 15, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "end_of_fade_in"
+                }, 
+                {
+                    "name": "FIELD_5_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "energy"
+                }, 
+                {
+                    "name": "FIELD_6_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 20, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_bars_confidence"
+                }, 
+                {
+                    "name": "FIELD_7_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 15, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_bars_start"
+                }, 
+                {
+                    "name": "FIELD_8_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 21, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_beats_confidence"
+                }, 
+                {
+                    "name": "FIELD_9_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 16, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_beats_start"
+                }, 
+                {
+                    "name": "FIELD_10_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 24, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_sections_confidence"
+                }, 
+                {
+                    "name": "FIELD_11_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 19, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_sections_start"
+                }, 
+                {
+                    "name": "FIELD_12_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 24, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_segments_confidence"
+                }, 
+                {
+                    "name": "FIELD_13_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 26, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_segments_loudness_max"
+                }, 
+                {
+                    "name": "FIELD_14_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 31, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_segments_loudness_max_time"
+                }, 
+                {
+                    "name": "FIELD_15_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 28, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_segments_loudness_start"
+                }, 
+                {
+                    "name": "FIELD_16_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 21, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_segments_pitches"
+                }, 
+                {
+                    "name": "FIELD_17_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 19, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_segments_start"
+                }, 
+                {
+                    "name": "FIELD_18_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 20, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_segments_timbre"
+                }, 
+                {
+                    "name": "FIELD_19_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 22, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_tatums_confidence"
+                }, 
+                {
+                    "name": "FIELD_20_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 17, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_tatums_start"
+                }, 
+                {
+                    "name": "FIELD_21_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "key"
+                }, 
+                {
+                    "name": "FIELD_22_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 15, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "key_confidence"
+                }, 
+                {
+                    "name": "FIELD_23_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 9, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "loudness"
+                }, 
+                {
+                    "name": "FIELD_24_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 5, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "mode"
+                }, 
+                {
+                    "name": "FIELD_25_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 16, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "mode_confidence"
+                }, 
+                {
+                    "name": "FIELD_26_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 18, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "start_of_fade_out"
+                }, 
+                {
+                    "name": "FIELD_27_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 6, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "tempo"
+                }, 
+                {
+                    "name": "FIELD_28_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 15, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "time_signature"
+                }, 
+                {
+                    "name": "FIELD_29_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 26, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "time_signature_confidence"
+                }, 
+                {
+                    "name": "FIELD_30_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 9, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "track_id"
+                }, 
+                {
+                    "name": "FIELD_0_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_1_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_2_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_3_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_4_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_5_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_6_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_7_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_8_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_9_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_10_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_11_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_12_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_13_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_14_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_15_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_16_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_17_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_18_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_19_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_20_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_21_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_22_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_23_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_24_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_25_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_26_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_27_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_28_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_29_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_30_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "NROWS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I64LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 1
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        37
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    1
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "class": "H5T_COMPOUND", 
+                "fields": [
+                    {
+                        "name": "analysis_sample_rate", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "audio_md5", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 32, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "danceability", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "duration", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "end_of_fade_in", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "energy", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "idx_bars_confidence", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_bars_start", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_beats_confidence", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_beats_start", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_sections_confidence", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_sections_start", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_segments_confidence", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_segments_loudness_max", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_segments_loudness_max_time", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_segments_loudness_start", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_segments_pitches", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_segments_start", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_segments_timbre", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_tatums_confidence", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_tatums_start", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "key", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "key_confidence", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "loudness", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "mode", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "mode_confidence", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "start_of_fade_out", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "tempo", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "time_signature", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "time_signature_confidence", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "track_id", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 32, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }
+                ]
+            }, 
+            "value": [
+                [
+                    22050, 
+                    "52ae1270b88d8dc43ffa299c682a2f17", 
+                    0.0, 
+                    1.04444, 
+                    0.0, 
+                    0.0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    3, 
+                    0.0, 
+                    -23.555, 
+                    1, 
+                    0.0, 
+                    1.044, 
+                    0.0, 
+                    1, 
+                    0.0, 
+                    "TRAUFLM128F42AECDC"
+                ]
+            ]
+        }, 
+        "75877540-0bfa-11e6-a4b2-74d435bebcd8": {
+            "alias": [
+                "/analysis/tatums_confidence"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 30, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of confidence of tatums"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2170
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                0.769, 
+                0.819, 
+                0.822, 
+                0.814
+            ]
+        }, 
+        "75877541-0bfa-11e6-9162-74d435bebcd8": {
+            "alias": [
+                "/analysis/tatums_start"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 31, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of start times of tatums"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2169
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    4
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                0.03285, 
+                0.27518, 
+                0.51402, 
+                0.74589
+            ]
+        }, 
+        "75879c4f-0bfa-11e6-8686-74d435bebcd8": {
+            "alias": [
+                "/metadata/artist_terms"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 46, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of terms (Echo Nest tags) for an artist"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2153
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        32
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    30
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "charSet": "H5T_CSET_ASCII", 
+                "class": "H5T_STRING", 
+                "length": 256, 
+                "strPad": "H5T_STR_NULLPAD"
+            }, 
+            "value": [
+                "dance pop", 
+                "teen pop", 
+                "pop rock", 
+                "electropop", 
+                "adult contemporary", 
+                "ballad", 
+                "pop", 
+                "r&b", 
+                "female vocalist", 
+                "club", 
+                "power pop", 
+                "hip hop", 
+                "electro", 
+                "rock", 
+                "soft rock", 
+                "electronica", 
+                "american", 
+                "00s", 
+                "female", 
+                "electronic", 
+                "funk", 
+                "techno", 
+                "rap", 
+                "soundtrack", 
+                "90s", 
+                "blues", 
+                "alternative", 
+                "indie", 
+                "punk", 
+                "metal"
+            ]
+        }, 
+        "75879c50-0bfa-11e6-9c74-74d435bebcd8": {
+            "alias": [
+                "/metadata/artist_terms_freq"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 57, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of term (Echo Nest tags) frequencies for an artist"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2154
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    30
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                1.0, 
+                0.9940917782447847, 
+                0.8622765163691491, 
+                0.7993010297096727, 
+                0.7430760947386075, 
+                0.7512682120337788, 
+                0.8733250143844005, 
+                0.7113820918951029, 
+                0.7789061107143902, 
+                0.7274376649004497, 
+                0.7274376649004497, 
+                0.7836042495937017, 
+                0.7786890718548379, 
+                0.8420469462374676, 
+                0.6761862579460614, 
+                0.7921097400202952, 
+                0.7332492059546813, 
+                0.7044149127076492, 
+                0.6896494651403071, 
+                0.7753473588357892, 
+                0.7085222955059841, 
+                0.7085222955059841, 
+                0.7085222955059841, 
+                0.6761862579460614, 
+                0.6761559201756665, 
+                0.6761862579460614, 
+                0.733315054340197, 
+                0.7274538275218798, 
+                0.7011902095947831, 
+                0.6906834748740769
+            ]
+        }, 
+        "7587c35e-0bfa-11e6-a9db-74d435bebcd8": {
+            "alias": [
+                "/metadata/artist_terms_weight"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 53, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of term (Echo Nest tags) weights for an artist"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2155
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    30
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_IEEE_F64LE", 
+                "class": "H5T_FLOAT"
+            }, 
+            "value": [
+                1.0, 
+                0.9951366095205798, 
+                0.8277221474248477, 
+                0.8100848782147977, 
+                0.7885114461587825, 
+                0.7866858814708769, 
+                0.7606201275010257, 
+                0.7547233319797956, 
+                0.7473504070876884, 
+                0.7362512106240808, 
+                0.7327027584236214, 
+                0.726728723060555, 
+                0.7234642930559562, 
+                0.7141738079831508, 
+                0.7085409032823456, 
+                0.7082061312886525, 
+                0.6802154179529617, 
+                0.678647801129763, 
+                0.6735200469193243, 
+                0.6696767383922964, 
+                0.6686839601017885, 
+                0.6639129145764308, 
+                0.662483068626198, 
+                0.6493488537221396, 
+                0.6486888557830407, 
+                0.6475358775968179, 
+                0.6450288402693434, 
+                0.636459879622282, 
+                0.6313321253547323, 
+                0.6254125748884457
+            ]
+        }, 
+        "7587c35f-0bfa-11e6-94de-74d435bebcd8": {
+            "alias": [
+                "/metadata/similar_artists"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 38, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of similar artists Echo Nest id"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2152
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        409
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    100
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "charSet": "H5T_CSET_ASCII", 
+                "class": "H5T_STRING", 
+                "length": 20, 
+                "strPad": "H5T_STR_NULLPAD"
+            }, 
+            "value": [
+                "ARX6TAQ11C8A415850", 
+                "ARY7CAU1187B98A4F6", 
+                "ARUBDKR1187FB3FC29", 
+                "AR0S7TA1187FB4D024", 
+                "ARU9LLJ1187B9B8AB2", 
+                "ARBZIN01187FB362CC", 
+                "AR3JMC51187B9AE49D", 
+                "ARWS1TU1187B9B2560", 
+                "AR7VWZ11187B98DA42", 
+                "AR7C6G11187B9B4C1E", 
+                "ARW8LQ71187B99BFC6", 
+                "ARVBRGZ1187FB4675A", 
+                "ARG84I01187B991D69", 
+                "ARN7POH1187B9B301E", 
+                "AR8V1X71187B9B919B", 
+                "ARJGIOD1187B9AE920", 
+                "ARJQJQO1187FB4FD5A", 
+                "AR0FXTC1187FB46FEC", 
+                "ARKSZW81187B9B695D", 
+                "AR13ULO1187FB3F043", 
+                "ARYAVBS1187FB5B46C", 
+                "ARBEOHF1187B9B044D", 
+                "ART4QZC1187FB51612", 
+                "ARTLC2E1187B98E661", 
+                "AR0DVRJ1187B98CBF5", 
+                "ARKBLT81187B995AF9", 
+                "ARWK5QH1187B9A9B7F", 
+                "ARVLF4Y1187FB3945A", 
+                "ARZRYXF1187FB555CC", 
+                "AR35K8C1187B98F4AF", 
+                "ARH36OC1187B9ABF2D", 
+                "ARK0Z5G1187B9A1E97", 
+                "AR8OMD41187B9B6907", 
+                "ARJMJYW122BCFCA970", 
+                "AROKXVO1187FB4D0E9", 
+                "ARBAW9R1187B98FB6B", 
+                "AR3MMZH1187B9B55D0", 
+                "ARHFCP01187B994361", 
+                "ARKU3Z61187FB51DCA", 
+                "ARGBOWQ1187B9A0915", 
+                "ARY7WK51187B9B1941", 
+                "ARCQJYZ11E2835D077", 
+                "AR81OA51187FB5C60B", 
+                "ARZNA6V1187FB388B6", 
+                "ARBCQ0V11C8A416015", 
+                "AR7BSZN1187B9B4CFB", 
+                "ARNUBZY1241B9CE9CF", 
+                "ARNEJAG1187FB41600", 
+                "ARNAM6D1187B9B2718", 
+                "ARK77PD1187B99C4D1", 
+                "ARAEJAX1187FB3F414", 
+                "AR0FFYE1187FB3B00A", 
+                "ARAJAAA11A348F0DC3", 
+                "ARJ440H1187FB4B37B", 
+                "ARLHDX411C8A4227A6", 
+                "ARXPPEY1187FB51DF4", 
+                "ARENMIP1187FB5638D", 
+                "ARC9Y481187B990259", 
+                "ARWPI7Z1187FB3C8F6", 
+                "ARGJSFO12454A4D66E", 
+                "ARW08SG1187B9AEC4D", 
+                "AR51JTF1187FB395B9", 
+                "ARI9W031187FB55E11", 
+                "AR0VAZ71187FB5AAD6", 
+                "ARVBII51187FB540BC", 
+                "ARXMEJH12454A3DBBF", 
+                "AR6QNIZ1187FB400E8", 
+                "ARPORLT11EBCD75E95", 
+                "ARYSMMZ1269FCD484E", 
+                "AR1VKBB1187B98A56E", 
+                "ARCKIZM12509416920", 
+                "AR51VFN1187B9941BD", 
+                "ARX5QKE1187B9B0AD3", 
+                "ARQRVTX124549A36EF", 
+                "AR5XHTI1187B9B02C9", 
+                "AR8S03I1187B992BA6", 
+                "ARMGLVI1269FCD5EBF", 
+                "ARGRXVA12A57A06E75", 
+                "ARRHNA81187FB53D58", 
+                "ARCUFBD12454A52036", 
+                "AROTQSL1187B9A26C0", 
+                "ARXSPZW1269FCD4A25", 
+                "ARDGYV01187B9BA3DD", 
+                "ARPZFX71187B9B5222", 
+                "ARVMSEF11F50C51379", 
+                "ARI0W8Y1187B9A8BE9", 
+                "ARSCXDT12454A3E95B", 
+                "ARUMIYF1264D137B1F", 
+                "ARXJX9D1187B9ADF34", 
+                "AR5YRCN1187B98E3C8", 
+                "AR6PJ8R1187FB5AD70", 
+                "ARIFVGB1213184FE6E", 
+                "AR6VHEC1187FB5AC0D", 
+                "ARPIHLK1187FB5B771", 
+                "ARIP1NA1187B9A12B9", 
+                "ARWQAZF1187FB4AC4F", 
+                "AR0IVTL1187B9AD520", 
+                "ARP6N4J1187FB36C7B", 
+                "ARHRKLT1269FCD40F6", 
+                "AREPRSS12454A2DC5E"
+            ]
+        }, 
+        "7587ea70-0bfa-11e6-969e-74d435bebcd8": {
+            "alias": [
+                "/metadata/songs"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 6, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "TABLE"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "2.6"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 31, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "table of metadata for one song"
+                }, 
+                {
+                    "name": "FIELD_0_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 17, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "analyzer_version"
+                }, 
+                {
+                    "name": "FIELD_1_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 18, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_7digitalid"
+                }, 
+                {
+                    "name": "FIELD_2_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 19, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_familiarity"
+                }, 
+                {
+                    "name": "FIELD_3_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 18, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_hotttnesss"
+                }, 
+                {
+                    "name": "FIELD_4_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 10, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_id"
+                }, 
+                {
+                    "name": "FIELD_5_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 16, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_latitude"
+                }, 
+                {
+                    "name": "FIELD_6_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 16, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_location"
+                }, 
+                {
+                    "name": "FIELD_7_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 17, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_longitude"
+                }, 
+                {
+                    "name": "FIELD_8_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 12, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_mbid"
+                }, 
+                {
+                    "name": "FIELD_9_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 12, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_name"
+                }, 
+                {
+                    "name": "FIELD_10_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 16, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "artist_playmeid"
+                }, 
+                {
+                    "name": "FIELD_11_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 6, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "genre"
+                }, 
+                {
+                    "name": "FIELD_12_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 17, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_artist_terms"
+                }, 
+                {
+                    "name": "FIELD_13_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 20, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_similar_artists"
+                }, 
+                {
+                    "name": "FIELD_14_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 8, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "release"
+                }, 
+                {
+                    "name": "FIELD_15_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 19, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "release_7digitalid"
+                }, 
+                {
+                    "name": "FIELD_16_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 16, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "song_hotttnesss"
+                }, 
+                {
+                    "name": "FIELD_17_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 8, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "song_id"
+                }, 
+                {
+                    "name": "FIELD_18_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 6, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "title"
+                }, 
+                {
+                    "name": "FIELD_19_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 17, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "track_7digitalid"
+                }, 
+                {
+                    "name": "FIELD_0_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_1_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_2_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_3_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_4_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_5_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_6_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_7_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_8_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_9_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_10_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_11_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_12_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_13_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_14_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_15_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_16_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_IEEE_F64LE", 
+                        "class": "H5T_FLOAT"
+                    }, 
+                    "value": 0.0
+                }, 
+                {
+                    "name": "FIELD_17_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_18_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 1, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": ""
+                }, 
+                {
+                    "name": "FIELD_19_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "NROWS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I64LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 1
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        3
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    1
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "class": "H5T_COMPOUND", 
+                "fields": [
+                    {
+                        "name": "analyzer_version", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 32, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "artist_7digitalid", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "artist_familiarity", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "artist_hotttnesss", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "artist_id", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 32, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "artist_latitude", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "artist_location", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 1024, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "artist_longitude", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "artist_mbid", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 40, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "artist_name", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 1024, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "artist_playmeid", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "genre", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 1024, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "idx_artist_terms", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "idx_similar_artists", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "release", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 1024, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "release_7digitalid", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "song_hotttnesss", 
+                        "type": {
+                            "base": "H5T_IEEE_F64LE", 
+                            "class": "H5T_FLOAT"
+                        }
+                    }, 
+                    {
+                        "name": "song_id", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 32, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "title", 
+                        "type": {
+                            "charSet": "H5T_CSET_ASCII", 
+                            "class": "H5T_STRING", 
+                            "length": 1024, 
+                            "strPad": "H5T_STR_NULLPAD"
+                        }
+                    }, 
+                    {
+                        "name": "track_7digitalid", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }
+                ]
+            }, 
+            "value": [
+                [
+                    "", 
+                    214, 
+                    0.9473275066349645, 
+                    0.6072572795814319, 
+                    "AR03BDP1187FB5B324", 
+                    34.05349, 
+                    "Kentwood, LA; Los Angeles, CA", 
+                    -118.24532, 
+                    "45a663b5-b1cb-4a91-bff6-2bef7bbfdd76", 
+                    "Britney Spears", 
+                    267, 
+                    "", 
+                    0, 
+                    0, 
+                    "Someday (I Will Understand)", 
+                    307443, 
+                    -666, 
+                    "SOYEVCP12AC9E17E09", 
+                    "Someday (I Will Understand)", 
+                    3474504
+                ]
+            ]
+        }, 
+        "75881180-0bfa-11e6-9a35-74d435bebcd8": {
+            "alias": [
+                "/musicbrainz/artist_mbtags"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 45, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of tags from MusicBrainz for an artist"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2171
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        32
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    9
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "charSet": "H5T_CSET_ASCII", 
+                "class": "H5T_STRING", 
+                "length": 256, 
+                "strPad": "H5T_STR_NULLPAD"
+            }, 
+            "value": [
+                "pop", 
+                "american", 
+                "urban pop", 
+                "dance", 
+                "pop and chart", 
+                "am\u00e9ricain", 
+                "electropop", 
+                "usa", 
+                "dance-pop"
+            ]
+        }, 
+        "75881181-0bfa-11e6-81a4-74d435bebcd8": {
+            "alias": [
+                "/musicbrainz/artist_mbtags_count"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 7, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "EARRAY"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 51, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "array of tag counts from MusicBrainz for an artist"
+                }, 
+                {
+                    "name": "EXTDIM", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 2172
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        2048
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    9
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "base": "H5T_STD_I32LE", 
+                "class": "H5T_INTEGER"
+            }, 
+            "value": [
+                6, 
+                2, 
+                1, 
+                1, 
+                1, 
+                1, 
+                1, 
+                1, 
+                1
+            ]
+        }, 
+        "75881182-0bfa-11e6-884f-74d435bebcd8": {
+            "alias": [
+                "/musicbrainz/songs"
+            ], 
+            "attributes": [
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 6, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "TABLE"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 4, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "2.6"
+                }, 
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 38, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "table of data coming from MusicBrainz"
+                }, 
+                {
+                    "name": "FIELD_0_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 18, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "idx_artist_mbtags"
+                }, 
+                {
+                    "name": "FIELD_1_NAME", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 5, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "year"
+                }, 
+                {
+                    "name": "FIELD_0_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "FIELD_1_FILL", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I32LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 0
+                }, 
+                {
+                    "name": "NROWS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I64LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 1
+                }
+            ], 
+            "creationProperties": {
+                "allocTime": "H5D_ALLOC_TIME_INCR", 
+                "fillTime": "H5D_FILL_TIME_ALLOC", 
+                "filters": [
+                    {
+                        "class": "H5Z_FILTER_SHUFFLE", 
+                        "id": 2, 
+                        "name": "shuffle"
+                    }, 
+                    {
+                        "class": "H5Z_FILTER_DEFLATE", 
+                        "id": 1, 
+                        "level": 1, 
+                        "name": "deflate"
+                    }
+                ], 
+                "layout": {
+                    "class": "H5D_CHUNKED", 
+                    "dims": [
+                        1024
+                    ]
+                }
+            }, 
+            "shape": {
+                "class": "H5S_SIMPLE", 
+                "dims": [
+                    1
+                ], 
+                "maxdims": [
+                    "H5S_UNLIMITED"
+                ]
+            }, 
+            "type": {
+                "class": "H5T_COMPOUND", 
+                "fields": [
+                    {
+                        "name": "idx_artist_mbtags", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }, 
+                    {
+                        "name": "year", 
+                        "type": {
+                            "base": "H5T_STD_I32LE", 
+                            "class": "H5T_INTEGER"
+                        }
+                    }
+                ]
+            }, 
+            "value": [
+                [
+                    0, 
+                    2005
+                ]
+            ]
+        }
+    }, 
+    "groups": {
+        "75863cc0-0bfa-11e6-890c-74d435bebcd8": {
+            "alias": [
+                "/"
+            ], 
+            "attributes": [
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 12, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "H5 Song File"
+                }, 
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 5, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "GROUP"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 3, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "PYTABLES_FORMAT_VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 3, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "2.0"
+                }, 
+                {
+                    "name": "FILTERS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I64LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 65793
+                }
+            ], 
+            "links": [
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "groups", 
+                    "id": "758663d1-0bfa-11e6-8285-74d435bebcd8", 
+                    "title": "analysis"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "groups", 
+                    "id": "75877542-0bfa-11e6-8c7a-74d435bebcd8", 
+                    "title": "metadata"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "groups", 
+                    "id": "7587ea71-0bfa-11e6-aaf3-74d435bebcd8", 
+                    "title": "musicbrainz"
+                }
+            ]
+        }, 
+        "758663d1-0bfa-11e6-8285-74d435bebcd8": {
+            "alias": [
+                "/analysis"
+            ], 
+            "attributes": [
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 30, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "Echo Nest analysis of the song"
+                }, 
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 5, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "GROUP"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 3, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "FILTERS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I64LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 65793
+                }
+            ], 
+            "links": [
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75868ae1-0bfa-11e6-9712-74d435bebcd8", 
+                    "title": "bars_confidence"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75868ae2-0bfa-11e6-9cbe-74d435bebcd8", 
+                    "title": "bars_start"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7586b1f0-0bfa-11e6-8eb6-74d435bebcd8", 
+                    "title": "beats_confidence"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7586b1f1-0bfa-11e6-ab18-74d435bebcd8", 
+                    "title": "beats_start"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7586b1f2-0bfa-11e6-8680-74d435bebcd8", 
+                    "title": "sections_confidence"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7586d900-0bfa-11e6-ac9f-74d435bebcd8", 
+                    "title": "sections_start"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7586d901-0bfa-11e6-b48f-74d435bebcd8", 
+                    "title": "segments_confidence"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7587000f-0bfa-11e6-80a7-74d435bebcd8", 
+                    "title": "segments_loudness_max"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75870010-0bfa-11e6-8e6e-74d435bebcd8", 
+                    "title": "segments_loudness_max_time"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7587271e-0bfa-11e6-b852-74d435bebcd8", 
+                    "title": "segments_loudness_start"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7587271f-0bfa-11e6-926c-74d435bebcd8", 
+                    "title": "segments_pitches"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75872720-0bfa-11e6-ba3d-74d435bebcd8", 
+                    "title": "segments_start"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75874e2e-0bfa-11e6-9f82-74d435bebcd8", 
+                    "title": "segments_timbre"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75874e2f-0bfa-11e6-9927-74d435bebcd8", 
+                    "title": "songs"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75877540-0bfa-11e6-a4b2-74d435bebcd8", 
+                    "title": "tatums_confidence"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75877541-0bfa-11e6-9162-74d435bebcd8", 
+                    "title": "tatums_start"
+                }
+            ]
+        }, 
+        "75877542-0bfa-11e6-8c7a-74d435bebcd8": {
+            "alias": [
+                "/metadata"
+            ], 
+            "attributes": [
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 23, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "metadata about the song"
+                }, 
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 5, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "GROUP"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 3, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "FILTERS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I64LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 65793
+                }
+            ], 
+            "links": [
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75879c4f-0bfa-11e6-8686-74d435bebcd8", 
+                    "title": "artist_terms"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75879c50-0bfa-11e6-9c74-74d435bebcd8", 
+                    "title": "artist_terms_freq"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7587c35e-0bfa-11e6-a9db-74d435bebcd8", 
+                    "title": "artist_terms_weight"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7587c35f-0bfa-11e6-94de-74d435bebcd8", 
+                    "title": "similar_artists"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "7587ea70-0bfa-11e6-969e-74d435bebcd8", 
+                    "title": "songs"
+                }
+            ]
+        }, 
+        "7587ea71-0bfa-11e6-aaf3-74d435bebcd8": {
+            "alias": [
+                "/musicbrainz"
+            ], 
+            "attributes": [
+                {
+                    "name": "TITLE", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 43, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "data about the song coming from MusicBrainz"
+                }, 
+                {
+                    "name": "CLASS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 5, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "GROUP"
+                }, 
+                {
+                    "name": "VERSION", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "charSet": "H5T_CSET_ASCII", 
+                        "class": "H5T_STRING", 
+                        "length": 3, 
+                        "strPad": "H5T_STR_NULLPAD"
+                    }, 
+                    "value": "1.0"
+                }, 
+                {
+                    "name": "FILTERS", 
+                    "shape": {
+                        "class": "H5S_SCALAR"
+                    }, 
+                    "type": {
+                        "base": "H5T_STD_I64LE", 
+                        "class": "H5T_INTEGER"
+                    }, 
+                    "value": 65793
+                }
+            ], 
+            "links": [
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75881180-0bfa-11e6-9a35-74d435bebcd8", 
+                    "title": "artist_mbtags"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75881181-0bfa-11e6-81a4-74d435bebcd8", 
+                    "title": "artist_mbtags_count"
+                }, 
+                {
+                    "class": "H5L_TYPE_HARD", 
+                    "collection": "datasets", 
+                    "id": "75881182-0bfa-11e6-884f-74d435bebcd8", 
+                    "title": "songs"
+                }
+            ]
+        }
+    }, 
+    "root": "75863cc0-0bfa-11e6-890c-74d435bebcd8"
+}
