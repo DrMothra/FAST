@@ -30,24 +30,12 @@ FastApp.prototype = new BaseApp();
 
 FastApp.prototype.init = function(container) {
     BaseApp.prototype.init.call(this, container);
+    //Camera and controls
     this.controls.disableMovement();
     this.setCamera(cameraViews.front);
     this.cameraView = 'front';
     this.updateRequired = false;
     this.freeMovement = false;
-    this.fileName = null;
-    this.data = null;
-    this.artistName = null;
-    this.trackName = null;
-    this.numCoefficients = 12;
-    this.segments = [];
-    this.segmentGap = 0;
-    this.segmentWidth = 2;
-    this.timbreSegments = [];
-    this.startSegment = undefined;
-    this.markers = [];
-    this.timbreSegmentsNormalised = null;
-    this.pitchSegments = [];
     this.cameraStartZPos = 700;
     this.lookAt = new THREE.Vector3();
     this.xRot = 0;
@@ -60,27 +48,23 @@ FastApp.prototype.init = function(container) {
     this.rotQuatLeft = new THREE.Quaternion();
     this.rotQuatLeft.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -ROT_INC);
     this.rotating = false;
+
+    //Renderable attributes
+    this.renderAttributes = [];
+
     this.checkTime = 100;
-    this.playHead = undefined;
-    this.startTime = 0;
-    this.startPlayhead = 0;
-    this.timeMargin = 2;
-    this.timelineDimensions = new THREE.Vector3(0.5, 15, 37.5);
-    this.timelineZPos = 17.5;
-    this.duration = 0;
-    this.playingTime = 0;
     this.tempVec = new THREE.Vector3();
     //Materials
     this.showHeatmap = true;
     this.colourSteps = 7;
     this.heatMap = [];
-    this.createMaterials();
+    this.createHeatmap();
     //Web audio
     var webkitAudio = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new webkitAudio();
 };
 
-FastApp.prototype.createMaterials = function() {
+FastApp.prototype.createHeatmap = function() {
     //Need material for each colour
     var colours = [
         { name: "black",
@@ -162,35 +146,23 @@ FastApp.prototype.createScene = function() {
     });
 
     //Rendering attributes
-    this.timbreAttributes = {
-        scaleX: 1,
-        scaleY: 1,
-        scaleZ: 1,
-        opacity: 1,
-        colour: 0xff0000,
-        yOffset: 20,
-        dimensions: [true, true, true, true, true, true, true, true, true, true, true, true, true]
-    };
+    var attribute = new RenderAttribute();
+    this.renderAttributes.push(attribute);
+    attribute.setPlayhead(this.playHead);
 
-    this.pitchAttributes = {
-        scaleX: 1,
-        scaleY: 1,
-        scaleZ: 1,
-        opacity: 1,
-        colour: 0x0000ff,
-        yOffset: 0,
-        dimensions: [true, true, true, true, true, true, true, true, true, true, true, true, true]
-    };
+    //Audio data
+    var audioAttribute = new AudioAttribute();
+    this.audioAttributes.push(audioAttribute);
 
-    //Load json data
-
+    //Load music data
     this.dataLoader = new dataLoader();
 
     this.dataLoader.load("data/johnWilliamsEmpire.json", function(data) {
-        _this.data = data;
+        attribute.setData(data);
         //DEBUG
         console.log("File loaded");
-        _this.parseData();
+        attribute.parseData();
+        audioAttribute.getAudioData(attribute.getTrackID());
     });
 
 };
