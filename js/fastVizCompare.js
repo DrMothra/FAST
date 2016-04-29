@@ -59,9 +59,8 @@ FastApp.prototype.init = function(container) {
     this.colourSteps = 7;
     this.heatMap = [];
     this.createHeatmap();
-    //Web audio
-    var webkitAudio = window.AudioContext || window.webkitAudioContext;
-    this.audioContext = new webkitAudio();
+    //Audio attributes
+    this.audioAttributes = [];
 };
 
 FastApp.prototype.createHeatmap = function() {
@@ -115,6 +114,13 @@ FastApp.prototype.update = function() {
         this.updateRequired = false;
     }
 
+    var audioAttribute;
+    for(var i=0; i<this.audioAttributes.length; ++i) {
+        audioAttribute = this.audioAttributes[i];
+        if(audioAttribute.playing) {
+            audioAttribute.updatePlayingTime(delta);
+        }
+    }
     BaseApp.prototype.update.call(this);
 };
 
@@ -159,10 +165,36 @@ FastApp.prototype.createScene = function() {
 
     this.dataLoader.load("data/johnWilliamsEmpire.json", function(data) {
         attribute.setData(data);
+        var segments = attribute.getSegmentData();
         //DEBUG
         console.log("File loaded");
         attribute.parseData();
-        audioAttribute.getAudioData(attribute.getTrackID());
+        attribute.normaliseRequired(true);
+        audioAttribute.getAudioData(attribute.getTrackID(), function() {
+            var totalTime = 0, startTime = audioAttribute.getStartTime();
+            var margin = attribute.getTimeMargin(), duration = audioAttribute.getDuration();
+            var clipStart = startTime - margin;
+            var endTime = startTime + duration + margin;
+            var clipDuration = endTime - clipStart;
+            var i;
+            for(i=0; i<attribute.getDataLength(); ++i){
+                totalTime = segments[i];
+                if(totalTime >= startTime) {
+                    _this.startSegment = _this.startSegment === undefined ? i-1 : _this.startSegment;
+                    if(totalTime >= endTime) {
+                        _this.endSegment = i-1;
+                        break;
+                    }
+                }
+            }
+
+            //Generate markers
+            attribute.generateMarkers(_this.startSegment, _this.endSegment);
+
+            //Render it all
+            _this.root.add(attribute.renderTimeline());
+            _this.root.add(attribute.renderData());
+        })
     });
 
 };
