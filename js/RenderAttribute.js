@@ -9,8 +9,11 @@ function RenderAttribute() {
     this.data = undefined;
     this.scale = new THREE.Vector3(1, 1, 1);
     this.timelineDimensions = new THREE.Vector3(0.5, 15, 37.5);
+    this.timelineZPos = 17.5;
     this.opacity = 1;
     this.startTime = 30;
+    this.startPlayhead = 0;
+    this.timeMargin = 2;
     this.dimensions = [true, true, true, true, true, true, true, true, true, true, true, true, true];
     this.colour = 0xff0000;
     this.yOffset = 0;
@@ -83,6 +86,7 @@ RenderAttribute.prototype = {
         if(!this.startTime) {
             alert("This track not synced yet!!");
         }
+        this.startPlayhead = this.timeMargin;
     },
 
     normaliseData: function(data) {
@@ -141,6 +145,10 @@ RenderAttribute.prototype = {
         return this.segments.length;
     },
 
+    getStartTime: function() {
+        return this.startTime;
+    },
+    
     getTotalTime: function() {
         return this.segments[this.segments.length-1];
     },
@@ -212,20 +220,24 @@ RenderAttribute.prototype = {
             transparent: true } );
         var timelineGeom = new THREE.BoxGeometry(this.timelineDimensions.x,
             this.timelineDimensions.y, this.timelineDimensions.z);
-        var timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
-        timelineIndicator.name = "timeline" + name;
-        timelineIndicator.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
-        dataGroup.add(timelineIndicator);
+        this.timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
+        this.timelineIndicator.name = "timeline" + name;
+        this.startPlayhead = this.startPlayhead * this.unitsPerSecond;
+        this.playHead.position.x = this.startPlayhead;
+        this.timelineIndicator.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
+        dataGroup.add(this.timelineIndicator);
+        dataGroup.add(this.playHead);
 
         var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
         var startX = 0, startY = 0, startZ = 0;
+        var segmentGap = 0;
         var interZgap = 1;
         var timeSlice, nextTimeSlice;
         var width = 2, depth = 2;
         var xScale, xOffset;
 
-        var boxMat = new THREE.MeshLambertMaterial( {color: attributes.colour,
-            opacity: attributes.opacity,
+        var boxMat = new THREE.MeshLambertMaterial( {color: this.colour,
+            opacity: this.opacity,
             transparent: true
         } );
         var geom = new THREE.BoxGeometry(this.segmentWidth, 1, depth, 1, 1, 1);
@@ -233,10 +245,10 @@ RenderAttribute.prototype = {
         var mesh;
 
         //Get relevant data
-        var segmentData = data;
+        var segmentData = this.timbreSegments;
 
         if(this.normalise) {
-            this.data = this.normaliseData(this.data);
+            segmentData = this.normaliseData(segmentData);
         }
 
         //Render first segment
@@ -262,7 +274,7 @@ RenderAttribute.prototype = {
             mesh.scale.x = xScale;
             dataGroup.add(mesh);
         }
-        startX = startX + xOffset+ this.segmentGap;
+        startX = startX + xOffset + segmentGap;
 
         for(var i=this.startSegment+1; i<=this.endSegment; ++i) {
             coefficients = segmentData[i];
@@ -287,8 +299,29 @@ RenderAttribute.prototype = {
                 mesh.scale.x = xScale;
                 dataGroup.add(mesh);
             }
-            startX = startX + (xOffset*2) + this.segmentGap;
+            startX = startX + (xOffset*2) + segmentGap;
         }
+
+        return dataGroup;
+    },
+
+    update: function(delta) {
+        this.playHead.position.x += (this.unitsPerSecond * delta);
+        this.timelineIndicator.position.x = this.playHead.position.x-0.25;
+    },
+
+    getPlayheadStartPos: function() {
+        return this.startPlayhead;
+    },
+
+    getPlaybackSpeed: function() {
+        return this.unitsPerSecond;
+    },
+
+    reset: function() {
+        this.playHead.position.set(this.startPlayhead, 0, 35);
+        this.timelineIndicator.position.set(this.startPlayhead-0.25, (this.timelineDimensions.y/2) * this.timelineIndicator.scale.y,
+            this.timelineZPos);
     }
 };
 

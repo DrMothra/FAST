@@ -8,8 +8,12 @@ function AudioAttribute() {
     //Web audio
     var webkitAudio = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new webkitAudio();
-    this.startTime = 0;
+    this.startTime = 30;
     this.timeMargin = 2;
+    this.playing = false;
+    this.playingTime = 0;
+    this.playbackTime = 0;
+    this.duration = undefined;
 }
 
 AudioAttribute.prototype = {
@@ -51,12 +55,13 @@ AudioAttribute.prototype = {
             if(xhr.readyState === 4) {
                 if(xhr.status === 200) {
                     console.log("Downloaded preview");
-                    this.audioContext.decodeAudioData(xhr.response, function(buffer) {
+                    _this.audioContext.decodeAudioData(xhr.response, function(buffer) {
                         _this.audioBuffer = buffer;
                         _this.source = _this.audioContext.createBufferSource();
                         _this.source.buffer = _this.audioBuffer;
                         _this.source.connect(_this.audioContext.destination);
-                        callback();
+                        _this.duration = _this.source.buffer.duration;
+                        if(callback) callback();
                     });
                     return true;
                 } else {
@@ -78,6 +83,46 @@ AudioAttribute.prototype = {
     
     getDuration: function() {
         return this.duration;
+    },
+
+    setPlaying: function(playing) {
+        this.playing = playing;
+    },
+
+    resetPlaybackTime: function() {
+        this.playbackStartTime = Date.now();
+        this.source.start(0, this.playbackTime);
+    },
+
+    updatePlaybackTime: function() {
+        this.playbackTime += ((Date.now() - this.playbackStartTime)/1000);
+        this.source.stop(0);
+        this.source = this.audioContext.createBufferSource();
+        this.source.buffer = this.audioBuffer;
+        this.source.connect(this.audioContext.destination);
+    },
+
+    isPlaying: function() {
+        return this.playing;
+    },
+
+    updatePlayingTime: function(delta) {
+        this.playingTime += delta;
+    },
+
+    finished: function() {
+        return this.playing > this.duration;
+    },
+
+    reset: function() {
+        if(this.playing) {
+            this.source.stop(0);
+            this.source = this.audioContext.createBufferSource();
+            this.source.buffer = this.audioBuffer;
+            this.source.connect(this.audioContext.destination);
+        }
+        this.playing = false;
+        this.playbackTime = 0;
     }
 };
 

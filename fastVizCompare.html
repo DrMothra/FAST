@@ -22,11 +22,11 @@
     <script type="text/javascript" src="js/oauth-signature.js"></script>
     <script type="text/javascript" src="js/RenderAttribute.js?v=0.1"></script>
     <script type="text/javascript" src="js/AudioAttribute.js?v=0.1"></script>
-    <script type="text/javascript" src="js/fastVizCompare.js?v=0.1"></script>
+    <script type="text/javascript" src="js/fastVizCompare.js?v=0.3"></script>
 
     <link rel="stylesheet" href="css/bootstrap.min.css?v=0.1">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css?v=0.1">
-    <link href="css/fastStyles.css?v=0.4" rel="stylesheet" type="text/css">
+    <link href="css/fastStyles.css?v=0.5" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -37,15 +37,10 @@
 </div>
 
 <div id="versionInfo" class="displayInfo">
-    <p>FAST Music Visualiser 0.2</p>
+    <p>FAST Music Visualiser 0.3</p>
 </div>
 
-<div id="trackInfo" class="displayInfo">
-    <p id="trackInfoArtist">Artist: </p>
-    <p id="trackInfoTrack">Track: </p>
-</div>
-
-<div id="controls" class="displayInfo centred">
+<div id="controlsCompare" class="displayInfo centred">
     <div id="camControls" >
         <div id="camImage">
             <img src="images/camera.png">
@@ -80,6 +75,13 @@
     <div id="musicControls">
         <div id="noteImage">
             <img src="images/music.png">
+        </div>
+        <div class="btn-group">
+            <button id="slot1" type="button" class="btn btn-primary active">1</button>
+            <button id="slot2" type="button" class="btn btn-primary">2</button>
+            <button id="slot3" type="button" class="btn btn-primary">3</button>
+            <button id="slot4" type="button" class="btn btn-primary">4</button>
+            <button id="slot5" type="button" class="btn btn-primary">5</button>
         </div>
         <div>
             <span id="chooseFile" class="btn btn-primary btn-file">Load<input type="file" accept=".json, application/json"></span>

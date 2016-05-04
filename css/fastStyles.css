@@ -40,6 +40,11 @@ select {
     left: 2%;
     width: 10%;
 }
+#controlsCompare {
+    top: 10%;
+    left: 2%;
+    width: 10%;
+}
 #musicControls {
     margin-top: 5%;
     border: 1px solid #629eff;

@@ -91,36 +91,26 @@ FastApp.prototype.createHeatmap = function() {
 FastApp.prototype.update = function() {
     var delta = this.clock.getDelta();
 
-    //Animate
-    if(this.playing) {
-        this.playingTime += delta;
-        if(this.playingTime > this.duration) {
-            this.playingTime = 0;
-            this.resetTrack();
-            return;
-        }
-        var deltaPos = this.unitsPerSecond * delta;
-        this.playHead.position.x += deltaPos;
-        this.camera.position.x += deltaPos;
-        this.lookAt = this.controls.getLookAt();
-        this.lookAt.x += deltaPos;
-        this.controls.setLookAt(this.lookAt);
-        this.timelineIndicatorPitch.position.x = this.playHead.position.x-0.25;
-        this.timelineIndicatorTimbre.position.x = this.playHead.position.x-0.25;
-    }
-
-    if(this.updateRequired) {
-        this.camera.position.set(this.tempVec.x, this.tempVec.y, this.tempVec.z);
-        this.updateRequired = false;
-    }
-
-    var audioAttribute;
+    var audioAttribute, renderAttribute;
     for(var i=0; i<this.audioAttributes.length; ++i) {
         audioAttribute = this.audioAttributes[i];
-        if(audioAttribute.playing) {
+        renderAttribute = this.renderAttributes[i];
+        if(audioAttribute.isPlaying()) {
             audioAttribute.updatePlayingTime(delta);
+            if(audioAttribute.finished()) {
+                audioAttribute.reset();
+                renderAttribute.reset();
+                continue;
+            }
+            renderAttribute.update(delta);
+            var deltaPos = renderAttribute.getPlaybackSpeed() * delta;
+            this.camera.position.x += deltaPos;
+            this.lookAt = this.controls.getLookAt();
+            this.lookAt.x += deltaPos;
+            this.controls.setLookAt(this.lookAt);
         }
     }
+    
     BaseApp.prototype.update.call(this);
 };
 
@@ -142,19 +132,9 @@ FastApp.prototype.createScene = function() {
 
     //Load objects
     var _this = this;
-    var manager = new THREE.LoadingManager();
-    var loader = new THREE.OBJLoader( manager );
-    loader.load("models/arrow.obj", function(object) {
-        object.scale.set(0.05, 0.05, 0.05);
-        object.position.set(_this.startPlayhead, 0, 35);
-        _this.root.add(object);
-        _this.playHead = object;
-    });
-
     //Rendering attributes
     var attribute = new RenderAttribute();
     this.renderAttributes.push(attribute);
-    attribute.setPlayhead(this.playHead);
 
     //Audio data
     var audioAttribute = new AudioAttribute();
@@ -162,41 +142,46 @@ FastApp.prototype.createScene = function() {
 
     //Load music data
     this.dataLoader = new dataLoader();
+    var manager = new THREE.LoadingManager();
+    var loader = new THREE.OBJLoader( manager );
+    loader.load("models/arrow.obj", function(object) {
+        object.scale.set(0.05, 0.05, 0.05);
+        object.position.set(attribute.getPlayheadStartPos(), 0, 35);
+        attribute.setPlayhead(object);
 
-    this.dataLoader.load("data/johnWilliamsEmpire.json", function(data) {
-        attribute.setData(data);
-        var segments = attribute.getSegmentData();
-        //DEBUG
-        console.log("File loaded");
-        attribute.parseData();
-        attribute.normaliseRequired(true);
-        audioAttribute.getAudioData(attribute.getTrackID(), function() {
-            var totalTime = 0, startTime = audioAttribute.getStartTime();
-            var margin = attribute.getTimeMargin(), duration = audioAttribute.getDuration();
-            var clipStart = startTime - margin;
-            var endTime = startTime + duration + margin;
-            var clipDuration = endTime - clipStart;
-            var i;
-            for(i=0; i<attribute.getDataLength(); ++i){
-                totalTime = segments[i];
-                if(totalTime >= startTime) {
-                    _this.startSegment = _this.startSegment === undefined ? i-1 : _this.startSegment;
-                    if(totalTime >= endTime) {
-                        _this.endSegment = i-1;
-                        break;
+        //Now load music data
+        _this.dataLoader.load("data/johnWilliamsEmpire.json", function(data) {
+            attribute.setData(data);
+            attribute.parseData();
+            var segments = attribute.getSegmentData();
+            attribute.normaliseRequired(true);
+            audioAttribute.getAudioData(attribute.getTrackID(), function() {
+                var totalTime = 0, startTime = attribute.getStartTime();
+                var margin = audioAttribute.getTimeMargin(), duration = audioAttribute.getDuration();
+                var clipStart = startTime - margin;
+                var endTime = startTime + duration + margin;
+                var clipDuration = endTime - clipStart;
+                var i;
+                for(i=0; i<attribute.getDataLength(); ++i){
+                    totalTime = segments[i];
+                    if(totalTime >= clipStart) {
+                        _this.startSegment = _this.startSegment === undefined ? i-1 : _this.startSegment;
+                        if(totalTime >= endTime) {
+                            _this.endSegment = i-1;
+                            break;
+                        }
                     }
                 }
-            }
 
-            //Generate markers
-            attribute.generateMarkers(_this.startSegment, _this.endSegment);
+                //Generate markers
+                attribute.generateMarkers(_this.startSegment, _this.endSegment);
 
-            //Render it all
-            _this.root.add(attribute.renderTimeline());
-            _this.root.add(attribute.renderData());
-        })
+                //Render it all
+                _this.root.add(attribute.renderTimeline());
+                _this.root.add(attribute.renderData());
+            })
+        });
     });
-
 };
 
 FastApp.prototype.loadNewFile = function(file) {
@@ -281,7 +266,7 @@ FastApp.prototype.parseData = function() {
         alert("This track not synced yet!!");
         this.startTime = 30;
     }
-    this.startPlayhead = this.timeMargin;
+    
     this.guiControls.Start = this.startPlayhead;
 
     //Calculate segments per second
@@ -1069,39 +1054,28 @@ FastApp.prototype.changeControls = function() {
 };
 
 FastApp.prototype.playTrack = function(trackState) {
-    this.playing = trackState;
-    if(this.playing) {
-        this.playbackStartTime = Date.now();
-        this.source.start(0, this.playbackTime);
+    //DEBUG
+    var audio = this.audioAttributes[0];
+    
+    audio.setPlaying(trackState);
+    if(audio.isPlaying()) {
+        audio.resetPlaybackTime();
     } else {
-        this.playbackTime += ((Date.now() - this.playbackStartTime)/1000);
-        this.source.stop(0);
-        this.source = this.audioContext.createBufferSource();
-        this.source.buffer = this.audioBuffer;
-        this.source.connect(this.audioContext.destination);
+        audio.updatePlaybackTime();
     }
 };
 
 FastApp.prototype.resetTrack = function() {
-    if(this.playing) {
-        this.source.stop(0);
-        this.source = this.audioContext.createBufferSource();
-        this.source.buffer = this.audioBuffer;
-        this.source.connect(this.audioContext.destination);
-    }
-    this.playing = false;
-    this.playbackTime = 0;
-    this.playHead.position.set(this.startPlayhead, 0, 35);
-    this.timelineIndicatorPitch.position.set(this.startPlayhead-0.25, (this.timelineDimensions.y/2) * this.timelineIndicatorPitch.scale.y,
-        this.timelineZPos);
-    this.timelineIndicatorTimbre.position.set(this.startPlayhead-0.25, (this.timelineDimensions.y/2) * this.timelineIndicatorTimbre.scale.y,
-        this.timelineZPos);
+    var audio = this.audioAttributes[0];
+    audio.reset();
+    this.renderAttributes[0].reset();
+
     $('#playState').attr("src", "images/play.png");
     this.setCamera(cameraViews[this.cameraView]);
 };
 
 FastApp.prototype.isPlaying = function() {
-    return this.playing;
+    return this.audioAttributes[0].isPlaying();
 };
 
 $(document).ready(function() {
