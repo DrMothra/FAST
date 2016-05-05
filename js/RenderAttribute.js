@@ -36,7 +36,19 @@ RenderAttribute.prototype = {
         this.scale.y = y;
         this.scale.z = z;
     },
-    
+
+    setXScale: function(scale) {
+        this.root.scale.x = scale;
+    },
+
+    setYScale: function(scale) {
+        this.root.scale.y = scale;
+    },
+
+    setZScale: function(scale) {
+        this.root.scale.z = scale;
+    },
+
     setPlayhead: function(playhead) {
         this.playHead = playhead;
     },
@@ -212,7 +224,7 @@ RenderAttribute.prototype = {
     renderData: function() {
         //Render data attribute
         var dataGroup = new THREE.Object3D();
-        dataGroup.name = name;
+        dataGroup.name = 'Timbre';
         dataGroup.position.y = this.yOffset;
         //Timeline indicator
         var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff,
@@ -221,7 +233,7 @@ RenderAttribute.prototype = {
         var timelineGeom = new THREE.BoxGeometry(this.timelineDimensions.x,
             this.timelineDimensions.y, this.timelineDimensions.z);
         this.timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
-        this.timelineIndicator.name = "timeline" + name;
+        this.timelineIndicator.name = "timeline" + dataGroup.name;
         this.startPlayhead = this.startPlayhead * this.unitsPerSecond;
         this.playHead.position.x = this.startPlayhead;
         this.timelineIndicator.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
@@ -301,6 +313,8 @@ RenderAttribute.prototype = {
             }
             startX = startX + (xOffset*2) + segmentGap;
         }
+
+        this.root = dataGroup;
 
         return dataGroup;
     },

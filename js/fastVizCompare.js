@@ -48,6 +48,7 @@ FastApp.prototype.init = function(container) {
     this.rotQuatLeft = new THREE.Quaternion();
     this.rotQuatLeft.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -ROT_INC);
     this.rotating = false;
+    this.numCoefficients = 12;
 
     //Renderable attributes
     this.renderAttributes = [];
@@ -330,7 +331,7 @@ FastApp.prototype.parseData = function() {
             alert("No pitch timeline");
         }
         _this.onStartChanged(_this.startPlayhead);
-        _this.renderHeatmap(_this.showHeatmap);
+        //_this.renderHeatmap(_this.showHeatmap);
     });
 };
 
@@ -584,24 +585,9 @@ FastApp.prototype.normaliseData = function(data) {
     return normalData;
 };
 
-FastApp.prototype.onShowGroup = function(name, value) {
-    //Show relevant dataset
-    var group = this.scene.getObjectByName(name);
-    if(group) {
-        group.traverse(function (obj) {
-            if (obj instanceof THREE.Mesh) {
-                obj.visible = value;
-            }
-        });
-    }
-};
-
 FastApp.prototype.onShowDimension = function(value, dim) {
-    //DEBUG
-    //console.log("Value = ", value, dim);
     //Get group and traverse meshes
-    var attribute = this.guiControls.Attribute === 'Timbre' ? this.timbreAttributes : this.pitchAttributes;
-    var group = this.scene.getObjectByName(this.guiControls.Attribute);
+    var group = this.scene.getObjectByName('Timbre');
     if(group) {
         var rowName = dim-1;
         group.traverse(function(obj) {
@@ -611,12 +597,11 @@ FastApp.prototype.onShowDimension = function(value, dim) {
                 }
             }
         });
-        attribute.dimensions[dim] = value;
     }
 };
 
 FastApp.prototype.onShowAllDimensions = function(status) {
-    var group = this.scene.getObjectByName(this.guiControls.Attribute);
+    var group = this.scene.getObjectByName('Timbre');
     if(group) {
         group.traverse(function(obj) {
             if (obj instanceof THREE.Mesh && obj.name.indexOf("timeline") === -1) {
@@ -637,15 +622,11 @@ FastApp.prototype.onStartChanged = function(value) {
 FastApp.prototype.createGUI = function() {
     var _this = this;
     this.guiControls = new function() {
-        this.Timbre = true;
-        this.Pitch = true;
-        this.Attribute = 'Timbre';
         this.Start = 0.001;
         this.ScaleX = 1.0;
         this.ScaleY = 1.0;
         this.ScaleZ = 1.0;
         this.Opacity = 1;
-        this.TimbreOffset = 0;
         this.LightX = 0.0;
         this.LightY = 200;
         this.LightZ = 0;
@@ -657,9 +638,6 @@ FastApp.prototype.createGUI = function() {
     //Appearance
     this.guiAppear = gui.addFolder("Appearance");
     //Scale the dataset
-    this.guiAppear.add(this.guiControls, 'Attribute', ['Timbre', 'Pitch']).onChange(function(value) {
-        _this.onAttributeChanged(value);
-    });
     var scaleX = this.guiAppear.add(this.guiControls, 'ScaleX', 0.25, 20).step(0.25);
     scaleX.listen();
     scaleX.onChange(function(value) {
@@ -680,9 +658,6 @@ FastApp.prototype.createGUI = function() {
         _this.onOpacityChanged(value);
     });
     opacity.listen();
-    this.guiAppear.add(this.guiControls, 'TimbreOffset', -20, 20).onChange(function(value) {
-        _this.onOffsetChanged(value);
-    });
 
     //Move the light
     var lightX = this.guiAppear.add(this.guiControls, 'LightX', -500, 500).step(1.0);
@@ -704,26 +679,13 @@ FastApp.prototype.createGUI = function() {
         _this.renderHeatmap(value);
     });
 
-
     //Data
     this.guiData = gui.addFolder("Data");
-    var timbre = this.guiData.add(this.guiControls, 'Timbre').onChange(function(value) {
-        _this.onShowGroup('Timbre', value);
-    });
-    timbre.listen();
-
-    var pitch = this.guiData.add(this.guiControls, 'Pitch').onChange(function(value) {
-        _this.onShowGroup('Pitch', value);
-    });
-    pitch.listen();
-
     var start = this.guiData.add(this.guiControls, 'Start', 0, 3).step(0.1);
     start.onChange(function(value) {
         _this.onStartChanged(value);
     });
     start.listen();
-
-
 
     //Dimensions
     var i;
@@ -751,25 +713,6 @@ FastApp.prototype.createGUI = function() {
         }
         _this.onShowAllDimensions(value);
     });
-};
-
-FastApp.prototype.onAttributeChanged = function(value) {
-    var attribute = value === 'Timbre' ? this.timbreAttributes : this.pitchAttributes;
-    this.guiControls.ScaleX = attribute.scaleX;
-    this.guiControls.ScaleY = attribute.scaleY;
-    this.guiControls.ScaleZ = attribute.scaleZ;
-    this.guiControls.Opacity = attribute.opacity;
-    for(var i=0; i<this.dimensions.length; ++i) {
-        this.dimensions[i] = attribute.dimensions[i];
-    }
-};
-
-FastApp.prototype.onOffsetChanged = function(value) {
-    //Alter timbre group only
-    var group = this.scene.getObjectByName('Timbre');
-    if(group) {
-        group.position.y = this.timbreAttributes.yOffset + value;
-    }
 };
 
 FastApp.prototype.onOpacityChanged = function(value) {
@@ -819,37 +762,19 @@ FastApp.prototype.clearScene = function(groups) {
 
 FastApp.prototype.onScaleChanged = function(axis, value) {
     //Scale along relevant axis
-    var group, attribute, timeline;
-    if(this.guiControls.Attribute === 'Timbre') {
-        group = this.scene.getObjectByName('Timbre');
-        attribute = this.timbreAttributes;
-        timeline = this.timelineIndicatorTimbre;
-    } else {
-        group = this.scene.getObjectByName('Pitch');
-        attribute = this.pitchAttributes;
-        timeline = this.timelineIndicatorPitch;
-    }
-    if(!group) {
-        console.log("No group!");
-        return;
-    }
+    var attribute = this.renderAttributes[0];
 
     switch(axis) {
         case X_AXIS:
-            group.scale.x = value;
-            attribute.scaleX = value;
+            attribute.setXScale(value);
             break;
 
         case Y_AXIS:
-            group.scale.y = value;
-            attribute.scaleY = value;
-            timeline.scale.y = 1/value;
-            timeline.position.y = (this.timelineDimensions.y/2) * timeline.scale.y;
+            attribute.setYScale(value);
             break;
 
         case Z_AXIS:
-            group.scale.z = value;
-            attribute.scaleZ = value;
+            attribute.setZScale(value);
             break;
 
         default:
