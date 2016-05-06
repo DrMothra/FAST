@@ -9,6 +9,7 @@ function RenderAttribute() {
     this.data = undefined;
     this.scale = new THREE.Vector3(1, 1, 1);
     this.timelineDimensions = new THREE.Vector3(0.5, 15, 37.5);
+    this.timelineIndicator = undefined;
     this.timelineZPos = 17.5;
     this.opacity = 1;
     this.startTime = 30;
@@ -16,7 +17,6 @@ function RenderAttribute() {
     this.timeMargin = 2;
     this.dimensions = [true, true, true, true, true, true, true, true, true, true, true, true, true];
     this.colour = 0xff0000;
-    this.yOffset = 0;
     this.startSegment = undefined;
     this.markers = [];
     this.playHead = undefined;
@@ -24,6 +24,13 @@ function RenderAttribute() {
     this.markers = [];
     this.numCoefficients = 12;
     this.normalise = false;
+    this.root = undefined;
+    this.dataGroup = undefined;
+    //Heatmap materials
+    this.showHeatmap = false;
+    this.colourSteps = 7;
+    this.heatMap = [];
+    this.createHeatmap();
 }
 
 RenderAttribute.prototype = {
@@ -32,25 +39,64 @@ RenderAttribute.prototype = {
     },
     
     setScale: function(x, y, z) {
-        this.scale.x = x;
-        this.scale.y = y;
-        this.scale.z = z;
+        this.dataGroup.x = x;
+        this.dataGroup.y = y;
+        this.dataGroup.z = z;
     },
 
     setXScale: function(scale) {
-        this.root.scale.x = scale;
+        this.dataGroup.scale.x = scale;
     },
 
     setYScale: function(scale) {
-        this.root.scale.y = scale;
+        this.dataGroup.scale.y = scale;
     },
 
     setZScale: function(scale) {
-        this.root.scale.z = scale;
+        this.dataGroup.scale.z = scale;
+    },
+
+    setOpacity: function(opacity) {
+        for(var child=0; child<this.dataGroup.children.length; ++child) {
+            this.dataGroup.children[child].material.opacity = opacity;
+        }
     },
 
     setPlayhead: function(playhead) {
         this.playHead = playhead;
+    },
+
+    setPlayheadPos: function(xPos) {
+        this.playHead.position.x = xPos;
+    },
+
+    setTimelinePos: function(xPos) {
+        this.timelineIndicator.position.x = xPos;
+    },
+
+    createHeatmap: function() {
+        //Need material for each colour
+        var colours = [
+            { name: "black",
+                value: 0x000000 },
+            { name: "blue",
+                value: 0x0000ff },
+            { name: "cyan",
+                value: 0x00ffff },
+            { name: "green",
+                value: 0x00ff00 },
+            { name: "yellow",
+                value: 0xffff00 },
+            { name: "red",
+                value: 0xff0000 },
+            { name: "white",
+                value: 0xffffff }
+        ];
+        for(var i=0; i<this.colourSteps; ++i) {
+            this.heatMap.push(new THREE.MeshLambertMaterial( { color: colours[i].value,
+                opacity: 1.0,
+                transparent: true}));
+        }
     },
 
     parseData: function() {
@@ -221,24 +267,35 @@ RenderAttribute.prototype = {
         return timelineGroup;
     },
     
-    renderData: function() {
+    renderData: function(heatmap) {
         //Render data attribute
-        var dataGroup = new THREE.Object3D();
-        dataGroup.name = 'Timbre';
-        dataGroup.position.y = this.yOffset;
+        this.showHeatmap = heatmap;
+        if(!this.root) {
+            this.root = new THREE.Object3D();
+            this.root.name = 'Timbre';
+        }
+
+        if(!this.dataGroup) {
+            this.dataGroup = new THREE.Object3D();
+            this.dataGroup.name = 'TimbreSegments';
+            this.root.add(this.dataGroup);
+        }
+
         //Timeline indicator
-        var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff,
-            opacity: 0.25,
-            transparent: true } );
-        var timelineGeom = new THREE.BoxGeometry(this.timelineDimensions.x,
-            this.timelineDimensions.y, this.timelineDimensions.z);
-        this.timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
-        this.timelineIndicator.name = "timeline" + dataGroup.name;
-        this.startPlayhead = this.startPlayhead * this.unitsPerSecond;
-        this.playHead.position.x = this.startPlayhead;
-        this.timelineIndicator.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
-        dataGroup.add(this.timelineIndicator);
-        dataGroup.add(this.playHead);
+        if(!this.timelineIndicator) {
+            var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff,
+                opacity: 0.25,
+                transparent: true } );
+            var timelineGeom = new THREE.BoxGeometry(this.timelineDimensions.x,
+                this.timelineDimensions.y, this.timelineDimensions.z);
+            this.timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
+            this.timelineIndicator.name = "timeline" + this.dataGroup.name;
+            this.root.add(this.timelineIndicator);
+            this.root.add(this.playHead);
+            this.startPlayhead = this.timeMargin * this.unitsPerSecond;
+            this.playHead.position.x = this.startPlayhead;
+            this.timelineIndicator.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
+        }
 
         var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
         var startX = 0, startY = 0, startZ = 0;
@@ -284,7 +341,7 @@ RenderAttribute.prototype = {
             mesh.visible = height > 0;
             mesh.scale.y = height <= 0 ? 0.001 : height;
             mesh.scale.x = xScale;
-            dataGroup.add(mesh);
+            this.dataGroup.add(mesh);
         }
         startX = startX + xOffset + segmentGap;
 
@@ -309,19 +366,26 @@ RenderAttribute.prototype = {
                 mesh.visible = height > 0;
                 mesh.scale.y = height <= 0 ? 0.001 : height;
                 mesh.scale.x = xScale;
-                dataGroup.add(mesh);
+                this.dataGroup.add(mesh);
             }
             startX = startX + (xOffset*2) + segmentGap;
         }
 
-        this.root = dataGroup;
+        return this.root;
+    },
 
-        return dataGroup;
+    clearScene: function() {
+        this.root.remove(this.dataGroup);
+        this.dataGroup = undefined;
     },
 
     update: function(delta) {
         this.playHead.position.x += (this.unitsPerSecond * delta);
         this.timelineIndicator.position.x = this.playHead.position.x-0.25;
+    },
+
+    setPlayheadStartPos: function(xPos) {
+        this.startPlayhead = xPos * this.unitsPerSecond;
     },
 
     getPlayheadStartPos: function() {
@@ -330,6 +394,25 @@ RenderAttribute.prototype = {
 
     getPlaybackSpeed: function() {
         return this.unitsPerSecond;
+    },
+
+    showDimension: function(visible, row) {
+        var rowName = row-1;
+        this.dataGroup.traverse(function(obj) {
+            if(obj instanceof THREE.Mesh) {
+                if(obj.name.indexOf("row"+rowName+"col") !== -1) {
+                    obj.visible = visible;
+                }
+            }
+        })
+    },
+
+    showAllDimensions: function(visible) {
+        this.dataGroup.traverse(function(obj) {
+            if (obj instanceof THREE.Mesh) {
+                obj.visible = visible;
+            }
+        });
     },
 
     reset: function() {

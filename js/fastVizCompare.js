@@ -49,44 +49,15 @@ FastApp.prototype.init = function(container) {
     this.rotQuatLeft.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -ROT_INC);
     this.rotating = false;
     this.numCoefficients = 12;
+    this.activeSlot = 0;
 
     //Renderable attributes
     this.renderAttributes = [];
 
     this.checkTime = 100;
     this.tempVec = new THREE.Vector3();
-    //Materials
-    this.showHeatmap = true;
-    this.colourSteps = 7;
-    this.heatMap = [];
-    this.createHeatmap();
     //Audio attributes
     this.audioAttributes = [];
-};
-
-FastApp.prototype.createHeatmap = function() {
-    //Need material for each colour
-    var colours = [
-        { name: "black",
-            value: 0x000000 },
-        { name: "blue",
-            value: 0x0000ff },
-        { name: "cyan",
-            value: 0x00ffff },
-        { name: "green",
-            value: 0x00ff00 },
-        { name: "yellow",
-            value: 0xffff00 },
-        { name: "red",
-            value: 0xff0000 },
-        { name: "white",
-            value: 0xffffff }
-    ];
-    for(var i=0; i<this.colourSteps; ++i) {
-        this.heatMap.push(new THREE.MeshLambertMaterial( { color: colours[i].value,
-                                                opacity: 1.0,
-                                                transparent: true}));
-    }
 };
 
 FastApp.prototype.update = function() {
@@ -179,7 +150,7 @@ FastApp.prototype.createScene = function() {
 
                 //Render it all
                 _this.root.add(attribute.renderTimeline());
-                _this.root.add(attribute.renderData());
+                _this.root.add(attribute.renderData(_this.guiControls.Heatmap));
             })
         });
     });
@@ -587,36 +558,25 @@ FastApp.prototype.normaliseData = function(data) {
 
 FastApp.prototype.onShowDimension = function(value, dim) {
     //Get group and traverse meshes
-    var group = this.scene.getObjectByName('Timbre');
-    if(group) {
-        var rowName = dim-1;
-        group.traverse(function(obj) {
-            if (obj instanceof THREE.Mesh) {
-                if(obj.name.indexOf("row"+rowName+"col") !== -1) {
-                    obj.visible = value;
-                }
-            }
-        });
-    }
+    var attribute = this.renderAttributes[this.activeSlot];
+
+    attribute.showDimension(value, dim);
 };
 
 FastApp.prototype.onShowAllDimensions = function(status) {
-    var group = this.scene.getObjectByName('Timbre');
-    if(group) {
-        group.traverse(function(obj) {
-            if (obj instanceof THREE.Mesh && obj.name.indexOf("timeline") === -1) {
-                obj.visible = status;
-            }
-        });
-    }
+    var attribute = this.renderAttributes[this.activeSlot];
+
+    attribute.showAllDimensions(status);
 };
 
 FastApp.prototype.onStartChanged = function(value) {
     //Adjust playhead
-    this.startPlayhead = value * this.unitsPerSecond;
-    this.playHead.position.x = this.startPlayhead;
-    this.timelineIndicatorPitch.position.x = this.startPlayhead -0.25;
-    this.timelineIndicatorTimbre.position.x = this.startPlayhead -0.25;
+    var attribute = this.renderAttributes[this.activeSlot];
+
+    var newPos = value * attribute.getPlaybackSpeed();
+    attribute.setPlayheadStartPos(newPos);
+    attribute.setPlayheadPos(newPos);
+    attribute.setTimelinePos(newPos-0.25);
 };
 
 FastApp.prototype.createGUI = function() {
@@ -716,32 +676,15 @@ FastApp.prototype.createGUI = function() {
 };
 
 FastApp.prototype.onOpacityChanged = function(value) {
-    var group = this.guiControls.Attribute === 'Timbre' ? this.scene.getObjectByName('Timbre') : this.scene.getObjectByName('Pitch');
-    if(group) {
-        var attributes = this.guiControls.Attribute === 'Timbre' ? this.timbreAttributes : this.pitchAttributes;
-        for(var child=0; child<group.children.length; ++child) {
-            group.children[child].material.opacity = value;
-        }
-        attributes.opacity = value;
-    }
+    var attribute = this.renderAttributes[0];
+
+    attribute.setOpacity(value);
 };
 
 FastApp.prototype.renderHeatmap = function(render) {
-    this.showHeatmap = render;
-    var elem = $('#heatmap');
-    this.showHeatmap ? elem.show() : elem.hide();
-    var clearData = ['Timbre', 'Pitch'];
-    this.clearScene(clearData);
-    this.renderAttribute('Timbre', this.timbreSegments, this.timbreAttributes, true);
-    this.renderAttribute('Pitch', this.pitchSegments, this.pitchAttributes, false);
-    this.timelineIndicatorTimbre = this.scene.getObjectByName('timelineTimbre');
-    if(!this.timelineIndicatorTimbre) {
-        alert("No timbre timeline");
-    }
-    this.timelineIndicatorPitch = this.scene.getObjectByName('timelinePitch');
-    if(!this.timelineIndicatorPitch) {
-        alert("No pitch timeline");
-    }
+    var attribute = this.renderAttributes[this.activeSlot];
+    attribute.clearScene();
+    attribute.renderData(render);
 };
 
 FastApp.prototype.clearScene = function(groups) {
