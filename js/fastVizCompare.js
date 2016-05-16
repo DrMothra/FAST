@@ -23,16 +23,20 @@ var cameraViews = {
 
 //Init this app from base
 function FastApp() {
-    BaseApp.call(this);
+    this.numRenderWindows = 2;
+    this.renderWindows = [];
 }
 
-FastApp.prototype = new BaseApp();
+//FastApp.prototype = new BaseApp();
 
 FastApp.prototype.init = function(container) {
-    BaseApp.prototype.init.call(this, container);
+    //Set up render windows
+    for(var i=0; i<this.numRenderWindows ++i) {
+        this.renderWindows.push(new RenderWindow(container));
+    }
     //Camera and controls
-    this.controls.disableMovement();
-    this.setCamera(cameraViews.front);
+    //this.controls.disableMovement();
+    //this.setCamera(cameraViews.front);
     this.cameraView = 'front';
     this.updateRequired = false;
     this.freeMovement = false;
