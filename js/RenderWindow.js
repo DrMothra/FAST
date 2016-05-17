@@ -7,7 +7,7 @@ var CAM_PERSPECTIVE = 45, NEAR_CLIP_PLANE = 0.1, FAR_CLIP_PLANE = 5000;
 var CAM_ZPOS = 100;
 
 function RenderWindow(element) {
-    this.element = element;
+    this.element = document.getElementById(element);
     this.camPos = new THREE.Vector3(0, 0, CAM_ZPOS);
 }
 
@@ -18,7 +18,7 @@ RenderWindow.prototype.init = function() {
 };
 
 RenderWindow.prototype.createCamera = function() {
-    this.camera = new THREE.PerspectiveCamera(CAM_PERSPECTIVE, 4/3, NEAR_CLIP_PLANE, FAR_CLIP_PLANE );
+    this.camera = new THREE.PerspectiveCamera(CAM_PERSPECTIVE, 5/2, NEAR_CLIP_PLANE, FAR_CLIP_PLANE );
     this.camera.position.set(this.camPos.x, this.camPos.y, this.camPos.z);
 };
 
@@ -31,6 +31,11 @@ RenderWindow.prototype.createScene = function() {
     this.pointLight.position.set(0,200,0);
     this.pointLight.name = 'PointLight';
     this.scene.add(this.pointLight);
+    //DEBUG - Add box for now
+    var boxGeom = new THREE.BoxGeometry(10, 10, 10);
+    var boxMat = new THREE.MeshLambertMaterial( { color: 0xff0000 });
+    var box = new THREE.Mesh(boxGeom, boxMat);
+    this.scene.add(box);
 };
 
 RenderWindow.prototype.createControls = function() {

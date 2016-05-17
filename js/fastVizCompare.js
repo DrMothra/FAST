@@ -30,9 +30,15 @@ function FastApp() {
 //FastApp.prototype = new BaseApp();
 
 FastApp.prototype.init = function(container) {
+    //Set up renderer
+    this.canvas = container;
+    this.renderer = new THREE.WebGLRenderer( { canvas: container, antialias: true, alpha: true});
+    this.renderer.setClearColor(0x5c5f64, 1.0);
+    this.renderer.setPixelRatio( window.devicePixelRatio );
     //Set up render windows
-    for(var i=0; i<this.numRenderWindows ++i) {
-        this.renderWindows.push(new RenderWindow(container));
+    for(var i=0; i<this.numRenderWindows; ++i) {
+        this.renderWindows.push(new RenderWindow("scene"+i));
+        this.renderWindows[i].init();
     }
     //Camera and controls
     //this.controls.disableMovement();
@@ -65,29 +71,46 @@ FastApp.prototype.init = function(container) {
 };
 
 FastApp.prototype.update = function() {
-    var delta = this.clock.getDelta();
+    //var delta = this.clock.getDelta();
 
-    var audioAttribute, renderAttribute;
-    for(var i=0; i<this.audioAttributes.length; ++i) {
-        audioAttribute = this.audioAttributes[i];
-        renderAttribute = this.renderAttributes[i];
-        if(audioAttribute.isPlaying()) {
-            audioAttribute.updatePlayingTime(delta);
-            if(audioAttribute.finished()) {
-                audioAttribute.reset();
-                renderAttribute.reset();
-                continue;
-            }
-            renderAttribute.update(delta);
-            var deltaPos = renderAttribute.getPlaybackSpeed() * delta;
-            this.camera.position.x += deltaPos;
-            this.lookAt = this.controls.getLookAt();
-            this.lookAt.x += deltaPos;
-            this.controls.setLookAt(this.lookAt);
-        }
+    var width = this.canvas.clientWidth;
+    var height = this.canvas.clientHeight;
+    if ( this.canvas.width !== width || this.canvas.height != height ) {
+        this.renderer.setSize( width, height, false );
     }
-    
-    BaseApp.prototype.update.call(this);
+};
+
+FastApp.prototype.run = function() {
+    this.update();
+
+    this.renderer.setScissorTest(false);
+    this.renderer.clear();
+
+    this.renderer.setScissorTest(true);
+    var _this = this;
+    this.renderWindows.forEach( function(renderWindow) {
+        renderWindow.controls.update();
+        var rect = renderWindow.element.getBoundingClientRect();
+
+        // check if it's offscreen. If so skip it
+        if ( rect.bottom < 0 || rect.top  > _this.renderer.domElement.clientHeight ||
+            rect.right  < 0 || rect.left > _this.renderer.domElement.clientWidth ) {
+            return;  // it's off screen
+        }
+        // set the viewport
+        var width  = rect.right - rect.left;
+        var height = rect.bottom - rect.top;
+        var left   = rect.left;
+        var bottom = _this.renderer.domElement.clientHeight - rect.bottom;
+        _this.renderer.setViewport( left, bottom, width, height );
+        _this.renderer.setScissor( left, bottom, width, height );
+
+        _this.renderer.render(renderWindow.scene, renderWindow.camera);
+    });
+
+    requestAnimationFrame(function() {
+        _this.run();
+    })
 };
 
 FastApp.prototype.createScene = function() {
@@ -965,8 +988,8 @@ $(document).ready(function() {
     var container = document.getElementById("WebGL-output");
     var app = new FastApp();
     app.init(container);
-    app.createGUI();
-    app.createScene();
+    //app.createGUI();
+    //app.createScene();
 
     //GUI callbacks
     $('#camFront').on("click", function() {
