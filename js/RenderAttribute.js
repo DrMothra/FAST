@@ -64,6 +64,8 @@ RenderAttribute.prototype = {
 
     setPlayhead: function(playhead) {
         this.playHead = playhead;
+        this.playHead.scale.set(0.05, 0.05, 0.05);
+        this.playHead.position.set(this.startPlayhead, 0, 35);
     },
 
     setPlayheadPos: function(xPos) {

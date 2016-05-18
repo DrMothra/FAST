@@ -23,7 +23,7 @@ var cameraViews = {
 
 //Init this app from base
 function FastApp() {
-    this.numRenderWindows = 2;
+    this.numRenderWindows = 4;
     this.renderWindows = [];
 }
 
@@ -32,14 +32,31 @@ function FastApp() {
 FastApp.prototype.init = function(container) {
     //Set up renderer
     this.canvas = container;
+    var width = this.canvas.clientWidth, height = this.canvas.clientHeight;
     this.renderer = new THREE.WebGLRenderer( { canvas: container, antialias: true, alpha: true});
     this.renderer.setClearColor(0x5c5f64, 1.0);
     this.renderer.setPixelRatio( window.devicePixelRatio );
+    this.renderer.setSize(width, height);
+
     //Set up render windows
+    var content = document.getElementById("content"),
+        element, renderAttribute, audioAttribute;
+    this.renderAttributes = [];
+    this.audioAttributes = [];
     for(var i=0; i<this.numRenderWindows; ++i) {
-        this.renderWindows.push(new RenderWindow("scene"+i));
+        element = document.createElement("div");
+        element.id = "scene"+i;
+        content.appendChild(element);
+        this.renderWindows.push(new RenderWindow(element.id, width, height/this.numRenderWindows));
         this.renderWindows[i].init();
+        renderAttribute = new RenderAttribute();
+        this.renderAttributes.push(renderAttribute);
+        this.renderWindows[i].setRenderAttribute(renderAttribute);
+        audioAttribute = new AudioAttribute();
+        this.audioAttributes.push(audioAttribute);
+        this.renderWindows[i].setAudioAttribute(audioAttribute);
     }
+
     //Camera and controls
     //this.controls.disableMovement();
     //this.setCamera(cameraViews.front);
@@ -62,12 +79,12 @@ FastApp.prototype.init = function(container) {
     this.activeSlot = 0;
 
     //Renderable attributes
-    this.renderAttributes = [];
+
 
     this.checkTime = 100;
     this.tempVec = new THREE.Vector3();
     //Audio attributes
-    this.audioAttributes = [];
+
 };
 
 FastApp.prototype.update = function() {
@@ -81,7 +98,7 @@ FastApp.prototype.update = function() {
 };
 
 FastApp.prototype.run = function() {
-    this.update();
+    //this.update();
 
     this.renderer.setScissorTest(false);
     this.renderer.clear();
@@ -105,7 +122,9 @@ FastApp.prototype.run = function() {
         _this.renderer.setViewport( left, bottom, width, height );
         _this.renderer.setScissor( left, bottom, width, height );
 
-        _this.renderer.render(renderWindow.scene, renderWindow.camera);
+        if(renderWindow.ready()) {
+            _this.renderer.render(renderWindow.scene, renderWindow.camera);
+        }
     });
 
     requestAnimationFrame(function() {
@@ -114,72 +133,20 @@ FastApp.prototype.run = function() {
 };
 
 FastApp.prototype.createScene = function() {
-    BaseApp.prototype.createScene.call(this);
-
-    //Root object
-    this.root = new THREE.Object3D();
-    this.scene.add(this.root);
-
-    //Light box
-    var size = 0.5;
-    var lightMat = new THREE.MeshBasicMaterial( { color: 0xffffff});
-    var lightGeom = new THREE.BoxGeometry(size, size, size);
-    var lightMesh = new THREE.Mesh(lightGeom, lightMat);
-    lightMesh.name = "LightBox";
-    lightMesh.position.set(0, 200, 0);
-    this.root.add(lightMesh);
 
     //Load objects
     var _this = this;
-    //Rendering attributes
-    var attribute = new RenderAttribute();
-    this.renderAttributes.push(attribute);
-
-    //Audio data
-    var audioAttribute = new AudioAttribute();
-    this.audioAttributes.push(audioAttribute);
 
     //Load music data
-    this.dataLoader = new dataLoader();
+    var dataLoader = new dataLoader();
     var manager = new THREE.LoadingManager();
     var loader = new THREE.OBJLoader( manager );
     loader.load("models/arrow.obj", function(object) {
-        object.scale.set(0.05, 0.05, 0.05);
-        object.position.set(attribute.getPlayheadStartPos(), 0, 35);
-        attribute.setPlayhead(object);
-
-        //Now load music data
-        _this.dataLoader.load("data/johnWilliamsEmpire.json", function(data) {
-            attribute.setData(data);
-            attribute.parseData();
-            var segments = attribute.getSegmentData();
-            attribute.normaliseRequired(true);
-            audioAttribute.getAudioData(attribute.getTrackID(), function() {
-                var totalTime = 0, startTime = attribute.getStartTime();
-                var margin = audioAttribute.getTimeMargin(), duration = audioAttribute.getDuration();
-                var clipStart = startTime - margin;
-                var endTime = startTime + duration + margin;
-                var clipDuration = endTime - clipStart;
-                var i;
-                for(i=0; i<attribute.getDataLength(); ++i){
-                    totalTime = segments[i];
-                    if(totalTime >= clipStart) {
-                        _this.startSegment = _this.startSegment === undefined ? i-1 : _this.startSegment;
-                        if(totalTime >= endTime) {
-                            _this.endSegment = i-1;
-                            break;
-                        }
-                    }
-                }
-
-                //Generate markers
-                attribute.generateMarkers(_this.startSegment, _this.endSegment);
-
-                //Render it all
-                _this.root.add(attribute.renderTimeline());
-                _this.root.add(attribute.renderData(_this.guiControls.Heatmap));
-            })
-        });
+        for(var i=0; i<_this.renderAttributes.length; ++i) {
+            _this.renderAttributes[i].setPlayhead(object);
+            _this.renderWindows[i].setDataLoader(dataLoader);
+            _this.renderWindows[i].createScene("data/johnWilliamsEmpire.json");
+        }
     });
 };
 
