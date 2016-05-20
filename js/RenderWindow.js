@@ -8,7 +8,6 @@ var CAM_ZPOS = 100;
 
 function RenderWindow(element, width, height) {
     this.element = document.getElementById(element);
-    this.element.style.width = width+"px";
     this.element.style.height = height+"px";
     this.aspectRatio = width/height;
     this.camPos = new THREE.Vector3(0, 0, CAM_ZPOS);
@@ -48,12 +47,6 @@ RenderWindow.prototype = {
         lightMesh.name = "LightBox";
         lightMesh.position.set(0, 200, 0);
         this.root.add(lightMesh);
-        
-        //DEBUG - Add box for now
-        var boxGeom = new THREE.BoxGeometry(10, 10, 10);
-        var boxMat = new THREE.MeshLambertMaterial({color: 0xff0000});
-        var box = new THREE.Mesh(boxGeom, boxMat);
-        this.scene.add(box);
 
         if(!this.dataLoader) {
             console.log("No data loader");

@@ -34,12 +34,44 @@
 <canvas id="WebGL-output">
 </canvas>
 
-<div id="content">
+<div id="content" class="container-fluid">
+    <div class="row">
+        <div id="scene0" class="col-md-6">
 
+        </div>
+        <div id="scene1" class="col-md-6">
+
+        </div>
+    </div>
+    <div class="row">
+        <div id="scene2" class="col-md-6">
+
+        </div>
+        <div id="scene3" class="col-md-6">
+
+        </div>
+    </div>
 </div>
 
 <div id="versionInfo" class="displayInfo">
     <p>FAST Music Visualiser 0.3</p>
+</div>
+
+<div id="musicControls" class="displayInfo centred">
+    <div id="noteImage">
+        <img src="images/music.png">
+    </div>
+    <div class="btn-group">
+        <button id="slot1" type="button" class="btn btn-primary active">1</button>
+        <button id="slot2" type="button" class="btn btn-primary">2</button>
+        <button id="slot3" type="button" class="btn btn-primary">3</button>
+        <button id="slot4" type="button" class="btn btn-primary">4</button>
+        <span id="chooseFile" class="btn btn-primary btn-file">Load<input type="file" accept=".json, application/json"></span>
+    </div>
+    <div id="playControls">
+        <img id="rewind" src="images/rewind.png">
+        <img id="playState" src="images/play.png">
+    </div>
 </div>
 
 <div id="controlsCompare" class="displayInfo centred">
@@ -71,25 +103,6 @@
         </div>
         <div>
             <button id="reset" type="button" class="btn btn-primary">Reset</button>
-        </div>
-    </div>
-
-    <div id="musicControls">
-        <div id="noteImage">
-            <img src="images/music.png">
-        </div>
-        <div class="btn-group">
-            <button id="slot1" type="button" class="btn btn-primary active">1</button>
-            <button id="slot2" type="button" class="btn btn-primary">2</button>
-            <button id="slot3" type="button" class="btn btn-primary">3</button>
-            <button id="slot4" type="button" class="btn btn-primary">4</button>
-        </div>
-        <div>
-            <span id="chooseFile" class="btn btn-primary btn-file">Load<input type="file" accept=".json, application/json"></span>
-        </div>
-        <div id="playControls">
-            <img id="rewind" src="images/rewind.png">
-            <img id="playState" src="images/play.png">
         </div>
     </div>
 </div>

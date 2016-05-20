@@ -50,7 +50,11 @@ select {
     width: 10%;
 }
 #musicControls {
-    margin-top: 5%;
+    top: 1%;
+    left: 40%;
+}
+#musicControls {
+    margin-top: 0%;
     border: 1px solid #629eff;
     border-radius: 15px;
 }

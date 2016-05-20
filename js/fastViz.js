@@ -186,7 +186,7 @@ FastApp.prototype.createScene = function() {
 
     this.dataLoader = new dataLoader();
 
-    this.dataLoader.load("data/johnWilliamsEmpire.json", function(data) {
+    this.dataLoader.load("data/newPhilharmonicJoyWorld.json", function(data) {
         _this.data = data;
         //DEBUG
         console.log("File loaded");

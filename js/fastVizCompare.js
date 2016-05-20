@@ -44,10 +44,8 @@ FastApp.prototype.init = function(container) {
     this.renderAttributes = [];
     this.audioAttributes = [];
     for(var i=0; i<this.numRenderWindows; ++i) {
-        element = document.createElement("div");
-        element.id = "scene"+i;
-        content.appendChild(element);
-        this.renderWindows.push(new RenderWindow(element.id, width, height/this.numRenderWindows));
+        element = document.getElementById("scene" + i);
+        this.renderWindows.push(new RenderWindow(element.id, width/2, height/2));
         this.renderWindows[i].init();
         renderAttribute = new RenderAttribute();
         this.renderAttributes.push(renderAttribute);
@@ -138,14 +136,14 @@ FastApp.prototype.createScene = function() {
     var _this = this;
 
     //Load music data
-    var dataLoader = new dataLoader();
+    this.dataLoader = new dataLoader();
     var manager = new THREE.LoadingManager();
     var loader = new THREE.OBJLoader( manager );
     loader.load("models/arrow.obj", function(object) {
         for(var i=0; i<_this.renderAttributes.length; ++i) {
             _this.renderAttributes[i].setPlayhead(object);
-            _this.renderWindows[i].setDataLoader(dataLoader);
-            _this.renderWindows[i].createScene("data/johnWilliamsEmpire.json");
+            _this.renderWindows[i].setDataLoader(_this.dataLoader);
+            _this.renderWindows[i].createScene("data/CarrollThompsonChange.json");
         }
     });
 };
@@ -956,7 +954,7 @@ $(document).ready(function() {
     var app = new FastApp();
     app.init(container);
     //app.createGUI();
-    //app.createScene();
+    app.createScene();
 
     //GUI callbacks
     $('#camFront').on("click", function() {
