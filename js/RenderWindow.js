@@ -4,19 +4,20 @@
 //Render into window of many in page
 
 var CAM_PERSPECTIVE = 45, NEAR_CLIP_PLANE = 0.1, FAR_CLIP_PLANE = 5000;
-var CAM_ZPOS = 100;
+var CAM_YPOS = 50, CAM_ZPOS = 100;
 
 function RenderWindow(element, width, height) {
     this.element = document.getElementById(element);
     this.element.style.height = height+"px";
     this.aspectRatio = width/height;
-    this.camPos = new THREE.Vector3(0, 0, CAM_ZPOS);
+    this.camPos = new THREE.Vector3(0, CAM_YPOS, CAM_ZPOS);
     this.dataLoader = undefined;
     this.dataReady = false;
 }
 
 RenderWindow.prototype = {
     init: function() {
+        this.rootOffset = new THREE.Vector3(-50, 0, 0);
         this.createCamera();
         this.createControls();
     },
@@ -30,6 +31,7 @@ RenderWindow.prototype = {
         this.scene = new THREE.Scene();
         //Root object
         this.root = new THREE.Object3D();
+        this.root.position.set(this.rootOffset.x, this.rootOffset.y, this.rootOffset.z);
         this.scene.add(this.root);
         
         var ambientLight = new THREE.AmbientLight(0x383838);
@@ -119,5 +121,21 @@ RenderWindow.prototype = {
 
     setDataLoader: function(loader) {
         this.dataLoader = loader;
+    },
+
+    setPlaying: function(state) {
+        this.audioAttribute.setPlaying(state);
+    },
+
+    isPlaying: function() {
+        return this.audioAttribute.isPlaying();
+    },
+
+    resetPlaybackTime: function() {
+        this.audioAttribute.resetPlaybackTime();
+    },
+
+    updatePlaybackTime: function() {
+        this.audioAttribute.updatePlaybackTime();
     }
 };

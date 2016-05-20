@@ -914,14 +914,13 @@ FastApp.prototype.changeControls = function() {
 };
 
 FastApp.prototype.playTrack = function(trackState) {
-    //DEBUG
-    var audio = this.audioAttributes[0];
+    var window = this.renderWindows[this.activeSlot];
     
-    audio.setPlaying(trackState);
-    if(audio.isPlaying()) {
-        audio.resetPlaybackTime();
+    window.setPlaying(trackState);
+    if(window.isPlaying()) {
+        window.resetPlaybackTime();
     } else {
-        audio.updatePlaybackTime();
+        window.updatePlaybackTime();
     }
 };
 
