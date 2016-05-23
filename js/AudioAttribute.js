@@ -89,6 +89,10 @@ AudioAttribute.prototype = {
         this.playing = playing;
     },
 
+    togglePlaying: function() {
+        this.playing = !this.playing;
+    },
+    
     resetPlaybackTime: function() {
         this.playbackStartTime = Date.now();
         this.source.start(0, this.playbackTime);

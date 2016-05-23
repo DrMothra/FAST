@@ -4,15 +4,26 @@
 //Render into window of many in page
 
 var CAM_PERSPECTIVE = 45, NEAR_CLIP_PLANE = 0.1, FAR_CLIP_PLANE = 5000;
-var CAM_YPOS = 50, CAM_ZPOS = 100;
+
+//Camera views - position + lookat
+var cameraViews = {
+    front: [ new THREE.Vector3(10, 70, 70),
+        new THREE.Vector3(10, 10, 20)],
+    end: [ new THREE.Vector3(286, 36, 16),
+        new THREE.Vector3(60, 0, 0)],
+    top: [ new THREE.Vector3(80, 170, 20),
+        new THREE.Vector3(80, 0, 10)]
+};
 
 function RenderWindow(element, width, height) {
     this.element = document.getElementById(element);
     this.element.style.height = height+"px";
     this.aspectRatio = width/height;
-    this.camPos = new THREE.Vector3(0, CAM_YPOS, CAM_ZPOS);
     this.dataLoader = undefined;
     this.dataReady = false;
+
+    this.cameraView = 'front';
+    this.clock = new THREE.Clock();
 }
 
 RenderWindow.prototype = {
@@ -20,11 +31,22 @@ RenderWindow.prototype = {
         this.rootOffset = new THREE.Vector3(-50, 0, 0);
         this.createCamera();
         this.createControls();
+        this.setCamera(cameraViews.front);
     },
 
     createCamera: function() {
         this.camera = new THREE.PerspectiveCamera(CAM_PERSPECTIVE, this.aspectRatio, NEAR_CLIP_PLANE, FAR_CLIP_PLANE);
-        this.camera.position.set(this.camPos.x, this.camPos.y, this.camPos.z);
+    },
+
+    setCamera: function(cameraProp) {
+        this.camera.position.set(cameraProp[0].x, cameraProp[0].y, cameraProp[0].z);
+        this.controls.setLookAt(cameraProp[1]);
+    },
+
+    resetCamera: function() {
+        //Camera back to start position
+        this.controls.reset();
+        this.setCamera(cameraViews[this.cameraView]);
     },
 
     createScene: function(datafile) {
@@ -107,6 +129,26 @@ RenderWindow.prototype = {
         this.controls.setLookAt(lookAt);
     },
 
+    update: function() {
+        var delta = this.clock.getDelta();
+        var audio = this.audioAttribute, render = this.renderAttribute;
+
+        if(audio.isPlaying()) {
+            audio.updatePlayingTime(delta);
+            if(audio.finished()) {
+                audio.reset();
+                render.reset();
+                return;
+            }
+            render.update(delta);
+            var deltaPos = render.getPlaybackSpeed() * delta;
+            this.camera.position.x += deltaPos;
+            this.lookAt = this.controls.getLookAt();
+            this.lookAt.x += deltaPos;
+            this.controls.setLookAt(this.lookAt);
+        }
+    },
+
     ready: function() {
         return this.dataReady;
     },
@@ -123,10 +165,14 @@ RenderWindow.prototype = {
         this.dataLoader = loader;
     },
 
-    setPlaying: function(state) {
+    setPlaying: function() {
         this.audioAttribute.setPlaying(state);
     },
 
+    togglePlaying: function() {
+        this.audioAttribute.togglePlaying();
+    },
+    
     isPlaying: function() {
         return this.audioAttribute.isPlaying();
     },
@@ -137,5 +183,12 @@ RenderWindow.prototype = {
 
     updatePlaybackTime: function() {
         this.audioAttribute.updatePlaybackTime();
+    },
+    
+    reset: function() {
+        this.audioAttribute.reset();
+        this.renderAttribute.reset();
+        //Reset camera
+        this.setCamera(cameraViews[this.cameraView]);
     }
 };

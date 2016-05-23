@@ -11,23 +11,11 @@ var MOVE_INC = 10;
 var START_TIME = 30;
 var SAMPLE_RATE = 44100;
 
-//Camera views
-var cameraViews = {
-    front: [ new THREE.Vector3(50, 70, 120),
-             new THREE.Vector3(50, 10, 20)],
-    end: [ new THREE.Vector3(286, 36, 16),
-           new THREE.Vector3(60, 0, 0)],
-    top: [ new THREE.Vector3(80, 170, 20),
-           new THREE.Vector3(80, 0, 10)]
-};
-
 //Init this app from base
 function FastApp() {
     this.numRenderWindows = 4;
     this.renderWindows = [];
 }
-
-//FastApp.prototype = new BaseApp();
 
 FastApp.prototype.init = function(container) {
     //Set up renderer
@@ -86,18 +74,15 @@ FastApp.prototype.init = function(container) {
 };
 
 FastApp.prototype.update = function() {
-    //var delta = this.clock.getDelta();
-
-    var width = this.canvas.clientWidth;
-    var height = this.canvas.clientHeight;
-    if ( this.canvas.width !== width || this.canvas.height != height ) {
-        this.renderer.setSize( width, height, false );
+    var window;
+    for(var i=0; i<this.renderWindows.length; ++i) {
+        window = this.renderWindows[i];
+        window.update();
     }
 };
 
 FastApp.prototype.run = function() {
-    //this.update();
-
+    this.update();
     this.renderer.setScissorTest(false);
     this.renderer.clear();
 
@@ -812,8 +797,9 @@ FastApp.prototype.translateCamera = function(direction) {
 
 FastApp.prototype.resetCamera = function() {
     //Camera back to start position
-    this.controls.reset();
-    this.setCamera(cameraViews[this.cameraView]);
+    var window = this.renderWindows[this.activeSlot];
+
+    window.resetCamera();
 };
 
 FastApp.prototype.repeat = function(direction) {
@@ -913,24 +899,49 @@ FastApp.prototype.changeControls = function() {
     this.freeMovement ? this.controls.enableMovement() : this.controls.disableMovement();
 };
 
-FastApp.prototype.playTrack = function(trackState) {
+FastApp.prototype.playTrack = function() {
     var window = this.renderWindows[this.activeSlot];
+    var playState = $('#playState');
     
-    window.setPlaying(trackState);
+    window.togglePlaying();
     if(window.isPlaying()) {
         window.resetPlaybackTime();
+        playState.attr("src", "images/pause.png");
     } else {
         window.updatePlaybackTime();
+        playState.attr("src", "images/play.png");
+    }
+};
+
+FastApp.prototype.changeView = function(slotId) {
+    var slot = slotId.slice(-1);
+    slot = parseInt(slot, 10);
+    if(isNaN(slot)) {
+        console.log("Not a valid slot");
+        return;
+    }
+    this.activeSlot = --slot;
+    this.updateTrack();
+};
+
+FastApp.prototype.updateTrack = function() {
+    //Music controls
+    var playState = $('#playState');
+    var window = this.renderWindows[this.activeSlot];
+
+    if(window.isPlaying()) {
+        playState.attr("src", "images/pause.png");
+    } else {
+        playState.attr("src", "images/play.png");
     }
 };
 
 FastApp.prototype.resetTrack = function() {
-    var audio = this.audioAttributes[0];
-    audio.reset();
-    this.renderAttributes[0].reset();
+    var window = this.renderWindows[this.activeSlot];
+    window.reset();
 
     $('#playState').attr("src", "images/play.png");
-    this.setCamera(cameraViews[this.cameraView]);
+    //this.setCamera(cameraViews[this.cameraView]);
 };
 
 FastApp.prototype.isPlaying = function() {
@@ -1004,15 +1015,22 @@ $(document).ready(function() {
         event.preventDefault();
         app.changeControls();
     });
-    
+
+    var slots = $('[id^=slot]');
+    slots.on('click', function(event) {
+        event.preventDefault();
+        slots.removeClass('active');
+        $(this).addClass('active');
+        app.changeView(this.id);
+    });
+
     $('#reset').on("click", function(event) {
         event.preventDefault();
         app.resetCamera();
     });
 
     $('#playState').on("click", function() {
-        app.playTrack(!app.isPlaying());
-        $('#playState').attr("src", app.isPlaying() ? "images/pause.png" : "images/play.png");
+        app.playTrack();
     });
 
     $('#rewind').on("click", function() {

@@ -54,6 +54,7 @@ select {
     left: 40%;
 }
 #musicControls {
+    z-index: 2;
     margin-top: 0%;
     border: 1px solid #629eff;
     border-radius: 15px;
@@ -73,6 +74,7 @@ select {
 #camControls input[type=checkbox] {
     margin-bottom: 10%;
 }
+
 .btn-file {
     position: relative;
     overflow: hidden;
