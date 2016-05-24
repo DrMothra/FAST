@@ -18,14 +18,14 @@ function RenderAttribute() {
     this.dimensions = [true, true, true, true, true, true, true, true, true, true, true, true, true];
     this.colour = 0xff0000;
     this.startSegment = undefined;
-    this.markers = [];
     this.playHead = undefined;
     this.segmentWidth = 2;
     this.markers = [];
     this.numCoefficients = 12;
     this.normalise = false;
-    this.root = undefined;
     this.dataGroup = undefined;
+    this.timelineGroup = undefined;
+    this.indicatorGroup = undefined;
     //Heatmap materials
     this.showHeatmap = false;
     this.colourSteps = 7;
@@ -150,6 +150,14 @@ RenderAttribute.prototype = {
         this.startPlayhead = this.timeMargin;
     },
 
+    getArtist: function() {
+        return this.artistName;
+    },
+
+    getTrack: function() {
+        return this.trackName;
+    },
+
     normaliseData: function(data) {
         var minArray = [];
         var maxArray = [];
@@ -237,6 +245,10 @@ RenderAttribute.prototype = {
         }
     },
     
+    clearMarkers: function() {
+        this.markers = [];
+    },
+    
     renderTimeline: function() {
         //Timeline
         var timelineGroup = new THREE.Object3D();
@@ -266,38 +278,42 @@ RenderAttribute.prototype = {
             numberLabel = spriteManager.create(this.markers[i].time + " s", labelPos, labelScale, 12, 1, true, false);
             timelineGroup.add(numberLabel);
         }
-        
+
+        this.timelineGroup = timelineGroup;
         return timelineGroup;
     },
-    
-    renderData: function(heatmap) {
-        //Render data attribute
-        this.showHeatmap = heatmap;
-        if(!this.root) {
-            this.root = new THREE.Object3D();
-            this.root.name = 'Timbre';
-        }
 
-        if(!this.dataGroup) {
-            this.dataGroup = new THREE.Object3D();
-            this.dataGroup.name = 'TimbreSegments';
-            this.root.add(this.dataGroup);
-        }
+    getTimeline: function() {
+        return this.timelineGroup;
+    },
 
+    renderIndicator: function() {
         //Timeline indicator
-        if(!this.timelineIndicator) {
+        if(!this.indicatorGroup) {
+            this.indicatorGroup = new THREE.Object3D();
             var timelineMat = new THREE.MeshBasicMaterial( { color: 0xffffff,
                 opacity: 0.25,
                 transparent: true } );
             var timelineGeom = new THREE.BoxGeometry(this.timelineDimensions.x,
                 this.timelineDimensions.y, this.timelineDimensions.z);
             this.timelineIndicator = new THREE.Mesh(timelineGeom, timelineMat);
-            this.timelineIndicator.name = "timeline" + this.dataGroup.name;
-            this.root.add(this.timelineIndicator);
-            this.root.add(this.playHead);
+            this.indicatorGroup.add(this.timelineIndicator);
+            this.indicatorGroup.add(this.playHead);
             this.startPlayhead = this.timeMargin * this.unitsPerSecond;
             this.playHead.position.x = this.startPlayhead;
             this.timelineIndicator.position.set(this.startPlayhead-0.25, this.timelineDimensions.y/2, this.timelineZPos);
+        }
+
+        return this.indicatorGroup;
+    },
+
+    renderData: function(heatmap) {
+        //Render data attribute
+        this.showHeatmap = heatmap;
+
+        if(!this.dataGroup) {
+            this.dataGroup = new THREE.Object3D();
+            this.dataGroup.name = 'TimbreSegments';
         }
 
         var numCoefficients = 12, numSegments = this.endSegment - this.startSegment + 1;
@@ -374,12 +390,15 @@ RenderAttribute.prototype = {
             startX = startX + (xOffset*2) + segmentGap;
         }
 
-        return this.root;
+        return this.dataGroup;
+    },
+
+    getRenderData: function() {
+        return this.dataGroup;
     },
 
     clearScene: function() {
-        this.root.remove(this.dataGroup);
-        this.dataGroup = undefined;
+
     },
 
     update: function(delta) {

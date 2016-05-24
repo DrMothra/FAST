@@ -21,6 +21,8 @@ function RenderWindow(element, width, height) {
     this.aspectRatio = width/height;
     this.dataLoader = undefined;
     this.dataReady = false;
+    this.file = undefined;
+    this.renderUpdate = true;
 
     this.cameraView = 'front';
     this.clock = new THREE.Clock();
@@ -70,7 +72,7 @@ RenderWindow.prototype = {
         var lightMesh = new THREE.Mesh(lightGeom, lightMat);
         lightMesh.name = "LightBox";
         lightMesh.position.set(0, 200, 0);
-        this.root.add(lightMesh);
+        this.scene.add(lightMesh);
 
         if(!this.dataLoader) {
             console.log("No data loader");
@@ -78,6 +80,16 @@ RenderWindow.prototype = {
         }
 
         //Now load music data
+        this.loadData(datafile);
+    },
+
+    clearScene: function() {
+        this.root.remove(this.renderAttribute.getTimeline());
+        this.root.remove(this.renderAttribute.getRenderData());
+        this.renderUpdate = true;
+    },
+    
+    loadData: function(datafile) {
         var _this = this;
         this.dataLoader.load(datafile, function(data) {
             _this.renderAttribute.setData(data);
@@ -104,16 +116,29 @@ RenderWindow.prototype = {
 
                 //Generate markers
                 _this.renderAttribute.generateMarkers(_this.startSegment, _this.endSegment);
-
-
+                
                 //Render it all
+                _this.root.add(_this.renderAttribute.renderIndicator());
                 _this.root.add(_this.renderAttribute.renderTimeline());
                 _this.root.add(_this.renderAttribute.renderData(true));
                 _this.dataReady = true;
+                _this.renderUpdate = true;
+                $('#downloadError').hide();
+            }, function() {
+                console.log("Couldn't get audio preview");
+                $('#downloadError').show();
             })
         });
     },
 
+    getArtist: function() {
+        return this.renderAttribute.getArtist();
+    },
+    
+    getTrack: function() {
+        return this.renderAttribute.getTrack();
+    },
+    
     createControls: function() {
         this.controls = new THREE.TrackballControls(this.camera, this.element);
         this.controls.rotateSpeed = 1.0;
@@ -134,6 +159,7 @@ RenderWindow.prototype = {
         var audio = this.audioAttribute, render = this.renderAttribute;
 
         if(audio.isPlaying()) {
+            this.renderUpdate = true;
             audio.updatePlayingTime(delta);
             if(audio.finished()) {
                 audio.reset();
@@ -149,8 +175,29 @@ RenderWindow.prototype = {
         }
     },
 
+    updateRequired: function() {
+        return this.renderUpdate;
+    },
+
+    setUpdateRequired: function(update) {
+        this.renderUpdate = update;
+    },
+
     ready: function() {
         return this.dataReady;
+    },
+
+    loadNewFile: function(file) {
+        this.file = file;
+        this.clearScene();
+        this.startSegment = undefined;
+        this.renderAttribute.clearMarkers();
+        //Render new data
+        var _this = this;
+        window.URL = window.URL || window.webkitURL;
+
+        var fileUrl = window.URL.createObjectURL(this.file);
+        this.loadData(fileUrl);
     },
 
     setRenderAttribute: function(attribute) {

@@ -17,7 +17,7 @@ function AudioAttribute() {
 }
 
 AudioAttribute.prototype = {
-    getAudioData: function(trackID, callback) {
+    getAudioData: function(trackID, callback, error) {
         var _this = this;
         var now = Math.floor(new Date().getTime() / 1000);
         var httpMethod = "GET",
@@ -63,9 +63,8 @@ AudioAttribute.prototype = {
                         _this.duration = _this.source.buffer.duration;
                         if(callback) callback();
                     });
-                    return true;
                 } else {
-                    return false;
+                    if(error) error();
                 }
             }
         };

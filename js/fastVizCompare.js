@@ -63,7 +63,7 @@ FastApp.prototype.init = function(container) {
     this.rotating = false;
     this.numCoefficients = 12;
     this.activeSlot = 0;
-
+    this.trackInfoUpdate = true;
     //Renderable attributes
 
 
@@ -83,12 +83,22 @@ FastApp.prototype.update = function() {
 
 FastApp.prototype.run = function() {
     this.update();
-    this.renderer.setScissorTest(false);
-    this.renderer.clear();
+    //this.renderer.setScissorTest(false);
+    //this.renderer.clear();
 
     this.renderer.setScissorTest(true);
     var _this = this;
     this.renderWindows.forEach( function(renderWindow) {
+        if(!renderWindow.ready()) return;
+
+        //if(!renderWindow.updateRequired()) return;
+        
+        //renderWindow.setUpdateRequired(false);
+        
+        if(_this.trackInfoUpdate) {
+            _this.updateTrackInfo();
+            _this.trackInfoUpdate = false;
+        }
         renderWindow.controls.update();
         var rect = renderWindow.element.getBoundingClientRect();
 
@@ -105,9 +115,7 @@ FastApp.prototype.run = function() {
         _this.renderer.setViewport( left, bottom, width, height );
         _this.renderer.setScissor( left, bottom, width, height );
 
-        if(renderWindow.ready()) {
-            _this.renderer.render(renderWindow.scene, renderWindow.camera);
-        }
+        _this.renderer.render(renderWindow.scene, renderWindow.camera);
     });
 
     requestAnimationFrame(function() {
@@ -124,11 +132,18 @@ FastApp.prototype.createScene = function() {
     this.dataLoader = new dataLoader();
     var manager = new THREE.LoadingManager();
     var loader = new THREE.OBJLoader( manager );
+    var window;
+    var startTracks = ['data/CarrollThompsonChange.json',
+                        'data/ledZeppelinPoorTom.json',
+                        'data/JuanFlorezAllegro.json',
+                        'data/prodigyFirestarter.json'];
+
     loader.load("models/arrow.obj", function(object) {
         for(var i=0; i<_this.renderAttributes.length; ++i) {
             _this.renderAttributes[i].setPlayhead(object);
-            _this.renderWindows[i].setDataLoader(_this.dataLoader);
-            _this.renderWindows[i].createScene("data/CarrollThompsonChange.json");
+            window = _this.renderWindows[i];
+            window.setDataLoader(_this.dataLoader);
+            window.createScene(startTracks[i]);
         }
     });
 };
@@ -139,27 +154,9 @@ FastApp.prototype.loadNewFile = function(file) {
         return;
     }
     //Reset everything
-    this.file = file;
-    //Reset current scene
-    var clearData = ['Timbre', 'Pitch', 'TimelineGroup'];
-    this.clearScene(clearData);
-
-    this.startSegment = undefined;
-
-    //Reset any data
-    this.markers = [];
-
-    //Render new data
-    var _this = this;
-    window.URL = window.URL || window.webkitURL;
-
-    var fileUrl = window.URL.createObjectURL(this.file);
-    this.dataLoader.load(fileUrl, function(data) {
-        _this.data = data;
-        //DEBUG
-        console.log("File loaded");
-        _this.parseData();
-    });
+    var window = this.renderWindows[this.activeSlot];
+    
+    window.loadNewFile(file);
 };
 
 FastApp.prototype.parseData = function() {
@@ -885,15 +882,6 @@ FastApp.prototype.repeat = function(direction) {
     }, this.checkTime)
 };
 
-FastApp.prototype.changeView = function(viewName) {
-    if(!viewName) {
-        console.log("No camera view name!");
-        return;
-    }
-    this.cameraView = viewName;
-    this.setCamera(cameraViews[this.cameraView]);
-};
-
 FastApp.prototype.changeControls = function() {
     this.freeMovement = !this.freeMovement;
     this.freeMovement ? this.controls.enableMovement() : this.controls.disableMovement();
@@ -934,6 +922,14 @@ FastApp.prototype.updateTrack = function() {
     } else {
         playState.attr("src", "images/play.png");
     }
+    this.updateTrackInfo();
+};
+
+FastApp.prototype.updateTrackInfo = function() {
+    var window = this.renderWindows[this.activeSlot];
+
+    $('#trackInfoArtist').html("Artist: " + window.getArtist());
+    $('#trackInfoTrack').html("Track: " + window.getTrack());
 };
 
 FastApp.prototype.resetTrack = function() {
