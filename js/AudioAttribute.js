@@ -114,7 +114,7 @@ AudioAttribute.prototype = {
     },
 
     finished: function() {
-        return this.playing > this.duration;
+        return this.playingTime > this.duration;
     },
 
     reset: function() {
@@ -126,6 +126,7 @@ AudioAttribute.prototype = {
         }
         this.playing = false;
         this.playbackTime = 0;
+        this.playingTime = 0;
     }
 };
 

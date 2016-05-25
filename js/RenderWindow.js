@@ -176,6 +176,7 @@ RenderWindow.prototype = {
             if(audio.finished()) {
                 audio.reset();
                 render.reset();
+                this.resetCamera();
                 return;
             }
             render.update(delta);
