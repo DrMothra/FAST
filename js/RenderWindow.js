@@ -18,6 +18,7 @@ var cameraViews = {
 function RenderWindow(element, width, height) {
     this.element = document.getElementById(element);
     this.element.style.height = height+"px";
+    this.rect = this.element.getBoundingClientRect();
     this.aspectRatio = width/height;
     this.dataLoader = undefined;
     this.dataReady = false;
@@ -26,6 +27,16 @@ function RenderWindow(element, width, height) {
 
     this.cameraView = 'front';
     this.clock = new THREE.Clock();
+
+    //Message display
+    this.msgElement = document.createElement("div");
+    this.msgElement.id = element + 'Msg';
+    this.msgElement.classList.add("displayInfo", "noDisplay");
+    var left = ((this.rect.right - this.rect.left)/3) + this.rect.left,
+        top = ((this.rect.bottom - this.rect.top)/2) + this.rect.top;
+    this.msgElement.style.top = top + "px";
+    this.msgElement.style.left = left + "px";
+    document.body.appendChild(this.msgElement);
 }
 
 RenderWindow.prototype = {
@@ -123,10 +134,11 @@ RenderWindow.prototype = {
                 _this.root.add(_this.renderAttribute.renderData(true));
                 _this.dataReady = true;
                 _this.renderUpdate = true;
-                $('#downloadError').hide();
+                $('#' + _this.msgElement.id).hide();
             }, function() {
                 console.log("Couldn't get audio preview");
-                $('#downloadError').show();
+                $('#' + _this.msgElement.id).html("Couldn't download audio");
+                $('#' + _this.msgElement.id).show();
             })
         });
     },

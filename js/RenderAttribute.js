@@ -146,6 +146,7 @@ RenderAttribute.prototype = {
         this.startTime = this.data["start_time"];
         if(!this.startTime) {
             alert("This track not synced yet!!");
+            this.startTime = 30;
         }
         this.startPlayhead = this.timeMargin;
     },

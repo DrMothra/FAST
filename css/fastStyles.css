@@ -124,7 +124,7 @@ select {
     left: 30%;
 }
 #downloadError {
-    bottom: 30%;
+    top: 10%;
     left: 40%;
 }
 #waiting {
@@ -140,4 +140,13 @@ select {
 #scene0,
 #scene1 {
 
+}
+#scene0Msg,
+#scene1Msg,
+#scene2Msg,
+#scene3Msg {
+    background: darkgrey;
+    border-radius: 15px;
+    color: black;
+    padding: 2%;
 }
