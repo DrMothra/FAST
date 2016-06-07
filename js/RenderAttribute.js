@@ -27,7 +27,7 @@ function RenderAttribute() {
     this.timelineGroup = undefined;
     this.indicatorGroup = undefined;
     //Heatmap materials
-    this.showHeatmap = false;
+    this.showHeatmap = true;
     this.colourSteps = 7;
     this.heatMap = [];
     this.createHeatmap();
@@ -48,20 +48,37 @@ RenderAttribute.prototype = {
         this.dataGroup.scale.x = scale;
     },
 
+    getXScale: function() {
+        return this.dataGroup.scale.x;
+    },
+
     setYScale: function(scale) {
         this.dataGroup.scale.y = scale;
+    },
+
+    getYScale: function() {
+        return this.dataGroup.scale.y;
     },
 
     setZScale: function(scale) {
         this.dataGroup.scale.z = scale;
     },
 
+    getZScale: function() {
+        return this.dataGroup.scale.z;
+    },
+
     setOpacity: function(opacity) {
+        this.opacity = opacity;
         for(var child=0; child<this.dataGroup.children.length; ++child) {
             this.dataGroup.children[child].material.opacity = opacity;
         }
     },
 
+    getOpacity: function() {
+        return this.opacity;
+    },
+    
     setPlayhead: function(playhead) {
         //Clone it first
         this.playHead = playhead.clone();
@@ -71,6 +88,10 @@ RenderAttribute.prototype = {
 
     setPlayheadPos: function(xPos) {
         this.playHead.position.x = xPos;
+    },
+
+    getPlayheadPos: function() {
+        return this.playHead.position.x;
     },
 
     setTimelinePos: function(xPos) {
@@ -419,8 +440,10 @@ RenderAttribute.prototype = {
         return this.unitsPerSecond;
     },
 
+    
     showDimension: function(visible, row) {
         var rowName = row-1;
+        this.dimensions[rowName] = visible;
         this.dataGroup.traverse(function(obj) {
             if(obj instanceof THREE.Mesh) {
                 if(obj.name.indexOf("row"+rowName+"col") !== -1) {
@@ -431,11 +454,23 @@ RenderAttribute.prototype = {
     },
 
     showAllDimensions: function(visible) {
+        for(var i=0; i<this.dimensions.length; ++i) {
+            this.dimensions[i] = visible;
+        }
+
         this.dataGroup.traverse(function(obj) {
             if (obj instanceof THREE.Mesh) {
                 obj.visible = visible;
             }
         });
+    },
+
+    getDimensions: function() {
+        return this.dimensions;
+    },
+
+    heatmapEnabled: function() {
+        return this.showHeatmap;
     },
 
     reset: function() {

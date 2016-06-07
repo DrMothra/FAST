@@ -157,25 +157,25 @@ FastApp.prototype.loadNewFile = function(file) {
 
 FastApp.prototype.onShowDimension = function(value, dim) {
     //Get group and traverse meshes
-    var attribute = this.renderAttributes[this.activeSlot];
+    var window = this.renderWindows[this.activeSlot];
 
-    attribute.showDimension(value, dim);
+    window.showDimension(value, dim);
 };
 
 FastApp.prototype.onShowAllDimensions = function(status) {
-    var attribute = this.renderAttributes[this.activeSlot];
+    var window = this.renderWindows[this.activeSlot];
 
-    attribute.showAllDimensions(status);
+    window.showAllDimensions(status);
 };
 
 FastApp.prototype.onStartChanged = function(value) {
     //Adjust playhead
-    var attribute = this.renderAttributes[this.activeSlot];
+    var window = this.renderWindows[this.activeSlot];
 
-    var newPos = value * attribute.getPlaybackSpeed();
-    attribute.setPlayheadStartPos(newPos);
-    attribute.setPlayheadPos(newPos);
-    attribute.setTimelinePos(newPos-0.25);
+    var newPos = value * window.getPlaybackSpeed();
+    window.setPlayheadStartPos(newPos);
+    window.setPlayheadPos(newPos);
+    window.setTimelinePos(newPos-0.25);
 };
 
 FastApp.prototype.createGUI = function() {
@@ -186,9 +186,6 @@ FastApp.prototype.createGUI = function() {
         this.ScaleY = 1.0;
         this.ScaleZ = 1.0;
         this.Opacity = 1;
-        this.LightX = 0.0;
-        this.LightY = 200;
-        this.LightZ = 0;
         this.Heatmap = true;
     };
 
@@ -218,25 +215,11 @@ FastApp.prototype.createGUI = function() {
     });
     opacity.listen();
 
-    //Move the light
-    var lightX = this.guiAppear.add(this.guiControls, 'LightX', -500, 500).step(1.0);
-    lightX.listen();
-    lightX.onChange(function(value) {
-        _this.onLightChanged(X_AXIS, value);
-    });
-    var lightY = this.guiAppear.add(this.guiControls, 'LightY', -500, 500).step(1.0);
-    lightY.listen();
-    lightY.onChange(function(value) {
-        _this.onLightChanged(Y_AXIS, value);
-    });
-    var lightZ = this.guiAppear.add(this.guiControls, 'LightZ', -500, 500).step(1.0);
-    lightZ.listen();
-    lightZ.onChange(function(value) {
-        _this.onLightChanged(Z_AXIS, value);
-    });
-    this.guiAppear.add(this.guiControls, 'Heatmap').onChange(function(value) {
+    //Heatmap
+    var heatmap = this.guiAppear.add(this.guiControls, 'Heatmap').onChange(function(value) {
         _this.renderHeatmap(value);
     });
+    heatmap.listen();
 
     //Data
     this.guiData = gui.addFolder("Data");
@@ -274,27 +257,45 @@ FastApp.prototype.createGUI = function() {
     });
 };
 
-FastApp.prototype.onOpacityChanged = function(value) {
-    var attribute = this.renderAttributes[0];
+FastApp.prototype.updateGUI = function() {
+    var window = this.renderWindows[this.activeSlot];
 
-    attribute.setOpacity(value);
+    this.guiControls.ScaleX = window.getXScale();
+    this.guiControls.ScaleY = window.getYScale();
+    this.guiControls.ScaleZ = window.getZScale();
+
+    this.guiControls.Opacity = window.getOpacity();
+    this.guiControls.Heatmap = window.heatmapEnabled();
+    
+    this.guiControls.Start = window.getPlayheadPos() / window.getPlaybackSpeed();
+
+    var dimensions = window.getDimensions();
+    for(var i=0; i<dimensions.length; ++i) {
+        this.dimensions[i] = dimensions[i];
+    }
+};
+
+FastApp.prototype.onOpacityChanged = function(value) {
+    var window = this.renderWindows[this.activeSlot];
+
+    window.setOpacity(value);
 };
 
 FastApp.prototype.onScaleChanged = function(axis, value) {
     //Scale along relevant axis
-    var attribute = this.renderAttributes[0];
+    var window = this.renderWindows[this.activeSlot];
 
     switch(axis) {
         case X_AXIS:
-            attribute.setXScale(value);
+            window.setXScale(value);
             break;
 
         case Y_AXIS:
-            attribute.setYScale(value);
+            window.setYScale(value);
             break;
 
         case Z_AXIS:
-            attribute.setZScale(value);
+            window.setZScale(value);
             break;
 
         default:
@@ -302,35 +303,11 @@ FastApp.prototype.onScaleChanged = function(axis, value) {
     }
 };
 
-FastApp.prototype.onLightChanged = function(axis, value) {
-    var light = this.scene.getObjectByName("PointLight");
-    if(!light) {
-        console.log("No light!");
-        return;
-    }
+FastApp.prototype.renderHeatmap = function(heatmap) {
+    var window = this.renderWindows[this.activeSlot];
 
-    switch (axis) {
-        case X_AXIS:
-            light.position.x = value;
-            break;
-
-        case Y_AXIS:
-            light.position.y = value;
-            break;
-
-        case Z_AXIS:
-            light.position.z = value;
-            break;
-
-        default:
-            break;
-    }
-    var lightBox = this.scene.getObjectByName("LightBox");
-    if(!lightBox) {
-        console.log("No lightbox!");
-        return;
-    }
-    lightBox.position.set(light.position.x, light.position.y, light.position.z);
+    window.clearRenderData();
+    window.renderData(heatmap);
 };
 
 FastApp.prototype.rotateScene = function(direction) {
@@ -513,6 +490,7 @@ FastApp.prototype.changeView = function(slotId) {
     }
     this.activeSlot = --slot;
     this.updateTrack();
+    this.updateGUI();
 };
 
 FastApp.prototype.updateTrack = function() {
@@ -557,7 +535,7 @@ $(document).ready(function() {
     var container = document.getElementById("WebGL-output");
     var app = new FastApp();
     app.init(container);
-    //app.createGUI();
+    app.createGUI();
     app.createScene();
 
     //GUI callbacks

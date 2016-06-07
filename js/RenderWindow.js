@@ -99,7 +99,11 @@ RenderWindow.prototype = {
         this.root.remove(this.renderAttribute.getRenderData());
         this.renderUpdate = true;
     },
-    
+
+    clearRenderData: function() {
+        this.root.remove(this.renderAttribute.getRenderData());
+    },
+
     loadData: function(datafile) {
         var _this = this;
         this.dataLoader.load(datafile, function(data) {
@@ -141,6 +145,10 @@ RenderWindow.prototype = {
                 $('#' + _this.msgElement.id).show();
             })
         });
+    },
+
+    renderData: function(heatmap) {
+        this.root.add(this.renderAttribute.renderData(heatmap));
     },
 
     getArtist: function() {
@@ -250,5 +258,74 @@ RenderWindow.prototype = {
         this.renderAttribute.reset();
         //Reset camera
         this.setCamera(cameraViews[this.cameraView]);
+    },
+
+    setXScale: function(scale) {
+        this.renderAttribute.setXScale(scale);
+    },
+
+    getXScale: function() {
+        return this.renderAttribute.getXScale();
+    },
+    
+    setYScale: function(scale) {
+        this.renderAttribute.setYScale(scale);
+    },
+
+    getYScale: function() {
+        return this.renderAttribute.getYScale();
+    },
+
+    setZScale: function(scale) {
+        this.renderAttribute.setZScale(scale);
+    },
+
+    getZScale: function() {
+        return this.renderAttribute.getZScale();
+    },
+
+    setOpacity: function(opacity) {
+        this.renderAttribute.setOpacity(opacity);
+    },
+
+    getOpacity: function() {
+        return this.renderAttribute.getOpacity();
+    },
+
+    getPlaybackSpeed: function() {
+        return this.renderAttribute.getPlaybackSpeed();
+    },
+
+    setPlayheadStartPos: function(newPos) {
+        this.renderAttribute.setPlayheadStartPos(newPos);
+    },
+
+    setPlayheadPos: function(newPos) {
+        this.renderAttribute.setPlayheadPos(newPos);
+    },
+
+    getPlayheadPos: function() {
+        return this.renderAttribute.getPlayheadPos();
+    },
+    
+    setTimelinePos: function(newPos) {
+        this.renderAttribute.setTimelinePos(newPos);
+    },
+
+    heatmapEnabled: function() {
+        return this.renderAttribute.heatmapEnabled();
+
+    },
+
+    showDimension: function(value, dim) {
+        this.renderAttribute.showDimension(value, dim);
+    },
+
+    showAllDimensions: function(status) {
+        this.renderAttribute.showAllDimensions(status);
+    },
+    
+    getDimensions: function() {
+        return this.renderAttribute.getDimensions();
     }
 };

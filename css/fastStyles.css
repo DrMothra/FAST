@@ -150,3 +150,6 @@ select {
     color: black;
     padding: 2%;
 }
+.dg.ac {
+    z-index: 2;
+}
