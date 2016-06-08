@@ -129,7 +129,7 @@ FastApp.prototype.createScene = function() {
     var manager = new THREE.LoadingManager();
     var loader = new THREE.OBJLoader( manager );
     var window;
-    var startTracks = ['data/CarrollThompsonChange.json',
+    var startTracks = ['data/BambergOrch_Presto.json',
                         'data/ledZeppelinPoorTom.json',
                         'data/JuanFlorezAllegro.json',
                         'data/prodigyFirestarter.json'];
