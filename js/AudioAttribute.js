@@ -49,6 +49,9 @@ AudioAttribute.prototype = {
         var oauthSig = "&oauth_signature=" + encodedSignature;
 
         var previewURL = url + trackID + country + key + oauthNonce + sigMethod + oauthTimestamp + oauthVersion + oauthSig;
+        //DEBUG
+        //console.log("URL = ", previewURL);
+
         xhr.open("GET", previewURL, true);
         xhr.responseType = 'arraybuffer';
         xhr.onreadystatechange = function() {
